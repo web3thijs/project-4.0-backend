@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@RequestMapping(path = "api/products")
 @RestController
 public class ProductController {
 
@@ -29,28 +30,28 @@ public class ProductController {
         System.out.println("DB test: " + productRepository.findAll().size());
     }
 
-    @GetMapping("/products")
+    @GetMapping("")
     public List<Product> findAll(){
         return productRepository.findAll();
     }
 
-    @GetMapping("/products/organization/{organizationId}")
+    @GetMapping("/organization/{organizationId}")
     public List<Product> findProductsByOrganizationId(@PathVariable ObjectId organizationId){
         return productRepository.findProductsByOrganizationId(organizationId);
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/{id}")
     public Product find(@PathVariable ObjectId id){
         return productRepository.findProductById(id);
     }
 
-    @PostMapping("/products")
+    @PostMapping("")
     public Product addProduct(@RequestBody Product product){
         productRepository.save(product);
         return product;
     }
 
-    @PutMapping("/products")
+    @PutMapping("")
     public Product updateProduct(@RequestBody Product updatedProduct){
         Product retrievedProduct = productRepository.findProductById(updatedProduct.getId());
 
@@ -67,7 +68,7 @@ public class ProductController {
         return retrievedProduct;
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteProduct(@PathVariable ObjectId id){
         Product product = productRepository.findProductById(id);
 
