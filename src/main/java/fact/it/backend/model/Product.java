@@ -13,25 +13,19 @@ public class Product {
     private String name;
     private int price;
     private Boolean isActive;
-    private int amountInStock;
-    private String size;
-    private String color;
     private String imageUrl;
 
     public Product(){
 
     }
 
-    public Product(String id, String categoryId, String organizationId, String name, int price, Boolean isActive, int amountInStock, String size, String color, String imageUrl) {
+    public Product(String id, String categoryId, String organizationId, String name, int price, Boolean isActive, String imageUrl) {
         this.id = id;
         this.categoryId = categoryId;
         this.organizationId = organizationId;
         this.name = name;
         this.price = price;
         this.isActive = isActive;
-        this.amountInStock = amountInStock;
-        this.size = size;
-        this.color = color;
         this.imageUrl = imageUrl;
     }
 
@@ -81,30 +75,6 @@ public class Product {
 
     public void setActive(Boolean active) {
         isActive = active;
-    }
-
-    public int getAmountInStock() {
-        return amountInStock;
-    }
-
-    public void setAmountInStock(int amountInStock) {
-        this.amountInStock = amountInStock;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public String getImageUrl() {
