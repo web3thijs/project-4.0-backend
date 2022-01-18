@@ -1,5 +1,6 @@
 package fact.it.backend.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,11 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Product {
 
     @Id
-    private String id;
-    private String categoryId;
-    private String organizationId;
+    private ObjectId id;
+    private ObjectId categoryId;
+    private ObjectId organizationId;
     private String name;
-    private int price;
+    private Number price;
+    private String description;
     private Boolean isActive;
     private String imageUrl;
 
@@ -19,37 +21,38 @@ public class Product {
 
     }
 
-    public Product(String id, String categoryId, String organizationId, String name, int price, Boolean isActive, String imageUrl) {
+    public Product(ObjectId id, ObjectId categoryId, ObjectId organizationId, String name, Number price, String description, Boolean isActive, String imageUrl) {
         this.id = id;
         this.categoryId = categoryId;
         this.organizationId = organizationId;
         this.name = name;
         this.price = price;
+        this.description = description;
         this.isActive = isActive;
         this.imageUrl = imageUrl;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public String getCategoryId() {
+    public ObjectId getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(ObjectId categoryId) {
         this.categoryId = categoryId;
     }
 
-    public String getOrganizationId() {
+    public ObjectId getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(String organizationId) {
+    public void setOrganizationId(ObjectId organizationId) {
         this.organizationId = organizationId;
     }
 
@@ -61,8 +64,20 @@ public class Product {
         this.name = name;
     }
 
-    public int getPrice() {
+    public Number getPrice() {
         return price;
+    }
+
+    public void setPrice(Number price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setPrice(int price) {
