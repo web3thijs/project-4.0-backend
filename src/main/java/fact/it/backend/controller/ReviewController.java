@@ -28,6 +28,8 @@ public class ReviewController {
             reviewRepository.save(new Review(product2, customer1, 4.5, "Nice product", "I liked it."));
             reviewRepository.save(new Review(product1, customer2, 3, "Nice product", "I liked it."));
         }
+        System.out.println("DB test reviews: " + reviewRepository.findAll().size() + " reviews.");
+
     }
 
     @GetMapping("")
