@@ -1,10 +1,6 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Category;
-import fact.it.backend.model.Customer;
-import fact.it.backend.model.Product;
 import fact.it.backend.model.User;
-import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
