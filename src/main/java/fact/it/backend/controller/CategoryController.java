@@ -32,6 +32,9 @@ public class CategoryController {
     @GetMapping("")
     public List<Category> findAll() { return categoryRepository.findAll(); }
 
+    @GetMapping("/{id}")
+    public Category findById(@PathVariable String id) { return categoryRepository.findCategoryById(id); }
+
     @PostMapping("")
     public Category addCategory(@RequestBody Category category){
         categoryRepository.save(category);
