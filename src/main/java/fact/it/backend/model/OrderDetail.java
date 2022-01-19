@@ -11,18 +11,18 @@ public class OrderDetail {
     private Product product;
     private Order order;
     private Size size;
-    private String colorId;
+    private Color color;
     private Number amount;
 
     public OrderDetail(){
 
     }
 
-    public OrderDetail(Product product, Order order, Size size, String colorId, Number amount) {
+    public OrderDetail(Product product, Order order, Size size, Color color, Number amount) {
         this.product = product;
         this.order = order;
         this.size = size;
-        this.colorId = colorId;
+        this.color = color;
         this.amount = amount;
     }
 
@@ -54,12 +54,12 @@ public class OrderDetail {
         this.size = size;
     }
 
-    public String getColorId() {
-        return colorId;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorId(String colorId) {
-        this.colorId = colorId;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Number getAmount() {
