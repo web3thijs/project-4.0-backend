@@ -32,4 +32,23 @@ public class CustomerController {
         customerRepository.save(customer);
         return customer;
     }
+
+    @PutMapping("")
+    public Customer updateCustomer(@RequestBody Customer updatedCustomer){
+        Customer retrievedCustomer = customerRepository.findCustomerById(updatedCustomer.getId());
+
+        retrievedCustomer.setFirstName(updatedCustomer.getFirstName());
+        retrievedCustomer.setLastName(updatedCustomer.getLastName());
+        retrievedCustomer.setEmail(updatedCustomer.getEmail());
+        retrievedCustomer.setPassword(updatedCustomer.getPassword());
+        retrievedCustomer.setPhoneNr(updatedCustomer.getPhoneNr());
+        retrievedCustomer.setAddress(updatedCustomer.getAddress());
+        retrievedCustomer.setPostalCode(updatedCustomer.getPostalCode());
+        retrievedCustomer.setCountry(updatedCustomer.getCountry());
+        retrievedCustomer.setAdmin(updatedCustomer.isAdmin());
+
+        customerRepository.save(updatedCustomer);
+
+        return updatedCustomer;
+    }
 }
