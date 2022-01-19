@@ -26,7 +26,7 @@ public class ProductController {
             productRepository.save(new Product(id2,id2, id2, "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
         }
 
-        System.out.println("DB test: " + productRepository.findAll().size());
+        System.out.println("DB test products: " + productRepository.findAll().size() + " products.");
     }
 
     @GetMapping("/products")
