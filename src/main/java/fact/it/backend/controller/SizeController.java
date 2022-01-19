@@ -20,12 +20,9 @@ public class SizeController {
     @PostConstruct
     public void fillDB(){
         if(sizeRepository.count() == 0){
-            ObjectId id1 = new ObjectId();
-            ObjectId id2 = new ObjectId();
-            ObjectId id3 = new ObjectId();
-            sizeRepository.save(new Size(id1, "S"));
-            sizeRepository.save(new Size(id2, "M"));
-            sizeRepository.save(new Size(id3, "L"));
+            sizeRepository.save(new Size("S"));
+            sizeRepository.save(new Size("M"));
+            sizeRepository.save(new Size("L"));
         }
         System.out.println("DB test sizes: " + sizeRepository.findAll().size() + " sizes.");
     }
@@ -40,7 +37,7 @@ public class SizeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSize(@PathVariable ObjectId id){
+    public ResponseEntity deleteSize(@PathVariable String id){
         Size size = sizeRepository.findSizeById(id);
 
         if(size != null){
