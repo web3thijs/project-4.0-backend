@@ -5,6 +5,7 @@ import fact.it.backend.model.Product;
 import fact.it.backend.repository.CategoryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -48,5 +49,15 @@ public class CategoryController {
         return retrievedCategory;
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCategory(@PathVariable String id){
+        Category category = categoryRepository.findCategoryById(id);
 
+        if(category != null){
+            categoryRepository.delete(category);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
