@@ -4,6 +4,7 @@ import fact.it.backend.model.*;
 import fact.it.backend.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,5 +31,10 @@ public class OrganizationController {
     @GetMapping("")
     public List<Organization> findAll(){
         return organizationRepository.findByRole(Role.ORGANIZATION);
+    }
+
+    @GetMapping("/{id}")
+    public Organization findById(@PathVariable String id){
+        return organizationRepository.findByRoleAndId(Role.ORGANIZATION, id);
     }
 }

@@ -10,6 +10,7 @@ import fact.it.backend.repository.CustomerRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +38,10 @@ public class CustomerController {
     @GetMapping("")
     public List<Customer> findAll(){
         return customerRepository.findByRole(Role.CUSTOMER);
+    }
+
+    @GetMapping("/{id}")
+    public Customer findById(@PathVariable String id){
+        return customerRepository.findByRoleAndId(Role.CUSTOMER, id);
     }
 }

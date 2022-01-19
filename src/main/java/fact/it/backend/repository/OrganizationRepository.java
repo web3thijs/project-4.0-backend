@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface OrganizationRepository extends MongoRepository<Organization, String> {
     List<Organization> findByRole(Role role);
+    Organization findByRoleAndId(Role role, String id);
 }
