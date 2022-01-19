@@ -38,7 +38,7 @@ public class ColorController {
         return color;
     }
 
-    @DeleteMapping
+    @DeleteMapping("/colors/{id}")
     public ResponseEntity deleteColor(@PathVariable ObjectId id){
         Color color = colorRepository.findColorById(id);
 
