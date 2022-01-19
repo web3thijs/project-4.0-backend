@@ -20,8 +20,8 @@ public class OrganizationController {
     @PostConstruct
     public void fillDB(){
         if(organizationRepository.count() == 3){
-            for(int i = 1; i < 4; i++){
-                organizationRepository.save(new Organization("test" + i + "@test.test", "password", "phoneNr", "address", "postalCode", "country", Role.ORGANIZATION ,"Org" + i, "vat" + i, "about", "suppPhone", "suppMail"));
+            for(int i = 1; i < 4; i++){                organizationRepository.save(new Organization("test" + i + "@test.test", "passwd", "+3240000000", "teststraat" + i, "2400", "Belgium", Role.ORGANIZATION, "Org" + i, "regisnr", "vatnr", "about", "suppPhone", "suppMail"));
+
             }
         }
 

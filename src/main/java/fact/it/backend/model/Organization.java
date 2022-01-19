@@ -14,7 +14,7 @@ public class Organization extends User{
     public Organization() {
     }
 
-    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String organizationName, String companyRegistrationNr, String vatNr, String about, String supportPhoneNr) {
+    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String organizationName, String companyRegistrationNr, String vatNr, String about, String supportPhoneNr, String supportEmail) {
         super(email, password, phoneNr, address, postalCode, country, role);
         this.organizationName = organizationName;
         this.companyRegistrationNr = companyRegistrationNr;
