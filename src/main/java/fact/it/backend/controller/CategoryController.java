@@ -36,4 +36,17 @@ public class CategoryController {
         categoryRepository.save(category);
         return category;
     }
+
+    @PutMapping("")
+    public Category updateCategory(@RequestBody Category updatedCategory){
+        Category retrievedCategory = categoryRepository.findCategoryById(updatedCategory.getId());
+
+        retrievedCategory.setName(updatedCategory.getName());
+
+        categoryRepository.save(retrievedCategory);
+
+        return retrievedCategory;
+    }
+
+
 }

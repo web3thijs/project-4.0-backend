@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CategoryRepository extends MongoRepository<Category, ObjectId> {
+public interface CategoryRepository extends MongoRepository<Category, String> {
     List<Category> findAll();
-    Category findCategoryById(ObjectId id);
+    Category findCategoryById(String id);
 }
