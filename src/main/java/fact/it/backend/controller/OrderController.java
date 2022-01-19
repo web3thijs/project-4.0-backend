@@ -24,9 +24,9 @@ public class OrderController {
     public void fillDB(){
         if(orderRepository.count()==0){
             String customer1 = new ObjectId().toString();
-            orderRepository.save(new Order(customer1, new Date()));
-            orderRepository.save(new Order(new ObjectId().toString(), new Date()));
-            orderRepository.save(new Order(customer1, new Date()));
+            orderRepository.save(new Order("61e80b759212ed04521a94b0",  customer1, new Date()));
+            orderRepository.save(new Order("61e80b759212ed04521a94b2", new ObjectId().toString(), new Date()));
+            orderRepository.save(new Order("61e80b759212ed04521a94b3", customer1, new Date()));
         }
         System.out.println("DB test orders: " + orderRepository.findAll().size() + " orders.");
     }

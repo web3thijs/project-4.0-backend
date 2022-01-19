@@ -21,7 +21,8 @@ public class Product {
 
     }
 
-    public Product( String categoryId, String organizationId, String name, Number price, String description, Boolean isActive, String imageUrl) {
+    public Product(String id, String categoryId, String organizationId, String name, Number price, String description, Boolean isActive, String imageUrl) {
+        this.id = id;
         this.categoryId = categoryId;
         this.organizationId = organizationId;
         this.name = name;
@@ -33,6 +34,10 @@ public class Product {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCategoryId() {

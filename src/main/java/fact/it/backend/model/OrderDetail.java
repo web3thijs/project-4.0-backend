@@ -8,8 +8,8 @@ public class OrderDetail {
 
     @Id
     private String id;
-    private String productId;
-    private String orderId;
+    private Product product;
+    private Order order;
     private String sizeId;
     private String colorId;
     private Number amount;
@@ -18,9 +18,9 @@ public class OrderDetail {
 
     }
 
-    public OrderDetail(String productId, String orderId, String sizeId, String colorId, Number amount) {
-        this.productId = productId;
-        this.orderId = orderId;
+    public OrderDetail(Product product, Order order, String sizeId, String colorId, Number amount) {
+        this.product = product;
+        this.order = order;
         this.sizeId = sizeId;
         this.colorId = colorId;
         this.amount = amount;
@@ -30,20 +30,20 @@ public class OrderDetail {
         return id;
     }
 
-    public String getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public String getSizeId() {
