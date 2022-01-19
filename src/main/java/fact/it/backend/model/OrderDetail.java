@@ -8,21 +8,21 @@ public class OrderDetail {
 
     @Id
     private String id;
-    private String productId;
-    private String orderId;
-    private String sizeId;
-    private String colorId;
+    private Product product;
+    private Order order;
+    private Size size;
+    private Color color;
     private Number amount;
 
     public OrderDetail(){
 
     }
 
-    public OrderDetail(String productId, String orderId, String sizeId, String colorId, Number amount) {
-        this.productId = productId;
-        this.orderId = orderId;
-        this.sizeId = sizeId;
-        this.colorId = colorId;
+    public OrderDetail(Product product, Order order, Size size, Color color, Number amount) {
+        this.product = product;
+        this.order = order;
+        this.size = size;
+        this.color = color;
         this.amount = amount;
     }
 
@@ -30,36 +30,36 @@ public class OrderDetail {
         return id;
     }
 
-    public String getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public String getSizeId() {
-        return sizeId;
+    public Size getSize() {
+        return size;
     }
 
-    public void setSizeId(String sizeId) {
-        this.sizeId = sizeId;
+    public void setSize(Size size) {
+        this.size = size;
     }
 
-    public String getColorId() {
-        return colorId;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorId(String colorId) {
-        this.colorId = colorId;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Number getAmount() {

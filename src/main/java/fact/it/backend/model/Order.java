@@ -17,13 +17,18 @@ public class Order {
 
     }
 
-    public Order(String customerId, Date date) {
+    public Order(String id,String customerId, Date date) {
+        this.id = id;
         this.customerId = customerId;
         this.date = date;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCustomerId() {

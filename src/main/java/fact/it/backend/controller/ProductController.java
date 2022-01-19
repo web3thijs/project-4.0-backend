@@ -21,8 +21,8 @@ public class ProductController {
     @PostConstruct
     public void fillDB(){
         if(productRepository.count() == 0){
-            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), "T-shirt", 13.99, "Plain T-shirt", true, "Google.com"));
-            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
+            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), "T-shirt", 13.99, "Plain T-shirt", true, "Google.com"));
+            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
         }
 
         System.out.println("DB test products: " + productRepository.findAll().size() + " products.");
