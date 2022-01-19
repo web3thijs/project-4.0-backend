@@ -1,12 +1,11 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.Category;
+import fact.it.backend.model.Product;
 import fact.it.backend.repository.CategoryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -21,9 +20,9 @@ public class CategoryController {
     @PostConstruct
     public void fillDB(){
         if(categoryRepository.count() == 0){
-            categoryRepository.save(new Category(new ObjectId(), "Category 1"));
-            categoryRepository.save(new Category(new ObjectId(), "Category 2"));
-            categoryRepository.save(new Category(new ObjectId(), "Category 3"));
+            categoryRepository.save(new Category("Category 1"));
+            categoryRepository.save(new Category("Category 2"));
+            categoryRepository.save(new Category("Category 3"));
         }
 
         System.out.println("DB test: " + categoryRepository.findAll().size());
@@ -32,5 +31,9 @@ public class CategoryController {
     @GetMapping("")
     public List<Category> findAll() { return categoryRepository.findAll(); }
 
-    
+    @PostMapping("")
+    public Category addCategory(@RequestBody Category category){
+        categoryRepository.save(category);
+        return category;
+    }
 }

@@ -21,10 +21,8 @@ public class ProductController {
     @PostConstruct
     public void fillDB(){
         if(productRepository.count() == 0){
-            ObjectId id1 = new ObjectId();
-            ObjectId id2 = new ObjectId();
-            productRepository.save(new Product(id1,id1, id1, "T-shirt", 13.99, "Plain T-shirt", true, "Google.com"));
-            productRepository.save(new Product(id2,id2, id2, "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
+            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), "T-shirt", 13.99, "Plain T-shirt", true, "Google.com"));
+            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
         }
 
         System.out.println("DB test products: " + productRepository.findAll().size() + " products.");
@@ -36,12 +34,12 @@ public class ProductController {
     }
 
     @GetMapping("/organization/{organizationId}")
-    public List<Product> findProductsByOrganizationId(@PathVariable ObjectId organizationId){
+    public List<Product> findProductsByOrganizationId(@PathVariable String organizationId){
         return productRepository.findProductsByOrganizationId(organizationId);
     }
 
     @GetMapping("/{id}")
-    public Product find(@PathVariable ObjectId id){
+    public Product find(@PathVariable String id){
         return productRepository.findProductById(id);
     }
 
@@ -69,7 +67,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProduct(@PathVariable ObjectId id){
+    public ResponseEntity deleteProduct(@PathVariable String id){
         Product product = productRepository.findProductById(id);
 
         if(product != null){

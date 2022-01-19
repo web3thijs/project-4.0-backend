@@ -8,23 +8,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Category {
 
     @Id
-    private ObjectId id;
+    private String id;
     private String name;
 
     public Category() {
     }
 
-    public Category(ObjectId id, String name) {
-        this.id = id;
+    public Category(String name) {
         this.name = name;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public String getName() {
