@@ -3,9 +3,7 @@ package fact.it.backend.controller;
 import fact.it.backend.model.Customer;
 import fact.it.backend.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -28,4 +26,10 @@ public class CustomerController {
 
     @GetMapping("")
     public List<Customer> findAll() { return customerRepository.findAll(); }
+
+    @PostMapping("")
+    public Customer addCustomer(@RequestBody Customer customer){
+        customerRepository.save(customer);
+        return customer;
+    }
 }
