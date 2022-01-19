@@ -3,6 +3,7 @@ package fact.it.backend.controller;
 import fact.it.backend.model.Customer;
 import fact.it.backend.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -50,5 +51,17 @@ public class CustomerController {
         customerRepository.save(updatedCustomer);
 
         return updatedCustomer;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCustomer(@PathVariable String id){
+        Customer customer = customerRepository.findCustomerById(id);
+
+        if(customer != null){
+            customerRepository.delete(customer);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
