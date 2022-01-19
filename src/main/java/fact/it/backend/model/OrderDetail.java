@@ -29,7 +29,7 @@ public class OrderDetail {
     public String getId() {
         return id;
     }
-    
+
     public String getProductId() {
         return productId;
     }
