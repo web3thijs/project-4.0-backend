@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Product {
 
     @Id
-    private ObjectId id;
-    private ObjectId categoryId;
-    private ObjectId organizationId;
+    private String id;
+    private String categoryId;
+    private String organizationId;
     private String name;
     private Number price;
     private String description;
@@ -21,8 +21,7 @@ public class Product {
 
     }
 
-    public Product(ObjectId id, ObjectId categoryId, ObjectId organizationId, String name, Number price, String description, Boolean isActive, String imageUrl) {
-        this.id = id;
+    public Product( String categoryId, String organizationId, String name, Number price, String description, Boolean isActive, String imageUrl) {
         this.categoryId = categoryId;
         this.organizationId = organizationId;
         this.name = name;
@@ -32,27 +31,23 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
-    public ObjectId getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(ObjectId categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 
-    public ObjectId getOrganizationId() {
+    public String getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(ObjectId organizationId) {
+    public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
     }
 
