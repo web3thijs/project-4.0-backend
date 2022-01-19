@@ -37,12 +37,12 @@ public class ReviewController {
         return reviewRepository.findAll();
     }
 
-    @GetMapping("/reviews/product/{productId}")
+    @GetMapping("/product/{productId}")
     public List<Review> findReviewsByProductId(@PathVariable String productId){
         return reviewRepository.findReviewsByProductId(productId);
     }
 
-    @GetMapping("/reviews/customer/{customerId}")
+    @GetMapping("/customer/{customerId}")
     public List<Review> findReviewsByCustomerId(@PathVariable String customerId){
         return reviewRepository.findReviewsByCustomerId(customerId);
     }
