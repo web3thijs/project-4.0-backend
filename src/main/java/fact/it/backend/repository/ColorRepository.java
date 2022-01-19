@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ColorRepository extends MongoRepository<Color, String> {
     List<Color> findAll();
-    Color findColorById(ObjectId id);
+    Color findColorById(String id);
 }

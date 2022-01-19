@@ -1,6 +1,5 @@
 package fact.it.backend.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,52 +7,47 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Stock {
 
     @Id
-    private ObjectId id;
-    private ObjectId sizeId;
-    private ObjectId colorId;
-    private ObjectId productId;
+    private String id;
+    private String sizeId;
+    private String colorId;
+    private String productId;
     private int amountInStock;
 
     public Stock() {
     }
 
-    public Stock(ObjectId id, ObjectId sizeId, ObjectId colorId, ObjectId productId, int amountInStock) {
-        this.id = id;
+    public Stock(String sizeId, String colorId, String productId, int amountInStock) {
         this.sizeId = sizeId;
         this.colorId = colorId;
         this.productId = productId;
         this.amountInStock = amountInStock;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
-    public ObjectId getSizeId() {
+    public String getSizeId() {
         return sizeId;
     }
 
-    public void setSizeId(ObjectId sizeId) {
+    public void setSizeId(String sizeId) {
         this.sizeId = sizeId;
     }
 
-    public ObjectId getColorId() {
+    public String getColorId() {
         return colorId;
     }
 
-    public void setColorId(ObjectId colorId) {
+    public void setColorId(String colorId) {
         this.colorId = colorId;
     }
 
-    public ObjectId getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(ObjectId productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 

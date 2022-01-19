@@ -8,24 +8,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Color {
 
     @Id
-    private ObjectId id;
+    private String id;
     private String name;
 
     public Color(){
 
     }
 
-    public Color(ObjectId id, String name){
-        this.id = id;
+    public Color(String name){
         this.name = name;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public String getName() {

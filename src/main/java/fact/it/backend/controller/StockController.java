@@ -1,9 +1,7 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Product;
 import fact.it.backend.model.Stock;
 import fact.it.backend.repository.StockRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +19,10 @@ public class StockController {
     @PostConstruct
     public void fillDB(){
         if(stockRepository.count() == 0){
-            ObjectId id1 = new ObjectId();
-            ObjectId id2 = new ObjectId();
-            stockRepository.save(new Stock(id1, id1, id1, id1, 10));
-            stockRepository.save(new Stock(id2, id2, id2, id2, 15));
+            String id1 = new String().toString();
+            String id2 = new String().toString();
+            stockRepository.save(new Stock(id1, id1, id1, 10));
+            stockRepository.save(new Stock(id2, id2, id2, 15));
         }
         System.out.println("DB test stocks: " + stockRepository.findAll().size() + " stocks.");
 
@@ -36,7 +34,7 @@ public class StockController {
     }
 
     @GetMapping("/product/{productId}")
-    public List<Stock> findStocksByProductId(@PathVariable ObjectId productId){
+    public List<Stock> findStocksByProductId(@PathVariable String productId){
         return stockRepository.findStocksByProductId(productId);
     }
 
@@ -61,7 +59,7 @@ public class StockController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteStock(@PathVariable ObjectId id){
+    public ResponseEntity deleteStock(@PathVariable String id){
         Stock stock = stockRepository.findStockById(id);
 
         if(stock != null){

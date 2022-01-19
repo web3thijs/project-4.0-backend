@@ -2,7 +2,6 @@ package fact.it.backend.controller;
 
 import fact.it.backend.model.Color;
 import fact.it.backend.repository.ColorRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +19,9 @@ public class ColorController {
     @PostConstruct
     public void fillDB(){
         if(colorRepository.count() == 0){
-             ObjectId id1 = new ObjectId();
-             ObjectId id2 = new ObjectId();
-             ObjectId id3 = new ObjectId();
-             colorRepository.save(new Color(id1, "red"));
-             colorRepository.save(new Color(id2, "green"));
-             colorRepository.save(new Color(id3, "blue"));
+             colorRepository.save(new Color("red"));
+             colorRepository.save(new Color("green"));
+             colorRepository.save(new Color("blue"));
         }
         System.out.println("DB test colors: " + colorRepository.findAll().size() + " colors.");
     }
@@ -40,7 +36,7 @@ public class ColorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteColor(@PathVariable ObjectId id){
+    public ResponseEntity deleteColor(@PathVariable String id){
         Color color = colorRepository.findColorById(id);
 
         if(color != null){
