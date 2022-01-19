@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@RequestMapping(path = "api/sizes")
 @RestController
 public class SizeController {
 
@@ -29,16 +30,16 @@ public class SizeController {
         System.out.println("DB test sizes: " + sizeRepository.findAll().size() + " sizes.");
     }
 
-    @GetMapping("/sizes")
+    @GetMapping("")
     public List<Size> findAll() {return sizeRepository.findAll();}
 
-    @PostMapping("/sizes")
+    @PostMapping("")
     public Size addSize(@RequestBody Size size){
         sizeRepository.save(size);
         return size;
     }
 
-    @DeleteMapping("/sizes/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteSize(@PathVariable ObjectId id){
         Size size = sizeRepository.findSizeById(id);
 
