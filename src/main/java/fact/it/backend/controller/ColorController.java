@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@RequestMapping(path = "api/colors")
 @RestController
 public class ColorController {
 
@@ -29,16 +30,16 @@ public class ColorController {
         System.out.println("DB test colors: " + colorRepository.findAll().size() + " colors.");
     }
 
-    @GetMapping("/colors")
+    @GetMapping("")
     public List<Color> findAll() {return colorRepository.findAll();}
 
-    @PostMapping("/colors")
+    @PostMapping("")
     public Color addColor(@RequestBody Color color){
         colorRepository.save(color);
         return color;
     }
 
-    @DeleteMapping("/colors/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteColor(@PathVariable ObjectId id){
         Color color = colorRepository.findColorById(id);
 
