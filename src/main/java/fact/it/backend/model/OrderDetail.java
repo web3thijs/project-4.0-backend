@@ -10,7 +10,7 @@ public class OrderDetail {
     private String id;
     private Product product;
     private Order order;
-    private String sizeId;
+    private Size size;
     private String colorId;
     private Number amount;
 
@@ -18,10 +18,10 @@ public class OrderDetail {
 
     }
 
-    public OrderDetail(Product product, Order order, String sizeId, String colorId, Number amount) {
+    public OrderDetail(Product product, Order order, Size size, String colorId, Number amount) {
         this.product = product;
         this.order = order;
-        this.sizeId = sizeId;
+        this.size = size;
         this.colorId = colorId;
         this.amount = amount;
     }
@@ -46,12 +46,12 @@ public class OrderDetail {
         this.order = order;
     }
 
-    public String getSizeId() {
-        return sizeId;
+    public Size getSize() {
+        return size;
     }
 
-    public void setSizeId(String sizeId) {
-        this.sizeId = sizeId;
+    public void setSize(Size size) {
+        this.size = size;
     }
 
     public String getColorId() {
