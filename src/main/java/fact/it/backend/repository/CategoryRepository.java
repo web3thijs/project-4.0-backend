@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends MongoRepository<Category, ObjectId> {
     List<Category> findAll();
-    Category findByCategoryId(ObjectId id);
+    Category findCategoryById(ObjectId id);
 }
