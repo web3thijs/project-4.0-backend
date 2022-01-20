@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.model.Color;
 import fact.it.backend.model.Size;
 import fact.it.backend.model.Stock;
 import fact.it.backend.repository.StockRepository;
@@ -22,10 +23,12 @@ public class StockController {
         if(stockRepository.count() == 0){
             Size size1 = new Size("61e7ca11710259397a88e7cf", "S");
             Size size2 = new Size("61e7ca11710259397a88e7d0", "M");
+            Color color1 = new Color("61e7c6f1abd83a51b5208b01", "red");
+            Color color2 = new Color("61e7c6f1abd83a51b5208b02", "green");
             String id1 = new String().toString();
             String id2 = new String().toString();
-            stockRepository.save(new Stock(size1, id1, id1, 10));
-            stockRepository.save(new Stock(size2, id2, id2, 15));
+            stockRepository.save(new Stock(size1, color1, id1, 10));
+            stockRepository.save(new Stock(size2, color2, id2, 15));
         }
         System.out.println("DB test stocks: " + stockRepository.findAll().size() + " stocks.");
 
@@ -52,7 +55,7 @@ public class StockController {
         Stock retrievedStock = stockRepository.findStockById(updatedStock.getId());
 
         retrievedStock.setSize(updatedStock.getSize());
-        retrievedStock.setColorId(updatedStock.getColorId());
+        retrievedStock.setColor(updatedStock.getColor());
         retrievedStock.setProductId(updatedStock.getProductId());
         retrievedStock.setAmountInStock(updatedStock.getAmountInStock());
 

@@ -9,16 +9,16 @@ public class Stock {
     @Id
     private String id;
     private Size size;
-    private String colorId;
+    private Color color;
     private String productId;
     private int amountInStock;
 
     public Stock() {
     }
 
-    public Stock(Size size, String colorId, String productId, int amountInStock) {
+    public Stock(Size size, Color color, String productId, int amountInStock) {
         this.size = size;
-        this.colorId = colorId;
+        this.color = color;
         this.productId = productId;
         this.amountInStock = amountInStock;
     }
@@ -35,12 +35,12 @@ public class Stock {
         this.size = size;
     }
 
-    public String getColorId() {
-        return colorId;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorId(String colorId) {
-        this.colorId = colorId;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public String getProductId() {
