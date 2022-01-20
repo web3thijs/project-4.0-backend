@@ -8,7 +8,7 @@ public class Interaction {
 
     @Id
     private String id;
-    private String productId;
+    private Product product;
     private String customerId;
     private String reviewId;
     private Number amountClicks;
@@ -17,8 +17,9 @@ public class Interaction {
 
     }
 
-    public Interaction(String productId, String customerId, String reviewId, Number amountClicks) {
-        this.productId = productId;
+    public Interaction(String id, Product product, String customerId, String reviewId, Number amountClicks) {
+        this.id = id;
+        this.product = product;
         this.customerId = customerId;
         this.reviewId = reviewId;
         this.amountClicks = amountClicks;
@@ -28,12 +29,16 @@ public class Interaction {
         return id;
     }
 
-    public String getProductId() {
-        return productId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public String getCustomerId() {
