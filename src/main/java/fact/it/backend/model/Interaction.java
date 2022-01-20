@@ -10,18 +10,18 @@ public class Interaction {
     private String id;
     private Product product;
     private Customer customer;
-    private String reviewId;
+    private Review review;
     private Number amountClicks;
 
     public Interaction(){
 
     }
 
-    public Interaction(String id, Product product, Customer customer, String reviewId, Number amountClicks) {
+    public Interaction(String id, Product product, Customer customer, Review review, Number amountClicks) {
         this.id = id;
         this.product = product;
         this.customer = customer;
-        this.reviewId = reviewId;
+        this.review = review;
         this.amountClicks = amountClicks;
     }
 
@@ -49,12 +49,12 @@ public class Interaction {
         this.customer = customer;
     }
 
-    public String getReviewId() {
-        return reviewId;
+    public Review getReview() {
+        return review;
     }
 
-    public void setReviewId(String reviewId) {
-        this.reviewId = reviewId;
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public Number getAmountClicks() {

@@ -11,8 +11,6 @@ public class Review {
 
     @Id
     private String id;
-    private String productId;
-    private String customerId;
     private Number score;
     private String title;
     private String text;
@@ -24,9 +22,8 @@ public class Review {
 
     }
 
-    public Review(String productId, String customerId, Number score, String title, String text) {
-        this.productId = productId;
-        this.customerId = customerId;
+    public Review(String id, Number score, String title, String text) {
+        this.id = id;
         this.score = score;
         this.title = title;
         this.text = text;
@@ -34,6 +31,10 @@ public class Review {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Number getScore() {
@@ -46,22 +47,6 @@ public class Review {
 
     public String getTitle() {
         return title;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
     }
 
     public void setTitle(String title) {

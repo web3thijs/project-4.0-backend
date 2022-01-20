@@ -20,13 +20,9 @@ public class ReviewController {
     @PostConstruct
     public void fillDB(){
         if(reviewRepository.count() == 0){
-            String customer1 = new ObjectId().toString();
-            String customer2 = new ObjectId().toString();
-            String product1 = new ObjectId().toString();
-            String product2 = new ObjectId().toString();
-            reviewRepository.save(new Review(product1, customer1, 4, "Good", ""));
-            reviewRepository.save(new Review(product2, customer1, 4.5, "Nice product", "I liked it."));
-            reviewRepository.save(new Review(product1, customer2, 3, "Nice product", "I liked it."));
+            reviewRepository.save(new Review("61e7e7512ddca07d1ddc79a1", 4, "Good", ""));
+            reviewRepository.save(new Review("61e7e7512ddca07d1ddc79a2", 4.5, "Nice product", "I liked it."));
+            reviewRepository.save(new Review("61e7e7512ddca07d1ddc79a3", 3, "Nice product", "I liked it."));
         }
         System.out.println("DB test reviews: " + reviewRepository.findAll().size() + " reviews.");
 
@@ -35,16 +31,6 @@ public class ReviewController {
     @GetMapping("")
     public List<Review> findAll(){
         return reviewRepository.findAll();
-    }
-
-    @GetMapping("/product/{productId}")
-    public List<Review> findReviewsByProductId(@PathVariable String productId){
-        return reviewRepository.findReviewsByProductId(productId);
-    }
-
-    @GetMapping("/customer/{customerId}")
-    public List<Review> findReviewsByCustomerId(@PathVariable String customerId){
-        return reviewRepository.findReviewsByCustomerId(customerId);
     }
 
     @PostMapping("")
@@ -57,8 +43,6 @@ public class ReviewController {
     public Review updateReview(@RequestBody Review updatedReview){
         Review retrievedReview = reviewRepository.findReviewById(updatedReview.getId());
 
-        retrievedReview.setProductId(updatedReview.getProductId());
-        retrievedReview.setCustomerId(updatedReview.getCustomerId());
         retrievedReview.setScore(updatedReview.getScore());
         retrievedReview.setTitle(updatedReview.getTitle());
         retrievedReview.setText(updatedReview.getText());
