@@ -1,12 +1,22 @@
 package fact.it.backend.model;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Collection;
 
 @Document(collection = "users")
 public class Customer extends User{
     private String firstName;
     private String lastName;
     private boolean isAdmin;
+
+    @DBRef
+    private Collection<Order> orders;
+
+    @DBRef
+    private Collection<Interaction> interactions;
+
 
     public Customer() {
     }
