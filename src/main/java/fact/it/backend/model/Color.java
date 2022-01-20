@@ -2,7 +2,10 @@ package fact.it.backend.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Collection;
 
 @Document(collection = "colors")
 public class Color {
@@ -10,6 +13,12 @@ public class Color {
     @Id
     private String id;
     private String name;
+
+    @DBRef
+    private Collection<OrderDetail> orderDetails;
+
+    @DBRef
+    private Collection<Stock> stocks;
 
     public Color(){
 
