@@ -19,9 +19,9 @@ public class ColorController {
     @PostConstruct
     public void fillDB(){
         if(colorRepository.count() == 0){
-             colorRepository.save(new Color("red"));
-             colorRepository.save(new Color("green"));
-             colorRepository.save(new Color("blue"));
+             colorRepository.save(new Color("61e7c6f1abd83a51b5208b01","red"));
+             colorRepository.save(new Color("61e7c6f1abd83a51b5208b02", "green"));
+             colorRepository.save(new Color("61e7c6f1abd83a51b5208b03", "blue"));
         }
         System.out.println("DB test colors: " + colorRepository.findAll().size() + " colors.");
     }
