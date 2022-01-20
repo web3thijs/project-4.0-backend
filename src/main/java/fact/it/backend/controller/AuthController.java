@@ -4,11 +4,14 @@ import fact.it.backend.model.AuthRequest;
 import fact.it.backend.model.AuthResponse;
 import fact.it.backend.model.User;
 import fact.it.backend.repository.UserRepository;
+import fact.it.backend.service.UserService;
+import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +27,13 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/subscription")
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @PostMapping("/register")
     private ResponseEntity<?> subscribeClient(@RequestBody AuthRequest authRequest){
         String email = authRequest.getEmail();
         String password = authRequest.getPassword();
@@ -36,10 +45,10 @@ public class AuthController {
         try{
             userRepository.save(user);
         } catch (Exception e){
-            return ResponseEntity.ok(new AuthResponse("Error during subscription for client " + email));
+            return ResponseEntity.ok(new AuthResponse("Error during registration for client " + email));
         }
 
-        return ResponseEntity.ok(new AuthResponse("Succesful subscription for client " + email));
+        return ResponseEntity.ok(new AuthResponse("Succesful registration for client " + email));
     }
 
     @PostMapping("/authenticate")
@@ -53,6 +62,10 @@ public class AuthController {
             return ResponseEntity.ok(new AuthResponse("Error during authentication for client " + email));
         }
 
-        return ResponseEntity.ok(new AuthResponse("Succesful authentication for client " + email));
+        UserDetails retrievedUser = userService.loadUserByUsername(email);
+
+        String generatedToken = jwtUtils.generateToken(retrievedUser);
+
+        return ResponseEntity.ok(new AuthResponse(generatedToken));
     }
 }
