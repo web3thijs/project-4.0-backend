@@ -1,7 +1,10 @@
 package fact.it.backend.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Collection;
 
 @Document(collection = "reviews")
 public class Review {
@@ -13,6 +16,9 @@ public class Review {
     private Number score;
     private String title;
     private String text;
+
+    @DBRef
+    private Interaction interaction;
 
     public Review(){
 

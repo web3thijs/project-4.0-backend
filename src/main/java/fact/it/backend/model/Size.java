@@ -18,7 +18,7 @@ public class Size {
 
     @DBRef
     private Collection<Stock> stocks;
-    
+
     public Size(){
 
     }
