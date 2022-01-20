@@ -20,8 +20,10 @@ public class OrderDetailController {
 
     @PostConstruct
     public void fillDB(){
-        Order order1 = new Order("61e80b759212ed04521a94b0", new ObjectId().toString(), new Date());
-        Order order2 = new Order("61e80b759212ed04521a94b2", new ObjectId().toString(), new Date());
+        Customer customer1 = new Customer("giannidh@gmail.com", "password123", "0479994529", "Kersstraat 17", "2200", "België", Role.CUSTOMER,"Gianni" , "De Herdt", false);
+        Customer customer2 = new Customer("thijswouters@gmail.com", "password123", "0479954719", "Hoekstraat 165", "1680", "België", Role.CUSTOMER,"Thijs" , "Wouters", true);
+        Order order1 = new Order("61e80b759212ed04521a94b0", customer1, new Date());
+        Order order2 = new Order("61e80b759212ed04521a94b2", customer2, new Date());
         Product product1 = new Product("61e6c2c183f852129f4ffff3", new ObjectId().toString(), new ObjectId().toString(), "T-shirt", 13.99, "Plain T-shirt", true, "Google.com");
         Product product2 = new Product("61e6c2c183f852129f4ffff4", new ObjectId().toString(), new ObjectId().toString(), "Jeans", 23.99, "Plain Jeans", true, "Google.com");
         Size size1 = new Size("61e7ca11710259397a88e7cf", "S");

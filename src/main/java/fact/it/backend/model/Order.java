@@ -12,7 +12,7 @@ public class Order {
 
     @Id
     private String id;
-    private String customerId;
+    private Customer customer;
     private Date date;
 
     @DBRef
@@ -22,9 +22,9 @@ public class Order {
 
     }
 
-    public Order(String id,String customerId, Date date) {
+    public Order(String id,Customer customer, Date date) {
         this.id = id;
-        this.customerId = customerId;
+        this.customer = customer;
         this.date = date;
     }
 
@@ -36,12 +36,12 @@ public class Order {
         this.id = id;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Date getDate() {
