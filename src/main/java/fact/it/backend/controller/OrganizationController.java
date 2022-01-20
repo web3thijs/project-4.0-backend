@@ -15,15 +15,6 @@ public class OrganizationController {
     @Autowired
     OrganizationRepository organizationRepository;
 
-    @PostConstruct
-    public void fillDB(){
-        if(organizationRepository.count() == 3){
-            organizationRepository.save(new Organization("supporters@wwf.be", "wwf123", "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Het World Wide Fund for Nature – waarvan de Nederlandse tak Wereld Natuur Fonds heet en de Amerikaanse World Wildlife Fund – is een wereldwijd opererende organisatie voor bescherming van de natuur", "+3223400920", "supporters@wwf.be"));
-        }
-
-        System.out.println("DB test organizations: " + organizationRepository.findAll().size());
-    }
-
     @GetMapping("")
     public List<Organization> findAll(){
         return organizationRepository.findByRole(Role.ORGANIZATION);

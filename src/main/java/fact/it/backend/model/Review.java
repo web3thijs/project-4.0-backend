@@ -22,8 +22,7 @@ public class Review {
 
     }
 
-    public Review(String id, Number score, String title, String text) {
-        this.id = id;
+    public Review( Number score, String title, String text) {
         this.score = score;
         this.title = title;
         this.text = text;

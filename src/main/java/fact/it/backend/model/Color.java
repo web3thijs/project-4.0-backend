@@ -24,8 +24,7 @@ public class Color {
 
     }
 
-    public Color(String id, String name){
-        this.id = id;
+    public Color(String name){
         this.name = name;
     }
 

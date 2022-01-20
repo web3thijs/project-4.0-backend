@@ -22,8 +22,7 @@ public class Order {
 
     }
 
-    public Order(String id,Customer customer, Date date) {
-        this.id = id;
+    public Order(Customer customer, Date date) {
         this.customer = customer;
         this.date = date;
     }

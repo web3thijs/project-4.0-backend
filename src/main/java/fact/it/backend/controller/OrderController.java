@@ -22,18 +22,6 @@ public class OrderController {
     @Autowired
     OrderRepository orderRepository;
 
-    @PostConstruct
-    public void fillDB(){
-        if(orderRepository.count()==0){
-            Customer customer1 = new Customer("giannidh@gmail.com", "password123", "0479994529", "Kersstraat 17", "2200", "België", Role.CUSTOMER,"Gianni" , "De Herdt", false);
-            Customer customer2 = new Customer("thijswouters@gmail.com", "password123", "0479954719", "Hoekstraat 165", "1680", "België", Role.CUSTOMER,"Thijs" , "Wouters", true);
-            orderRepository.save(new Order("61e80b759212ed04521a94b0",  customer1, new Date()));
-            orderRepository.save(new Order("61e80b759212ed04521a94b2", customer2, new Date()));
-            orderRepository.save(new Order("61e80b759212ed04521a94b3", customer1, new Date()));
-        }
-        System.out.println("DB test orders: " + orderRepository.findAll().size() + " orders.");
-    }
-
     @GetMapping("")
     public List<Order> findAll(){
         return orderRepository.findAll();

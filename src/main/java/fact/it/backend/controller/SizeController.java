@@ -17,16 +17,6 @@ public class SizeController {
     @Autowired
     SizeRepository sizeRepository;
 
-    @PostConstruct
-    public void fillDB(){
-        if(sizeRepository.count() == 0){
-            sizeRepository.save(new Size("61e7ca11710259397a88e7cf","S"));
-            sizeRepository.save(new Size("61e7ca11710259397a88e7d0","M"));
-            sizeRepository.save(new Size("61e7ca11710259397a88e7d1","L"));
-        }
-        System.out.println("DB test sizes: " + sizeRepository.findAll().size() + " sizes.");
-    }
-
     @GetMapping("")
     public List<Size> findAll() {return sizeRepository.findAll();}
 

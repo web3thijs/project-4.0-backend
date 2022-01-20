@@ -17,8 +17,7 @@ public class Interaction {
 
     }
 
-    public Interaction(String id, Product product, Customer customer, Review review, Number amountClicks) {
-        this.id = id;
+    public Interaction(Product product, Customer customer, Review review, Number amountClicks) {
         this.product = product;
         this.customer = customer;
         this.review = review;

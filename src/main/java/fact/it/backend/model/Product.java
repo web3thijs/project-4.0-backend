@@ -33,8 +33,7 @@ public class Product {
 
     }
 
-    public Product(String id, Category category, Organization organization, String name, Number price, String description, Boolean isActive, String imageUrl) {
-        this.id = id;
+    public Product(Category category, Organization organization, String name, Number price, String description, Boolean isActive, String imageUrl) {
         this.category = category;
         this.organization = organization;
         this.name = name;

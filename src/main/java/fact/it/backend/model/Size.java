@@ -23,8 +23,7 @@ public class Size {
 
     }
 
-    public Size(String id, String name) {
-        this.id = id;
+    public Size(String name) {
         this.name = name;
     }
 

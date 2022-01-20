@@ -17,17 +17,6 @@ public class ReviewController {
     @Autowired
     ReviewRepository reviewRepository;
 
-    @PostConstruct
-    public void fillDB(){
-        if(reviewRepository.count() == 0){
-            reviewRepository.save(new Review("61e7e7512ddca07d1ddc79a1", 4, "Good", ""));
-            reviewRepository.save(new Review("61e7e7512ddca07d1ddc79a2", 4.5, "Nice product", "I liked it."));
-            reviewRepository.save(new Review("61e7e7512ddca07d1ddc79a3", 3, "Nice product", "I liked it."));
-        }
-        System.out.println("DB test reviews: " + reviewRepository.findAll().size() + " reviews.");
-
-    }
-
     @GetMapping("")
     public List<Review> findAll(){
         return reviewRepository.findAll();
