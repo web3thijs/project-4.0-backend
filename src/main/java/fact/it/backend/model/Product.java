@@ -2,7 +2,10 @@ package fact.it.backend.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Collection;
 
 @Document(collection = "products")
 public class Product {
@@ -16,6 +19,15 @@ public class Product {
     private String description;
     private Boolean isActive;
     private String imageUrl;
+
+    @DBRef
+    private Collection<Stock> stock;
+
+    @DBRef
+    private Collection<OrderDetail> orderDetails;
+
+    @DBRef
+    private Collection<Interaction> interactions;
 
     public Product(){
 
