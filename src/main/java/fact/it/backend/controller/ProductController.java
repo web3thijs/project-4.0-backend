@@ -1,6 +1,10 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.model.Category;
+import fact.it.backend.model.Organization;
 import fact.it.backend.model.Product;
+import fact.it.backend.model.Role;
+import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.ProductRepository;
 import org.apache.coyote.Response;
 import org.bson.types.ObjectId;
@@ -17,12 +21,16 @@ public class ProductController {
 
     @Autowired
     ProductRepository productRepository;
+    CategoryRepository categoryRepository;
 
     @PostConstruct
     public void fillDB(){
         if(productRepository.count() == 0){
-            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), "T-shirt", 13.99, "Plain T-shirt", true, "Google.com"));
-            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
+            Category category1 = new Category("61e7e7ba38d73c28cb36c3eb", "shirts");
+            Category category2 = new Category("61e7e7ba38d73c28cb36c3ec", "pants");
+            Organization organization1 = new Organization("supporters@wwf.be", "wwf123", "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Het World Wide Fund for Nature – waarvan de Nederlandse tak Wereld Natuur Fonds heet en de Amerikaanse World Wildlife Fund – is een wereldwijd opererende organisatie voor bescherming van de natuur", "+3223400920", "supporters@wwf.be");
+            productRepository.save(new Product("61e6c2c183f852129f4ffff3", category1, organization1 , "T-shirt", 13.99, "Plain T-shirt", true, "Google.com"));
+            productRepository.save(new Product("61e6c2c183f852129f4ffff4", category2, organization1, "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
         }
 
         System.out.println("DB test products: " + productRepository.findAll().size() + " products.");
@@ -53,8 +61,8 @@ public class ProductController {
     public Product updateProduct(@RequestBody Product updatedProduct){
         Product retrievedProduct = productRepository.findProductById(updatedProduct.getId());
 
-        retrievedProduct.setCategoryId(updatedProduct.getCategoryId());
-        retrievedProduct.setOrganizationId(updatedProduct.getOrganizationId());
+        retrievedProduct.setCategory(updatedProduct.getCategory());
+        retrievedProduct.setOrganization(updatedProduct.getOrganization());
         retrievedProduct.setName(updatedProduct.getName());
         retrievedProduct.setPrice(updatedProduct.getPrice());
         retrievedProduct.setDescription(updatedProduct.getDescription());

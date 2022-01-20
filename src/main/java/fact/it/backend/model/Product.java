@@ -12,8 +12,8 @@ public class Product {
 
     @Id
     private String id;
-    private String categoryId;
-    private String organizationId;
+    private Category category;
+    private Organization organization;
     private String name;
     private Number price;
     private String description;
@@ -33,10 +33,10 @@ public class Product {
 
     }
 
-    public Product(String id, String categoryId, String organizationId, String name, Number price, String description, Boolean isActive, String imageUrl) {
+    public Product(String id, Category category, Organization organization, String name, Number price, String description, Boolean isActive, String imageUrl) {
         this.id = id;
-        this.categoryId = categoryId;
-        this.organizationId = organizationId;
+        this.category = category;
+        this.organization = organization;
         this.name = name;
         this.price = price;
         this.description = description;
@@ -52,20 +52,20 @@ public class Product {
         this.id = id;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public String getOrganizationId() {
-        return organizationId;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     public String getName() {
