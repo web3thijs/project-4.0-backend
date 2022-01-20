@@ -1,9 +1,11 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.Color;
+import fact.it.backend.model.Product;
 import fact.it.backend.model.Size;
 import fact.it.backend.model.Stock;
 import fact.it.backend.repository.StockRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +27,10 @@ public class StockController {
             Size size2 = new Size("61e7ca11710259397a88e7d0", "M");
             Color color1 = new Color("61e7c6f1abd83a51b5208b01", "red");
             Color color2 = new Color("61e7c6f1abd83a51b5208b02", "green");
-            String id1 = new String().toString();
-            String id2 = new String().toString();
-            stockRepository.save(new Stock(size1, color1, id1, 10));
-            stockRepository.save(new Stock(size2, color2, id2, 15));
+            Product product1 = new Product("61e6c2c183f852129f4ffff3", new ObjectId().toString(), new ObjectId().toString(), "T-shirt", 13.99, "Plain T-shirt", true, "Google.com");
+            Product product2 = new Product("61e6c2c183f852129f4ffff4", new ObjectId().toString(), new ObjectId().toString(), "Jeans", 23.99, "Plain Jeans", true, "Google.com");
+            stockRepository.save(new Stock(size1, color1, product1, 10));
+            stockRepository.save(new Stock(size2, color2, product2, 15));
         }
         System.out.println("DB test stocks: " + stockRepository.findAll().size() + " stocks.");
 
@@ -56,7 +58,7 @@ public class StockController {
 
         retrievedStock.setSize(updatedStock.getSize());
         retrievedStock.setColor(updatedStock.getColor());
-        retrievedStock.setProductId(updatedStock.getProductId());
+        retrievedStock.setProduct(updatedStock.getProduct());
         retrievedStock.setAmountInStock(updatedStock.getAmountInStock());
 
         stockRepository.save(retrievedStock);

@@ -10,16 +10,16 @@ public class Stock {
     private String id;
     private Size size;
     private Color color;
-    private String productId;
+    private Product product;
     private int amountInStock;
 
     public Stock() {
     }
 
-    public Stock(Size size, Color color, String productId, int amountInStock) {
+    public Stock(Size size, Color color, Product product, int amountInStock) {
         this.size = size;
         this.color = color;
-        this.productId = productId;
+        this.product = product;
         this.amountInStock = amountInStock;
     }
 
@@ -43,12 +43,12 @@ public class Stock {
         this.color = color;
     }
 
-    public String getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getAmountInStock() {
