@@ -1,5 +1,6 @@
 package fact.it.backend.util;
 
+import fact.it.backend.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,8 +16,9 @@ import java.util.function.Function;
 public class JwtUtils {
     private static final String SECRET_KEY = "secret";
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, Role role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
         return createToken(claims, userDetails.getUsername());
     }
 
@@ -37,7 +39,7 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
+    public Claims extractAllClaims(String token){
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 

@@ -2,7 +2,9 @@ package fact.it.backend.controller;
 
 import fact.it.backend.model.AuthRequest;
 import fact.it.backend.model.AuthResponse;
+import fact.it.backend.model.Category;
 import fact.it.backend.model.User;
+import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.UserRepository;
 import fact.it.backend.service.UserService;
 import fact.it.backend.util.JwtUtils;
@@ -12,10 +14,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.Console;
 
 @RequestMapping(path = "/api")
 @RestController
@@ -33,6 +38,9 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/register")
     private ResponseEntity<?> subscribeClient(@RequestBody AuthRequest authRequest){
         String email = authRequest.getEmail();
@@ -40,7 +48,7 @@ public class AuthController {
         User user = new User();
 
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
 
         try{
             userRepository.save(user);
@@ -63,8 +71,9 @@ public class AuthController {
         }
 
         UserDetails retrievedUser = userService.loadUserByUsername(email);
+        User retrievedUser2 = userRepository.findUserByEmail(email);
 
-        String generatedToken = jwtUtils.generateToken(retrievedUser);
+        String generatedToken = jwtUtils.generateToken(retrievedUser, retrievedUser2.getRole());
 
         return ResponseEntity.ok(new AuthResponse(generatedToken));
     }
