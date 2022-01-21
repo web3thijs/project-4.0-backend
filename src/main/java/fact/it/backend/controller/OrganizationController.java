@@ -32,22 +32,24 @@ public class OrganizationController {
     }
 
     @PutMapping
-    public Organization updateOrganization(@RequestBody Organization updatedOrganizationr){
-        Organization retrievedOrganization= organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganizationr.getId());
+    public Organization updateOrganization(@RequestBody Organization updatedOrganization){
+        Organization retrievedOrganization= organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganization.getId());
 
-        retrievedOrganization.setEmail(updatedOrganizationr.getEmail());
-        retrievedOrganization.setPassword(updatedOrganizationr.getPassword());
-        retrievedOrganization.setPhoneNr(updatedOrganizationr.getPhoneNr());
-        retrievedOrganization.setAddress(updatedOrganizationr.getAddress());
-        retrievedOrganization.setPostalCode(updatedOrganizationr.getPostalCode());
-        retrievedOrganization.setCountry(updatedOrganizationr.getCountry());
-        retrievedOrganization.setRole(updatedOrganizationr.getRole());
-        retrievedOrganization.setOrganizationName(updatedOrganizationr.getOrganizationName());
-        retrievedOrganization.setCompanyRegistrationNr(updatedOrganizationr.getCompanyRegistrationNr());
-        retrievedOrganization.setVatNr(updatedOrganizationr.getVatNr());
-        retrievedOrganization.setAbout(updatedOrganizationr.getAbout());
-        retrievedOrganization.setSupportPhoneNr(updatedOrganizationr.getSupportPhoneNr());
-        retrievedOrganization.setSupportEmail(updatedOrganizationr.getSupportEmail());
+        retrievedOrganization.setEmail(updatedOrganization.getEmail());
+        retrievedOrganization.setPassword(updatedOrganization.getPassword());
+        retrievedOrganization.setPhoneNr(updatedOrganization.getPhoneNr());
+        retrievedOrganization.setAddress(updatedOrganization.getAddress());
+        retrievedOrganization.setPostalCode(updatedOrganization.getPostalCode());
+        retrievedOrganization.setCountry(updatedOrganization.getCountry());
+        retrievedOrganization.setRole(updatedOrganization.getRole());
+        retrievedOrganization.setOrganizationName(updatedOrganization.getOrganizationName());
+        retrievedOrganization.setCompanyRegistrationNr(updatedOrganization.getCompanyRegistrationNr());
+        retrievedOrganization.setVatNr(updatedOrganization.getVatNr());
+        retrievedOrganization.setWho(updatedOrganization.getWho());
+        retrievedOrganization.setWhat(updatedOrganization.getWhat());
+        retrievedOrganization.setHelp(updatedOrganization.getHelp());
+        retrievedOrganization.setSupportPhoneNr(updatedOrganization.getSupportPhoneNr());
+        retrievedOrganization.setSupportEmail(updatedOrganization.getSupportEmail());
 
         organizationRepository.save(retrievedOrganization);
 

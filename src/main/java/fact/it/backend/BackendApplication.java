@@ -65,11 +65,12 @@ public class BackendApplication {
         Review review2 = new Review(4.5, "Nice product", "I liked it.");
         Customer customer1 = new Customer("giannidh@gmail.com", "password123", "0479994529", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER,"Gianni" , "De Herdt", false);
         Customer customer2 = new Customer("thijswouters@gmail.com", "password123", "0479954719", "Hoekstraat 165", "1680", "Belgium", Role.CUSTOMER,"Thijs" , "Wouters", true);
-        Organization organization1 = new Organization("supporters@wwf.be", "wwf123", "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Het World Wide Fund for Nature – waarvan de Nederlandse tak Wereld Natuur Fonds heet en de Amerikaanse World Wildlife Fund – is een wereldwijd opererende organisatie voor bescherming van de natuur", "+3223400920", "supporters@wwf.be", Arrays.asList("Google.com"));
+        Organization organization1 = new Organization("supporters@wwf.be", "wwf123", "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "", "", "", "+3223400920", "supporters@wwf.be", Arrays.asList("Google.com"));
+        Organization organization2 = new Organization("2@wwf.be", "wwf123", "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "", "", "", "+3223400920", "supporters@wwf.be", Arrays.asList("Google.com"));
         Order order1 = new Order( customer1, new Date());
         Order order2 = new Order( customer2, new Date());
         Product product1 = new Product(category1, organization1, "T-shirt", 13.99, "Plain T-shirt", true, Arrays.asList("Google.com"));
-        Product product2 = new Product( category2, organization1, "Jeans", 23.99, "Plain Jeans", true, Arrays.asList("Yahoo.com"));
+        Product product2 = new Product( category2, organization2, "Jeans", 23.99, "Plain Jeans", true, Arrays.asList("Yahoo.com"));
 
 
         if(categoryRepository.count()==0){
@@ -84,6 +85,7 @@ public class BackendApplication {
             customerRepository.save(customer1);
             customerRepository.save(customer2);
             organizationRepository.save(organization1);
+            organizationRepository.save(organization2);
         }
         if(interactionRepository.count() == 0){
             interactionRepository.save(new Interaction(product1, customer1,review1, 26));
