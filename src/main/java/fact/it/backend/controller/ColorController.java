@@ -1,6 +1,7 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.Color;
+import fact.it.backend.model.Role;
 import fact.it.backend.repository.ColorRepository;
 import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,12 +36,17 @@ public class ColorController {
         System.out.println("DB test colors: " + colorRepository.findAll().size() + " colors.");
     }
 
-    @GetMapping("")
-    public String findAll(@RequestHeader("authorization") String tokenWithPrefix) {
-        String token = tokenWithPrefix.substring(7);
+//    @GetMapping("")
+//    public String findAll(@RequestHeader("authorization") String tokenWithPrefix) {
+//        String token = tokenWithPrefix.substring(7);
+//        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+//        String role = claims.get("role").toString();
+//
+//        return role;
+//    }
 
-        return jwtUtils.extractAllClaims(token).toString();
-    }
+    @GetMapping("")
+    public List<Color> findAll() {return colorRepository.findAll();}
 
     @PostMapping("")
     public Color addColor(@RequestBody Color color){

@@ -1,9 +1,6 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.AuthRequest;
-import fact.it.backend.model.AuthResponse;
-import fact.it.backend.model.Category;
-import fact.it.backend.model.User;
+import fact.it.backend.model.*;
 import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.UserRepository;
 import fact.it.backend.service.UserService;
@@ -15,10 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Console;
 
@@ -41,11 +35,20 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register")
-    private ResponseEntity<?> subscribeClient(@RequestBody AuthRequest authRequest){
+    @PostMapping("/register/{role}")
+    private ResponseEntity<?> subscribeClient(@RequestBody AuthRequest authRequest, @PathVariable String role){
         String email = authRequest.getEmail();
         String password = authRequest.getPassword();
         User user = new User();
+
+        switch (role){
+            case "customer":
+                user.setRole(Role.CUSTOMER);
+                break;
+            case "organization":
+                user.setRole(Role.ORGANIZATION);
+                break;
+        }
 
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
