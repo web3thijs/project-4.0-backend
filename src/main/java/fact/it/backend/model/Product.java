@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
+import java.util.List;
 
 @Document(collection = "products")
 public class Product {
@@ -18,7 +19,7 @@ public class Product {
     private Number price;
     private String description;
     private Boolean isActive;
-    private String imageUrl;
+    private List<String> imageUrl;
 
     @DBRef
     private Collection<Stock> stock;
@@ -33,7 +34,7 @@ public class Product {
 
     }
 
-    public Product(Category category, Organization organization, String name, Number price, String description, Boolean isActive, String imageUrl) {
+    public Product(Category category, Organization organization, String name, Number price, String description, Boolean isActive, List<String> imageUrl) {
         this.category = category;
         this.organization = organization;
         this.name = name;
@@ -103,11 +104,11 @@ public class Product {
         isActive = active;
     }
 
-    public String getImageUrl() {
+    public List<String> getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(List<String> imageUrl) {
         this.imageUrl = imageUrl;
     }
 }
