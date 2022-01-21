@@ -11,7 +11,9 @@ public class Organization extends User{
     private String organizationName;
     private String companyRegistrationNr;
     private String vatNr;
-    private String about;
+    private String who;
+    private String what;
+    private String help;
     private String supportPhoneNr;
     private String supportEmail;
     private List<String> imageUrl;
@@ -24,12 +26,14 @@ public class Organization extends User{
     public Organization() {
     }
 
-    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String organizationName, String companyRegistrationNr, String vatNr, String about, String supportPhoneNr, String supportEmail, List<String> imageUrl) {
+    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String organizationName, String companyRegistrationNr, String vatNr, String who, String what, String help, String supportPhoneNr, String supportEmail, List<String> imageUrl) {
         super(email, password, phoneNr, address, postalCode, country, role);
         this.organizationName = organizationName;
         this.companyRegistrationNr = companyRegistrationNr;
         this.vatNr = vatNr;
-        this.about = about;
+        this.who = who;
+        this.what = what;
+        this.help = help;
         this.supportPhoneNr = supportPhoneNr;
         this.supportEmail = supportEmail;
         this.imageUrl = imageUrl;
@@ -59,12 +63,28 @@ public class Organization extends User{
         this.vatNr = vatNr;
     }
 
-    public String getAbout() {
-        return about;
+    public String getWho() {
+        return who;
     }
 
-    public void setAbout(String about) {
-        this.about = about;
+    public void setWho(String who) {
+        this.who = who;
+    }
+
+    public String getWhat() {
+        return what;
+    }
+
+    public void setWhat(String what) {
+        this.what = what;
+    }
+
+    public String getHelp() {
+        return help;
+    }
+
+    public void setHelp(String help) {
+        this.help = help;
     }
 
     public String getSupportPhoneNr() {
