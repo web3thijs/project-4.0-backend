@@ -18,11 +18,6 @@ public class OrderDetailController {
     @Autowired
     OrderDetailRepository orderDetailRepository;
 
-    @PostConstruct
-    public void fillDB(){
-
-    }
-
     @GetMapping("")
     public List<OrderDetail> findAll(){
         return orderDetailRepository.findAll();
