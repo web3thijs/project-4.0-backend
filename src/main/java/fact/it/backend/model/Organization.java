@@ -1,6 +1,9 @@
 package fact.it.backend.model;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Collection;
 
 @Document(collection = "users")
 public class Organization extends User{
@@ -10,6 +13,11 @@ public class Organization extends User{
     private String about;
     private String supportPhoneNr;
     private String supportEmail;
+
+
+    @DBRef
+    private Collection<Product> products;
+
 
     public Organization() {
     }

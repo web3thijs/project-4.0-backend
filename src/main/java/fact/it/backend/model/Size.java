@@ -1,7 +1,10 @@
 package fact.it.backend.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Collection;
 
 @Document(collection = "sizes")
 public class Size {
@@ -10,12 +13,17 @@ public class Size {
     private String id;
     private String name;
 
+    @DBRef
+    private Collection<OrderDetail> orderDetails;
+
+    @DBRef
+    private Collection<Stock> stocks;
+
     public Size(){
 
     }
 
-    public Size(String id, String name) {
-        this.id = id;
+    public Size(String name) {
         this.name = name;
     }
 

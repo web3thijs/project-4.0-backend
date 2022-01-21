@@ -2,29 +2,40 @@ package fact.it.backend.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Collection;
 
 @Document(collection = "products")
 public class Product {
 
     @Id
     private String id;
-    private String categoryId;
-    private String organizationId;
+    private Category category;
+    private Organization organization;
     private String name;
     private Number price;
     private String description;
     private Boolean isActive;
     private String imageUrl;
 
+    @DBRef
+    private Collection<Stock> stock;
+
+    @DBRef
+    private Collection<OrderDetail> orderDetails;
+
+    @DBRef
+    private Collection<Interaction> interactions;
+
     public Product(){
 
     }
 
-    public Product(String id, String categoryId, String organizationId, String name, Number price, String description, Boolean isActive, String imageUrl) {
-        this.id = id;
-        this.categoryId = categoryId;
-        this.organizationId = organizationId;
+    public Product(Category category, Organization organization, String name, Number price, String description, Boolean isActive, String imageUrl) {
+        this.category = category;
+        this.organization = organization;
         this.name = name;
         this.price = price;
         this.description = description;
@@ -40,20 +51,20 @@ public class Product {
         this.id = id;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public String getOrganizationId() {
-        return organizationId;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     public String getName() {

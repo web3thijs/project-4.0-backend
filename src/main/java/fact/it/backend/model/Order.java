@@ -1,8 +1,10 @@
 package fact.it.backend.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collection;
 import java.util.Date;
 
 @Document(collection = "orders")
@@ -10,16 +12,18 @@ public class Order {
 
     @Id
     private String id;
-    private String customerId;
+    private Customer customer;
     private Date date;
+
+    @DBRef
+    private Collection<OrderDetail> orderDetails;
 
     public Order(){
 
     }
 
-    public Order(String id,String customerId, Date date) {
-        this.id = id;
-        this.customerId = customerId;
+    public Order(Customer customer, Date date) {
+        this.customer = customer;
         this.date = date;
     }
 
@@ -31,12 +35,12 @@ public class Order {
         this.id = id;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Date getDate() {

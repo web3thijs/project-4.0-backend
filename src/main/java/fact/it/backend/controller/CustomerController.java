@@ -22,17 +22,6 @@ public class CustomerController {
     @Autowired
     CustomerRepository customerRepository;
 
-    @PostConstruct
-    public void fillDB(){
-        if(customerRepository.count() == 0){
-            for(int i = 1; i < 4; i++){
-                customerRepository.save(new Customer("test" + i + "@test.test", "password", "phoneNr", "address", "postalCode", "country", Role.CUSTOMER,"user" + i, "lastName", false));
-            }
-        }
-
-        System.out.println("DB test customers: " + customerRepository.findAll().size());
-    }
-
     @GetMapping("")
     public List<Customer> findAll(){
         return customerRepository.findByRole(Role.CUSTOMER);

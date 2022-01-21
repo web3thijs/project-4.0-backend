@@ -1,6 +1,10 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.model.Category;
+import fact.it.backend.model.Organization;
 import fact.it.backend.model.Product;
+import fact.it.backend.model.Role;
+import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.ProductRepository;
 import org.apache.coyote.Response;
 import org.bson.types.ObjectId;
@@ -17,16 +21,6 @@ public class ProductController {
 
     @Autowired
     ProductRepository productRepository;
-
-    @PostConstruct
-    public void fillDB(){
-        if(productRepository.count() == 0){
-            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), "T-shirt", 13.99, "Plain T-shirt", true, "Google.com"));
-            productRepository.save(new Product(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), "Jeans", 23.99, "Plain Jeans", true, "Google.com"));
-        }
-
-        System.out.println("DB test products: " + productRepository.findAll().size() + " products.");
-    }
 
     @GetMapping("")
     public List<Product> findAll(){
@@ -53,8 +47,8 @@ public class ProductController {
     public Product updateProduct(@RequestBody Product updatedProduct){
         Product retrievedProduct = productRepository.findProductById(updatedProduct.getId());
 
-        retrievedProduct.setCategoryId(updatedProduct.getCategoryId());
-        retrievedProduct.setOrganizationId(updatedProduct.getOrganizationId());
+        retrievedProduct.setCategory(updatedProduct.getCategory());
+        retrievedProduct.setOrganization(updatedProduct.getOrganization());
         retrievedProduct.setName(updatedProduct.getName());
         retrievedProduct.setPrice(updatedProduct.getPrice());
         retrievedProduct.setDescription(updatedProduct.getDescription());

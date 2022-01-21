@@ -8,18 +8,18 @@ public class Stock {
 
     @Id
     private String id;
-    private String sizeId;
-    private String colorId;
-    private String productId;
+    private Size size;
+    private Color color;
+    private Product product;
     private int amountInStock;
 
     public Stock() {
     }
 
-    public Stock(String sizeId, String colorId, String productId, int amountInStock) {
-        this.sizeId = sizeId;
-        this.colorId = colorId;
-        this.productId = productId;
+    public Stock(Size size, Color color, Product product, int amountInStock) {
+        this.size = size;
+        this.color = color;
+        this.product = product;
         this.amountInStock = amountInStock;
     }
 
@@ -27,28 +27,28 @@ public class Stock {
         return id;
     }
 
-    public String getSizeId() {
-        return sizeId;
+    public Size getSize() {
+        return size;
     }
 
-    public void setSizeId(String sizeId) {
-        this.sizeId = sizeId;
+    public void setSize(Size size) {
+        this.size = size;
     }
 
-    public String getColorId() {
-        return colorId;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorId(String colorId) {
-        this.colorId = colorId;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
-    public String getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getAmountInStock() {
