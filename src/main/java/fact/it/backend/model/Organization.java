@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
+import java.util.List;
 
 @Document(collection = "users")
 public class Organization extends User{
@@ -13,6 +14,7 @@ public class Organization extends User{
     private String about;
     private String supportPhoneNr;
     private String supportEmail;
+    private List<String> imageUrl;
 
 
     @DBRef
@@ -22,7 +24,7 @@ public class Organization extends User{
     public Organization() {
     }
 
-    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String organizationName, String companyRegistrationNr, String vatNr, String about, String supportPhoneNr, String supportEmail) {
+    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String organizationName, String companyRegistrationNr, String vatNr, String about, String supportPhoneNr, String supportEmail, List<String> imageUrl) {
         super(email, password, phoneNr, address, postalCode, country, role);
         this.organizationName = organizationName;
         this.companyRegistrationNr = companyRegistrationNr;
@@ -30,6 +32,7 @@ public class Organization extends User{
         this.about = about;
         this.supportPhoneNr = supportPhoneNr;
         this.supportEmail = supportEmail;
+        this.imageUrl = imageUrl;
     }
 
     public String getOrganizationName() {
@@ -78,5 +81,13 @@ public class Organization extends User{
 
     public void setSupportEmail(String supportEmail) {
         this.supportEmail = supportEmail;
+    }
+
+    public List<String> getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(List<String> imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
