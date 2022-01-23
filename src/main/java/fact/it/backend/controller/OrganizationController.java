@@ -15,17 +15,6 @@ public class OrganizationController {
     @Autowired
     OrganizationRepository organizationRepository;
 
-    @PostConstruct
-    public void fillDB(){
-        if(organizationRepository.count() == 3){
-            for(int i = 1; i < 4; i++){                organizationRepository.save(new Organization("testorg" + i + "@test.test", "passwd", "+3240000000", "teststraat" + i, "2400", "Belgium", Role.ORGANIZATION, "Org" + i, "regisnr", "vatnr", "about", "suppPhone", "suppMail"));
-
-            }
-        }
-
-        System.out.println("DB test organizations: " + organizationRepository.findAll().size());
-    }
-
     @GetMapping("")
     public List<Organization> findAll(){
         return organizationRepository.findByRole(Role.ORGANIZATION);
@@ -43,22 +32,24 @@ public class OrganizationController {
     }
 
     @PutMapping
-    public Organization updateOrganization(@RequestBody Organization updatedOrganizationr){
-        Organization retrievedOrganization= organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganizationr.getId());
+    public Organization updateOrganization(@RequestBody Organization updatedOrganization){
+        Organization retrievedOrganization= organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganization.getId());
 
-        retrievedOrganization.setEmail(updatedOrganizationr.getEmail());
-        retrievedOrganization.setPassword(updatedOrganizationr.getPassword());
-        retrievedOrganization.setPhoneNr(updatedOrganizationr.getPhoneNr());
-        retrievedOrganization.setAddress(updatedOrganizationr.getAddress());
-        retrievedOrganization.setPostalCode(updatedOrganizationr.getPostalCode());
-        retrievedOrganization.setCountry(updatedOrganizationr.getCountry());
-        retrievedOrganization.setRole(updatedOrganizationr.getRole());
-        retrievedOrganization.setOrganizationName(updatedOrganizationr.getOrganizationName());
-        retrievedOrganization.setCompanyRegistrationNr(updatedOrganizationr.getCompanyRegistrationNr());
-        retrievedOrganization.setVatNr(updatedOrganizationr.getVatNr());
-        retrievedOrganization.setAbout(updatedOrganizationr.getAbout());
-        retrievedOrganization.setSupportPhoneNr(updatedOrganizationr.getSupportPhoneNr());
-        retrievedOrganization.setSupportEmail(updatedOrganizationr.getSupportEmail());
+        retrievedOrganization.setEmail(updatedOrganization.getEmail());
+        retrievedOrganization.setPassword(updatedOrganization.getPassword());
+        retrievedOrganization.setPhoneNr(updatedOrganization.getPhoneNr());
+        retrievedOrganization.setAddress(updatedOrganization.getAddress());
+        retrievedOrganization.setPostalCode(updatedOrganization.getPostalCode());
+        retrievedOrganization.setCountry(updatedOrganization.getCountry());
+        retrievedOrganization.setRole(updatedOrganization.getRole());
+        retrievedOrganization.setOrganizationName(updatedOrganization.getOrganizationName());
+        retrievedOrganization.setCompanyRegistrationNr(updatedOrganization.getCompanyRegistrationNr());
+        retrievedOrganization.setVatNr(updatedOrganization.getVatNr());
+        retrievedOrganization.setWho(updatedOrganization.getWho());
+        retrievedOrganization.setWhat(updatedOrganization.getWhat());
+        retrievedOrganization.setHelp(updatedOrganization.getHelp());
+        retrievedOrganization.setSupportPhoneNr(updatedOrganization.getSupportPhoneNr());
+        retrievedOrganization.setSupportEmail(updatedOrganization.getSupportEmail());
 
         organizationRepository.save(retrievedOrganization);
 

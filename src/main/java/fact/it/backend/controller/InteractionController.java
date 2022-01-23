@@ -1,6 +1,6 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Interaction;
+import fact.it.backend.model.*;
 import fact.it.backend.repository.InteractionRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +16,6 @@ public class InteractionController {
 
     @Autowired
     InteractionRepository interactionRepository;
-
-    @PostConstruct
-    public void fillDB(){
-        if(interactionRepository.count() == 0){
-            interactionRepository.save(new Interaction(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), 26));
-            interactionRepository.save(new Interaction(new ObjectId().toString(), new ObjectId().toString(), new ObjectId().toString(), 23));
-        }
-        System.out.println("DB test interactions: " + interactionRepository.findAll().size() + " interactions.");
-    }
 
     @GetMapping("")
     public List<Interaction> findAll(){
@@ -51,9 +42,9 @@ public class InteractionController {
     public Interaction updateInteraction(@RequestBody Interaction updatedInteraction){
         Interaction retrievedInteraction = interactionRepository.findInteractionById(updatedInteraction.getId());
 
-        retrievedInteraction.setProductId(updatedInteraction.getProductId());
-        retrievedInteraction.setCustomerId(updatedInteraction.getCustomerId());
-        retrievedInteraction.setReviewId(updatedInteraction.getReviewId());
+        retrievedInteraction.setProduct(updatedInteraction.getProduct());
+        retrievedInteraction.setCustomer(updatedInteraction.getCustomer());
+        retrievedInteraction.setReview(updatedInteraction.getReview());
         retrievedInteraction.setAmountClicks(updatedInteraction.getAmountClicks());
 
         interactionRepository.save(retrievedInteraction);

@@ -1,7 +1,8 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Stock;
+import fact.it.backend.model.*;
 import fact.it.backend.repository.StockRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +16,6 @@ public class StockController {
 
     @Autowired
     StockRepository stockRepository;
-
-    @PostConstruct
-    public void fillDB(){
-        if(stockRepository.count() == 0){
-            String id1 = new String().toString();
-            String id2 = new String().toString();
-            stockRepository.save(new Stock(id1, id1, id1, 10));
-            stockRepository.save(new Stock(id2, id2, id2, 15));
-        }
-        System.out.println("DB test stocks: " + stockRepository.findAll().size() + " stocks.");
-
-    }
 
     @GetMapping("")
     public List<Stock> findAll(){
@@ -48,9 +37,9 @@ public class StockController {
     public Stock updateStock(@RequestBody Stock updatedStock){
         Stock retrievedStock = stockRepository.findStockById(updatedStock.getId());
 
-        retrievedStock.setSizeId(updatedStock.getSizeId());
-        retrievedStock.setColorId(updatedStock.getColorId());
-        retrievedStock.setProductId(updatedStock.getProductId());
+        retrievedStock.setSize(updatedStock.getSize());
+        retrievedStock.setColor(updatedStock.getColor());
+        retrievedStock.setProduct(updatedStock.getProduct());
         retrievedStock.setAmountInStock(updatedStock.getAmountInStock());
 
         stockRepository.save(retrievedStock);

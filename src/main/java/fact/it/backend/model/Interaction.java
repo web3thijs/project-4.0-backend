@@ -8,19 +8,19 @@ public class Interaction {
 
     @Id
     private String id;
-    private String productId;
-    private String customerId;
-    private String reviewId;
+    private Product product;
+    private Customer customer;
+    private Review review;
     private Number amountClicks;
 
     public Interaction(){
 
     }
 
-    public Interaction(String productId, String customerId, String reviewId, Number amountClicks) {
-        this.productId = productId;
-        this.customerId = customerId;
-        this.reviewId = reviewId;
+    public Interaction(Product product, Customer customer, Review review, Number amountClicks) {
+        this.product = product;
+        this.customer = customer;
+        this.review = review;
         this.amountClicks = amountClicks;
     }
 
@@ -28,28 +28,32 @@ public class Interaction {
         return id;
     }
 
-    public String getProductId() {
-        return productId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public String getReviewId() {
-        return reviewId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public void setReviewId(String reviewId) {
-        this.reviewId = reviewId;
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public Number getAmountClicks() {
