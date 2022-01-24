@@ -35,31 +35,58 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register/{role}")
-    private ResponseEntity<?> subscribeClient(@RequestBody AuthRequest authRequest, @PathVariable String role){
-        String email = authRequest.getEmail();
-        String password = authRequest.getPassword();
-        User user = new User();
+    @PostMapping("/register/customer")
+    private ResponseEntity<?> registerCustomer(@RequestBody Customer retrievedCustomer){
+        Customer customer = new Customer();
 
-        switch (role){
-            case "customer":
-                user.setRole(Role.CUSTOMER);
-                break;
-            case "organization":
-                user.setRole(Role.ORGANIZATION);
-                break;
-        }
-
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
+        customer.setAdmin(retrievedCustomer.isAdmin());
+        customer.setCountry(retrievedCustomer.getCountry());
+        customer.setPassword(passwordEncoder.encode(retrievedCustomer.getPassword()));
+        customer.setEmail(retrievedCustomer.getEmail());
+        customer.setPhoneNr(retrievedCustomer.getPhoneNr());
+        customer.setAddress(retrievedCustomer.getAddress());
+        customer.setPostalCode(retrievedCustomer.getPostalCode());
+        customer.setRole(Role.CUSTOMER);
+        customer.setFirstName(retrievedCustomer.getFirstName());
+        customer.setLastName(retrievedCustomer.getLastName());
 
         try{
-            userRepository.save(user);
+            userRepository.save(customer);
         } catch (Exception e){
-            return ResponseEntity.ok(new AuthResponse("Error during registration for client " + email));
+            return ResponseEntity.ok(new AuthResponse("Error during registration for customer " + retrievedCustomer.getEmail()));
         }
 
-        return ResponseEntity.ok(new AuthResponse("Succesful registration for client " + email));
+        return ResponseEntity.ok(new AuthResponse("Succesful registration for customer " + retrievedCustomer.getEmail()));
+    }
+
+    @PostMapping("/register/organization")
+    private ResponseEntity<?> registerCustomer(@RequestBody Organization retrievedOrganization){
+        Organization organization = new Organization();
+
+        organization.setEmail(retrievedOrganization.getEmail());
+        organization.setPassword(passwordEncoder.encode(retrievedOrganization.getPassword()));
+        organization.setPhoneNr(retrievedOrganization.getPhoneNr());
+        organization.setAddress(retrievedOrganization.getAddress());
+        organization.setPostalCode(retrievedOrganization.getPostalCode());
+        organization.setCountry(retrievedOrganization.getCountry());
+        organization.setRole(retrievedOrganization.getRole());
+        organization.setOrganizationName(retrievedOrganization.getOrganizationName());
+        organization.setCompanyRegistrationNr(retrievedOrganization.getCompanyRegistrationNr());
+        organization.setVatNr(retrievedOrganization.getVatNr());
+        organization.setWho(retrievedOrganization.getWho());
+        organization.setWhat(retrievedOrganization.getWhat());
+        organization.setHelp(retrievedOrganization.getHelp());
+        organization.setSupportEmail(retrievedOrganization.getSupportEmail());
+        organization.setSupportPhoneNr(retrievedOrganization.getSupportPhoneNr());
+        organization.setImageUrl(retrievedOrganization.getImageUrl());
+
+        try{
+            userRepository.save(organization);
+        } catch (Exception e){
+            return ResponseEntity.ok(new AuthResponse("Error during registration for organization " + organization.getEmail()));
+        }
+
+        return ResponseEntity.ok(new AuthResponse("Succesful registration for organization " + organization.getEmail()));
     }
 
     @PostMapping("/authenticate")
