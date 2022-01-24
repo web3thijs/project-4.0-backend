@@ -1,6 +1,7 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.*;
+import fact.it.backend.repository.OrderDetailRepository;
 import fact.it.backend.repository.OrderRepository;
 import fact.it.backend.util.JwtUtils;
 import org.apache.coyote.Response;
@@ -24,6 +25,10 @@ public class OrderController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
+
 
     @GetMapping("")
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix){
@@ -110,9 +115,15 @@ public class OrderController {
 
         if(role.contains("ADMIN")){
             Order order = orderRepository.findOrderById(id);
+            List<OrderDetail> orderDetails = orderDetailRepository.findOrderDetailsByOrderId(id);
 
             if(order != null){
                 orderRepository.delete(order);
+                if(orderDetails != null) {
+                  for (int i = 0; i < orderDetails.size(); i++) {
+                      orderDetailRepository.delete(orderDetails.get(i));
+                  }
+                }
                 return ResponseEntity.ok().build();
             }else{
                 return ResponseEntity.notFound().build();
