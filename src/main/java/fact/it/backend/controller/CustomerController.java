@@ -78,7 +78,6 @@ public class CustomerController {
             retrievedCustomer.setRole(updatedCustomer.getRole());
             retrievedCustomer.setFirstName(updatedCustomer.getFirstName());
             retrievedCustomer.setLastName(updatedCustomer.getLastName());
-            retrievedCustomer.setAdmin(updatedCustomer.isAdmin());
 
             customerRepository.save(retrievedCustomer);
 
