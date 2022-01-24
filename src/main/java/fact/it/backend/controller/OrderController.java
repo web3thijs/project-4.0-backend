@@ -1,9 +1,7 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Customer;
-import fact.it.backend.model.Order;
-import fact.it.backend.model.Product;
-import fact.it.backend.model.Role;
+import fact.it.backend.model.*;
+import fact.it.backend.repository.OrderDetailRepository;
 import fact.it.backend.repository.OrderRepository;
 import org.apache.coyote.Response;
 import org.bson.types.ObjectId;
@@ -21,6 +19,9 @@ public class OrderController {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
 
     @GetMapping("")
     public List<Order> findAll(){
@@ -58,9 +59,15 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteOrder(@PathVariable String id){
         Order order = orderRepository.findOrderById(id);
+        List<OrderDetail> orderDetails = orderDetailRepository.findOrderDetailsByOrderId(id);
 
         if(order != null){
             orderRepository.delete(order);
+            if(orderDetails != null) {
+                for (int i = 0; i < orderDetails.size(); i++) {
+                    orderDetailRepository.delete(orderDetails.get(i));
+                }
+            }
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();

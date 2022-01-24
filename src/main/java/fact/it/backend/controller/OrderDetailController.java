@@ -61,17 +61,4 @@ public class OrderDetailController {
         }
     }
 
-    @DeleteMapping("order/{orderId}")
-    public ResponseEntity deleteOrderDetails(@PathVariable String orderId){
-        List<OrderDetail> orderDetails = orderDetailRepository.findOrderDetailsByOrderId(orderId);
-
-        if(orderDetails != null){
-            for(int i = 0; i < orderDetails.size(); i++){
-                orderDetailRepository.delete(orderDetails.get(i));
-            }
-            return ResponseEntity.ok().build();
-        } else{
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
