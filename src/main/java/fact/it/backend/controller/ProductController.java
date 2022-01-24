@@ -1,19 +1,19 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Category;
-import fact.it.backend.model.Organization;
-import fact.it.backend.model.Product;
-import fact.it.backend.model.Role;
+import fact.it.backend.model.*;
 import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.ProductRepository;
+import fact.it.backend.util.JwtUtils;
 import org.apache.coyote.Response;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(path = "api/products")
 @RestController
@@ -21,6 +21,9 @@ public class ProductController {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @GetMapping("")
     public List<Product> findAll(){
@@ -38,37 +41,62 @@ public class ProductController {
     }
 
     @PostMapping("")
-    public Product addProduct(@RequestBody Product product){
-        productRepository.save(product);
-        return product;
+    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Product product){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && product.getOrganization().getId().contains(user_id))){
+            productRepository.save(product);
+            return ResponseEntity.ok(product);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PutMapping("")
-    public Product updateProduct(@RequestBody Product updatedProduct){
-        Product retrievedProduct = productRepository.findProductById(updatedProduct.getId());
+    public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Product updatedProduct){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
 
-        retrievedProduct.setCategory(updatedProduct.getCategory());
-        retrievedProduct.setOrganization(updatedProduct.getOrganization());
-        retrievedProduct.setName(updatedProduct.getName());
-        retrievedProduct.setPrice(updatedProduct.getPrice());
-        retrievedProduct.setDescription(updatedProduct.getDescription());
-        retrievedProduct.setActive(updatedProduct.getActive());
-        retrievedProduct.setImageUrl(updatedProduct.getImageUrl());
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedProduct.getOrganization().getId().contains(user_id))){
+            Product retrievedProduct = productRepository.findProductById(updatedProduct.getId());
 
-        productRepository.save(retrievedProduct);
+            retrievedProduct.setCategory(updatedProduct.getCategory());
+            retrievedProduct.setOrganization(updatedProduct.getOrganization());
+            retrievedProduct.setName(updatedProduct.getName());
+            retrievedProduct.setPrice(updatedProduct.getPrice());
+            retrievedProduct.setDescription(updatedProduct.getDescription());
+            retrievedProduct.setActive(updatedProduct.getActive());
+            retrievedProduct.setImageUrl(updatedProduct.getImageUrl());
 
-        return retrievedProduct;
+            productRepository.save(retrievedProduct);
+            return ResponseEntity.ok(retrievedProduct);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProduct(@PathVariable String id){
-        Product product = productRepository.findProductById(id);
+    public ResponseEntity deleteProduct(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
 
-        if(product != null){
-            productRepository.delete(product);
-            return ResponseEntity.ok().build();
-        } else{
-            return ResponseEntity.notFound().build();
+        if(role.contains("ADMIN")){
+            Product product = productRepository.findProductById(id);
+
+            if(product != null){
+                productRepository.delete(product);
+                return ResponseEntity.ok().build();
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }
