@@ -43,7 +43,6 @@ public class SizeController {
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
-
     }
 
     @DeleteMapping("/{id}")
