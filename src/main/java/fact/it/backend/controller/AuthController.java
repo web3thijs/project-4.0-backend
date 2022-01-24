@@ -103,7 +103,7 @@ public class AuthController {
         UserDetails retrievedUser = userService.loadUserByUsername(email);
         User retrievedUser2 = userRepository.findUserByEmail(email);
 
-        String generatedToken = jwtUtils.generateToken(retrievedUser, retrievedUser2.getRole());
+        String generatedToken = jwtUtils.generateToken(retrievedUser, retrievedUser2.getRole(), retrievedUser2.getId());
 
         return ResponseEntity.ok(new AuthResponse(generatedToken));
     }
