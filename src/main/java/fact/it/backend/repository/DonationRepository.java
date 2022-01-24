@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface DonationRepository extends MongoRepository<Donation, String> {
     List<Donation> findAll();
-    List<Donation> findDonationById(String id);
+    List<Donation> findDonationsByOrganizationId(String organizationId);
+    Donation findDonationById(String id);
 }
