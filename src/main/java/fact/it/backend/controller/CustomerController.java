@@ -89,7 +89,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCustomer(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity<?> deleteCustomer(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
