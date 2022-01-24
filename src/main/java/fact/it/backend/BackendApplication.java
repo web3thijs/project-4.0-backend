@@ -77,6 +77,7 @@ public class BackendApplication {
         Color colorWit = new Color("wit");
         Color colorGroen = new Color("groen");
         Color colorBruin = new Color("bruin");
+        Color colorGeel = new Color("geel");
         Color colorRoze = new Color("roze");
         Color colorBeige = new Color("beige");
         Color colorMix = new Color("mix");
@@ -104,6 +105,7 @@ public class BackendApplication {
         Customer customerKevinMaes = new Customer("kevinmaes@gmail.com", password, "0476281912", "Lambertuslaan 42", "2260", "Belgium", Role.CUSTOMER,"Kevin" , "Maes", false);
         Customer customerHelderCeyssens = new Customer("helderceyssens@gmail.com", password, "0476596168", "Koepel 186", "1540", "Belgium", Role.CUSTOMER,"Helder" , "Ceyssens", false);
         Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
+        Organization organizationBKKS = new Organization("info@bkks.be", password, "+3211192819", "Diesterstraat 67A bus 001", "3800", "Belgium", Role.ORGANIZATION, "Belgisch KinderKanker Steunfonds", "BE0835627680", "0835627680", "Het Belgisch Kinder Kanker Steunfonds realiseert dromen en wensen van kinderen en betrekt het ganse gezin hierbij. Niet alleen het zieke kindje maar ook broers of zusjes en de ouders worden op deze speciale dag niet vergeten.", "Het Belgisch Kinder Kanker Steunfonds bezoekt regelmatig ziekenhuizen waar we dan alle aanwezige kinderen verwennen met speelgoed. En/of we schenken materiaal aan de afdeling. We denken ook aan het verplegend personeel en brengen voor hen ook een lekkere, kleine attentie mee. Want zij zorgen dag in, dag uit met heel veel liefde en toewijding voor al deze kinderen", "Zelfs in een land als België is het mogelijk om als gezin in financiële problemen te geraken na langdurige ziekte zoals kanker. Wij geven aan deze gezinnen dan financiële steun om deze moeilijke periode door te komen en op die manier al wat financiële zorgen en stress weg te nemen. Dit kunnen we mogelijk maken dankzij de “Vrienden van Bkks”", "+3223400920", "supporters@wwf.be", Arrays.asList("https://belgischkinderkankersteunfonds.be/wp-content/uploads/2020/02/cropped-logo-bkks-1.png"));
         Organization organizationBZN = new Organization("welkom@bzn.be", password, "032012210", "Herentalsebaan 74", "2100", "Belgium", Role.ORGANIZATION, "Bond Zonder Naam", "BE0469514642", "BE0469514642", "De Bond zonder Naam (BZN) is een Vlaamse maatschappijkritische beweging die vooral bekend is van de gratis maandspreuken die uitnodigen tot reflectie, verdieping en verandering. Uiterlijk, interesses, gewoonten, leeftijden, culturen of nationaliteiten: het zijn stuk voor stuk verschillen tussen mensen die we soms als grenzen ervaren. Bond zonder Naam wil deze grenzen overbruggen en ook het omgaan met diversiteit stimuleren opdat samen leven echt samenleven wordt, met respect voor diversiteit en ieders kwaliteit.", "Bond zonder Naam schreef voor de periode 2016-2020 een beleidsplan over onze visie, acties en campagnes, vormingsaanbod en vrijwilligerswerk. Wat heeft Bond zonder Naam nog in petto? Waar zien we groeikansen? Welke pijnpunten in onze samenleving willen we blootleggen en aanpakken? We lieten ons inspireren door het verhaal van bevriende organisaties, experten, leden en vrijwilligers. Telkens staan de meest kwetsbaren onder ons centraal: mensen in armoede, vluchtelingen, chronische zieken of mensen aan de buitenste rand van de samenleving. Iedereen verdient een betekenis- en hoopvol leven. Wij weten wat ons te doen staat.", "Bond zonder Naam wil zoveel mogelijk mensen vanuit het hart aanspreken en met elkaar verbinden. En zo een samenleving creëren die een warm verschil maakt, vooral voor wie minder kansen krijgt. Concreet willen we dit waarmaken door mensen te inspireren en helpen in hun groei. Want hoe meer inzicht we in onszelf en de wereld hebben, hoe meer we elkaar te bieden hebben. Dit engagement maken we hard voor en met mensen in kansarmoede, eenzaamheid of gevangenschap.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://www.bzn.be/graphics/default-socialmedia.jpg"));
         Organization organizationThinkPink = new Organization("maite@think-pink.be", password, "+32475406602", "Researchdreef 12", "1070", "Belgium", Role.ORGANIZATION, "Think Pink", "0810893274", "BE0810893274", "Think Pink is de nationale borstkankerorganisatie die zich dagelijks inzet voor borstkankerpatiënten en hun familie.\n" +
                 "\n" +
@@ -147,6 +149,9 @@ public class BackendApplication {
         Product productGeurkaarsBZN = new Product(categoryKaarsenGeuren, organizationBZN, "Geurkaars Bond zonder Naam", 8.00, "Geurkaars ter ondersteuning van de Bond zonder Naam", true, Arrays.asList("https://i.imgur.com/9uiTrqz.png", "https://scontent-bru2-1.xx.fbcdn.net/v/t45.1600-4/cp0/q90/spS444/s526x296/17948818_23842562753170682_2138087182974320640_n.png.jpg?_nc_cat=111&ccb=1-5&_nc_sid=67cdda&_nc_ohc=EyD0jzQTYhwAX8aElSS&_nc_ht=scontent-bru2-1.xx&oh=00_AT9zk-4Xe2ziHjz1DDk6jyXObJY4jxlAXvgCWRr2CJXTyQ&oe=61F2E9BC"));
         Product productGeurstokjesBZN = new Product(categoryKaarsenGeuren, organizationBZN, "Geurstokjes Bond zonder Naam", 5.00, "Geurstokjes ter ondersteuning van de Bond zonder Naam", true, Arrays.asList("https://i.imgur.com/fW2Jkm2.png"));
         Product productSojakaarsBZN = new Product(categoryKaarsenGeuren, organizationBZN, "Sojakaars Bond zonder Naam", 10.00, "Sojakaars ter ondersteuning van de Bond zonder Naam", true, Arrays.asList("https://i.imgur.com/aOWdepM.png"));
+        Product product3pennenBKKS = new Product(categoryPennen, organizationBKKS, "3 stylo's Belgisch KinderKanker Fonds", 6, "3 pennen met het logo van het Belgisch KinderKanker Fonds.", true, Arrays.asList("https://www.online-fanshop.be/wp-content/uploads/2020/11/stylo-bkks.png"));
+        Product productMondmaskerBKKS = new Product(categoryMondmaskers, organizationBKKS, "Mondmasker Belgisch KinderKanker Fonds", 8.25, "Mondmasker met het logo van het Belgisch KinderKanker Fonds.", true, Arrays.asList("https://www.online-fanshop.be/wp-content/uploads/2020/11/mondmasker-BKKS.png"));
+        Product productShirtBKKS = new Product(categoryShirtsMannen, organizationBKKS, "Stanno Pride T-Shirt", 24.99, "Dit stretchy sportshirt, onderdeel van de Stanno Pride collectie, is voorzien van het logo van BKKS. De ClimaTec finish zorgt voor optimale vochtafvoer en dankzij de ventilerende mesh-structuur op de bovenzijde en in de zij voelt het shirt licht en luchtig aan. De kraag is gemaakt van zacht rib-materiaal. De achterzijde van het shirt is net wat langer en heeft en mooie ronde afwerking.", true, Arrays.asList("https://i.imgur.com/dLA2Rab.png"));
 
 
         if(categoryRepository.count()==0){
@@ -163,6 +168,7 @@ public class BackendApplication {
             colorRepository.save(colorRood);
             colorRepository.save(colorGroen);
             colorRepository.save(colorBruin);
+            colorRepository.save(colorGeel);
             colorRepository.save(colorRoze);
             colorRepository.save(colorWit);
             colorRepository.save(colorBeige);
@@ -180,6 +186,7 @@ public class BackendApplication {
             organizationRepository.save(organizationDamiaanactie);
             organizationRepository.save(organizationThinkPink);
             organizationRepository.save(organizationBZN);
+            organizationRepository.save(organizationBKKS);
         }
         if(interactionRepository.count() == 0){
             interactionRepository.save(new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4));
@@ -224,6 +231,9 @@ public class BackendApplication {
             productRepository.save(productGeurkaarsBZN);
             productRepository.save(productGeurstokjesBZN);
             productRepository.save(productSojakaarsBZN);
+            productRepository.save(productMondmaskerBKKS);
+            productRepository.save(product3pennenBKKS);
+            productRepository.save(productShirtBKKS);
         }
         if(reviewRepository.count() == 0){
             reviewRepository.save(reviewGianniDeHerdtSleutelhanger);
@@ -257,7 +267,16 @@ public class BackendApplication {
             stockRepository.save(new Stock(sizeMedium, colorWit, productShirtMannenTP, 25));
             stockRepository.save(new Stock(sizeLarge, colorWit, productShirtMannenTP, 50));
             stockRepository.save(new Stock(sizeMedium, colorRoze, productShirtVrouwenTP, 50));
+            stockRepository.save(new Stock(sizeSmall, colorRoze, productShirtVrouwenTP, 40));
             stockRepository.save(new Stock(size05l, colorRoze, productDrinkbusTP, 80));
+            stockRepository.save(new Stock(size100g, colorRood, productGeurkaarsBZN, 40));
+            stockRepository.save(new Stock(size15cm, colorGeel, productGeurstokjesBZN, 30));
+            stockRepository.save(new Stock(size100g, colorWit, productSojakaarsBZN, 20));
+            stockRepository.save(new Stock(size15cm, colorWit, product3pennenBKKS, 60));
+            stockRepository.save(new Stock(sizeMedium, colorWit, productMondmaskerBKKS, 25));
+            stockRepository.save(new Stock(sizeSmall, colorZwartWit, productShirtBKKS, 15));
+            stockRepository.save(new Stock(sizeMedium, colorZwartWit, productShirtBKKS, 30));
+            stockRepository.save(new Stock(sizeLarge, colorZwartWit, productShirtBKKS, 30));
         }
         if(donationRepository.count() == 0){
             donationRepository.save(new Donation(productOrangoetanKnuffel, organizationWWF, 2.5));
