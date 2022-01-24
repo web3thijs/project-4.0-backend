@@ -45,15 +45,6 @@ public class CategoryController {
         }
     }
 
-    //    @GetMapping("")
-//    public String findAll(@RequestHeader("authorization") String tokenWithPrefix) {
-//        String token = tokenWithPrefix.substring(7);
-//        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
-//        String role = claims.get("role").toString();
-//
-//        return role;
-//    }
-
     @PutMapping("")
     public ResponseEntity<?> updateCategory(@RequestHeader("authorization") String tokenWithPrefix, @RequestBody Category updatedCategory){
         String token = tokenWithPrefix.substring(7);

@@ -7,6 +7,7 @@ import fact.it.backend.repository.ColorRepository;
 import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,15 +26,6 @@ public class ColorController {
 
     @Autowired
     private JwtUtils jwtUtils;
-
-//    @GetMapping("")
-//    public String findAll(@RequestHeader("authorization") String tokenWithPrefix) {
-//        String token = tokenWithPrefix.substring(7);
-//        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
-//        String role = claims.get("role").toString();
-//
-//        return role;
-//    }
   
     @GetMapping("")
     public List<Color> findAll() {return colorRepository.findAll();}
@@ -42,20 +34,36 @@ public class ColorController {
     public Color findById(@PathVariable String id) { return colorRepository.findColorById(id); }
 
     @PostMapping("")
-    public Color addColor(@RequestBody Color color){
-        colorRepository.save(color);
-        return color;
+    public ResponseEntity<?> addColor(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Color color){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+
+        if(role.contains("ADMIN")){
+            colorRepository.save(color);
+            return ResponseEntity.ok(color);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteColor(@PathVariable String id){
-        Color color = colorRepository.findColorById(id);
+    public ResponseEntity deleteColor(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
 
-        if(color != null){
-            colorRepository.delete(color);
-            return ResponseEntity.ok().build();
-        } else{
-            return ResponseEntity.notFound().build();
+        if(role.contains("ADMIN")){
+            Color color = colorRepository.findColorById(id);
+
+            if(color != null){
+                colorRepository.delete(color);
+                return ResponseEntity.ok().build();
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }
