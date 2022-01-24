@@ -20,6 +20,9 @@ public class SizeController {
     @GetMapping("")
     public List<Size> findAll() {return sizeRepository.findAll();}
 
+    @GetMapping("{/:id}")
+    public Size findById(@PathVariable String id) {return sizeRepository.findSizeById(id);}
+
     @PostMapping("")
     public Size addSize(@RequestBody Size size){
         sizeRepository.save(size);

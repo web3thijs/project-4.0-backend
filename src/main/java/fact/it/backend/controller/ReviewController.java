@@ -22,6 +22,11 @@ public class ReviewController {
         return reviewRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Review findById(@PathVariable String id){
+        return reviewRepository.findReviewById(id);
+    }
+
     @PostMapping("")
     public Review addReview(@RequestBody Review review){
         reviewRepository.save(review);

@@ -4,6 +4,7 @@ import fact.it.backend.model.*;
 import fact.it.backend.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,9 @@ public class OrganizationController {
     @Autowired
     OrganizationRepository organizationRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("")
     public List<Organization> findAll(){
         return organizationRepository.findByRole(Role.ORGANIZATION);
@@ -25,18 +29,12 @@ public class OrganizationController {
         return organizationRepository.findByRoleAndId(Role.ORGANIZATION, id);
     }
 
-    @PostMapping("")
-    public Organization addOrganization(@RequestBody Organization organization) {
-        organizationRepository.save(organization);
-        return organization;
-    }
-
     @PutMapping
     public Organization updateOrganization(@RequestBody Organization updatedOrganization){
         Organization retrievedOrganization= organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganization.getId());
 
         retrievedOrganization.setEmail(updatedOrganization.getEmail());
-        retrievedOrganization.setPassword(updatedOrganization.getPassword());
+        retrievedOrganization.setPassword(passwordEncoder.encode(updatedOrganization.getPassword()));
         retrievedOrganization.setPhoneNr(updatedOrganization.getPhoneNr());
         retrievedOrganization.setAddress(updatedOrganization.getAddress());
         retrievedOrganization.setPostalCode(updatedOrganization.getPostalCode());

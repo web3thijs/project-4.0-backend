@@ -10,6 +10,7 @@ import fact.it.backend.repository.CustomerRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,9 @@ public class CustomerController {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("")
     public List<Customer> findAll(){
         return customerRepository.findByRole(Role.CUSTOMER);
@@ -32,18 +36,12 @@ public class CustomerController {
         return customerRepository.findByRoleAndId(Role.CUSTOMER, id);
     }
 
-    @PostMapping("")
-    public Customer addCustomer(@RequestBody Customer customer) {
-        customerRepository.save(customer);
-        return customer;
-    }
-
     @PutMapping
     public Customer updateCustomer(@RequestBody Customer updatedCustomer){
         Customer retrievedCustomer = customerRepository.findByRoleAndId(Role.CUSTOMER, updatedCustomer.getId());
 
         retrievedCustomer.setEmail(updatedCustomer.getEmail());
-        retrievedCustomer.setPassword(updatedCustomer.getPassword());
+        retrievedCustomer.setPassword(passwordEncoder.encode(updatedCustomer.getPassword()));
         retrievedCustomer.setPhoneNr(updatedCustomer.getPhoneNr());
         retrievedCustomer.setAddress(updatedCustomer.getAddress());
         retrievedCustomer.setPostalCode(updatedCustomer.getPostalCode());

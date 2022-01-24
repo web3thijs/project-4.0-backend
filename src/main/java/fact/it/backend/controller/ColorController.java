@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.model.Category;
 import fact.it.backend.model.Color;
 import fact.it.backend.model.Role;
 import fact.it.backend.repository.ColorRepository;
@@ -36,6 +37,9 @@ public class ColorController {
   
     @GetMapping("")
     public List<Color> findAll() {return colorRepository.findAll();}
+
+    @GetMapping("/{id}")
+    public Color findById(@PathVariable String id) { return colorRepository.findColorById(id); }
 
     @PostMapping("")
     public Color addColor(@RequestBody Color color){
