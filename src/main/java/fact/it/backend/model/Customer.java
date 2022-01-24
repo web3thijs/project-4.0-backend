@@ -17,6 +17,9 @@ public class Customer extends User{
     @DBRef
     private Collection<Interaction> interactions;
 
+    @DBRef
+    private Collection<Review> reviews;
+
 
     public Customer() {
     }
