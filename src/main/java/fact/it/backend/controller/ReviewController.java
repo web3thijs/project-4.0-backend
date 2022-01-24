@@ -1,14 +1,19 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Review;
+import fact.it.backend.model.*;
+import fact.it.backend.repository.CustomerRepository;
+import fact.it.backend.repository.OrganizationRepository;
 import fact.it.backend.repository.ReviewRepository;
+import fact.it.backend.util.JwtUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(path = "api/reviews")
 @RestController
@@ -17,39 +22,76 @@ public class ReviewController {
     @Autowired
     ReviewRepository reviewRepository;
 
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @GetMapping("")
     public List<Review> findAll(){
         return reviewRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Review findById(@PathVariable String id){
+        return reviewRepository.findReviewById(id);
+    }
+
     @PostMapping("")
-    public Review addReview(@RequestBody Review review){
-        reviewRepository.save(review);
-        return review;
+    public ResponseEntity<?> addReview(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Review review){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && review.getCustomer().getId().contains(user_id))){
+            reviewRepository.save(review);
+            return ResponseEntity.ok(review);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PutMapping("")
-    public Review updateReview(@RequestBody Review updatedReview){
-        Review retrievedReview = reviewRepository.findReviewById(updatedReview.getId());
+    public ResponseEntity<?> updateReview(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Review updatedReview){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
 
-        retrievedReview.setScore(updatedReview.getScore());
-        retrievedReview.setTitle(updatedReview.getTitle());
-        retrievedReview.setText(updatedReview.getText());
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && updatedReview.getCustomer().getId().contains(user_id))){
+            Review retrievedReview = reviewRepository.findReviewById(updatedReview.getId());
 
-        reviewRepository.save(retrievedReview);
+            retrievedReview.setScore(updatedReview.getScore());
+            retrievedReview.setTitle(updatedReview.getTitle());
+            retrievedReview.setText(updatedReview.getText());
 
-        return retrievedReview;
+            reviewRepository.save(retrievedReview);
+
+            return ResponseEntity.ok(retrievedReview);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteReview(@PathVariable String id){
-        Review review = reviewRepository.findReviewById(id);
+    public ResponseEntity deleteReview(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
 
-        if(review != null){
-            reviewRepository.delete(review);
-            return ResponseEntity.ok().build();
-        }else{
-            return ResponseEntity.notFound().build();
+        if(role.contains("ADMIN")){
+            Review review = reviewRepository.findReviewById(id);
+
+            if(review != null){
+                reviewRepository.delete(review);
+                return ResponseEntity.ok().build();
+            }else{
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }

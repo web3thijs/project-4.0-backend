@@ -16,9 +16,10 @@ import java.util.function.Function;
 public class JwtUtils {
     private static final String SECRET_KEY = "secret";
 
-    public String generateToken(UserDetails userDetails, Role role) {
+    public String generateToken(UserDetails userDetails, Role role, String user_id) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
+        claims.put("user_id", user_id);
         return createToken(claims, userDetails.getUsername());
     }
 
