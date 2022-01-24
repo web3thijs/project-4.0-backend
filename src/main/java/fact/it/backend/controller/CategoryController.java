@@ -1,15 +1,19 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.model.AuthResponse;
 import fact.it.backend.model.Category;
 import fact.it.backend.model.Product;
 import fact.it.backend.repository.CategoryRepository;
+import fact.it.backend.util.JwtUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(path = "api/categories")
 @RestController
@@ -18,6 +22,9 @@ public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @GetMapping("")
     public List<Category> findAll() { return categoryRepository.findAll(); }
 
@@ -25,31 +32,64 @@ public class CategoryController {
     public Category findById(@PathVariable String id) { return categoryRepository.findCategoryById(id); }
 
     @PostMapping("")
-    public Category addCategory(@RequestBody Category category){
-        categoryRepository.save(category);
-        return category;
+    public ResponseEntity<?> addCategory(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Category category){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+
+        if(role.contains("ADMIN")){
+            categoryRepository.save(category);
+            return ResponseEntity.ok(category);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
+    //    @GetMapping("")
+//    public String findAll(@RequestHeader("authorization") String tokenWithPrefix) {
+//        String token = tokenWithPrefix.substring(7);
+//        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+//        String role = claims.get("role").toString();
+//
+//        return role;
+//    }
+
     @PutMapping("")
-    public Category updateCategory(@RequestBody Category updatedCategory){
-        Category retrievedCategory = categoryRepository.findCategoryById(updatedCategory.getId());
+    public ResponseEntity<?> updateCategory(@RequestHeader("authorization") String tokenWithPrefix, @RequestBody Category updatedCategory){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
 
-        retrievedCategory.setName(updatedCategory.getName());
+        if(role.contains("ADMIN")){
+            Category retrievedCategory = categoryRepository.findCategoryById(updatedCategory.getId());
 
-        categoryRepository.save(retrievedCategory);
+            retrievedCategory.setName(updatedCategory.getName());
 
-        return retrievedCategory;
+            categoryRepository.save(retrievedCategory);
+
+            return ResponseEntity.ok(retrievedCategory);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCategory(@PathVariable String id){
-        Category category = categoryRepository.findCategoryById(id);
+    public ResponseEntity deleteCategory(@RequestHeader("authorization") String tokenWithPrefix, @PathVariable String id){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
 
-        if(category != null){
-            categoryRepository.delete(category);
-            return ResponseEntity.ok().build();
+        if(role.contains("ADMIN")){
+            Category category = categoryRepository.findCategoryById(id);
+
+            if(category != null){
+                categoryRepository.delete(category);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }
