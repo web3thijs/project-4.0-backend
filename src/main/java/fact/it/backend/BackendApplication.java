@@ -87,15 +87,17 @@ public class BackendApplication {
         Size size14cm = new Size("14 cm");
         Size size15cm = new Size("15 cm");
         Size size05l = new Size("0,5 liter");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!");
-        Review reviewGianniDeHerdtOrangoetanKnuffel = new Review( 5, "Zeer leuke knuffel", "");
-        Review reviewThijsWoutersPandaSleutelhanger = new Review(3.5, "Mooi", "");
-        Review reviewThijsWoutersBeertjeRK = new Review(3.5, "De beer", "Beetje lelijk maar heeft een groot hart");
-        Review reviewJolienFoetsPen = new Review(4.5, "Schrijft goed!", "");
-        Review reviewJolienFoetsKoffieKop = new Review(5, "Stevige kop.", "Perfect om de ochtend mee te beginnen, warmte blijft goed binnen de koffiekop.");
         Customer customerGianniDeHerdt = new Customer("giannidh@gmail.com", "password123", "0479994529", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER,"Gianni" , "De Herdt", false);
         Customer customerThijsWouters = new Customer("thijswouters@gmail.com", "password123", "0479954719", "Hoekstraat 165", "1680", "Belgium", Role.CUSTOMER,"Thijs" , "Wouters", true);
         Customer customerJolienFoets = new Customer("jolienfoets@gmail.com", "jolien123", "0476584982", "Stepelaar 6A", "1700", "Belgium", Role.CUSTOMER,"Jolien" , "Foets", false);
+
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Review reviewGianniDeHerdtOrangoetanKnuffel = new Review( 5, "Zeer leuke knuffel", "", customerGianniDeHerdt);
+        Review reviewThijsWoutersPandaSleutelhanger = new Review(3.5, "Mooi", "", customerThijsWouters);
+        Review reviewThijsWoutersBeertjeRK = new Review(3.5, "De beer", "Beetje lelijk maar heeft een groot hart", customerThijsWouters);
+        Review reviewJolienFoetsPen = new Review(4.5, "Schrijft goed!", "", customerJolienFoets);
+        Review reviewJolienFoetsKoffieKop = new Review(5, "Stevige kop.", "Perfect om de ochtend mee te beginnen, warmte blijft goed binnen de koffiekop.", customerJolienFoets);
+
         Organization organizationWWF = new Organization("supporters@wwf.be", "wwf123", "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
         Organization organizationThinkPink = new Organization("maite@think-pink.be", "maite123", "+32475406602", "Researchdreef 12", "1070", "Belgium", Role.ORGANIZATION, "Think Pink", "0810893274", "BE0810893274", "Think Pink is de nationale borstkankerorganisatie die zich dagelijks inzet voor borstkankerpatiënten en hun familie.\n" +
                 "\n" +

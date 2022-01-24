@@ -14,6 +14,7 @@ public class Review {
     private Number score;
     private String title;
     private String text;
+    private Customer customer;
 
     @DBRef
     private Interaction interaction;
@@ -22,10 +23,18 @@ public class Review {
 
     }
 
-    public Review( Number score, String title, String text) {
+    public Review( Number score, String title, String text, Customer customer) {
         this.score = score;
         this.title = title;
         this.text = text;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getId() {
