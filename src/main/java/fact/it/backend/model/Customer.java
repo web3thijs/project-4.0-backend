@@ -9,7 +9,6 @@ import java.util.Collection;
 public class Customer extends User{
     private String firstName;
     private String lastName;
-    private boolean isAdmin;
 
     @DBRef
     private Collection<Order> orders;
@@ -21,11 +20,10 @@ public class Customer extends User{
     public Customer() {
     }
 
-    public Customer(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String firstName, String lastName, boolean isAdmin) {
+    public Customer(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String firstName, String lastName) {
         super(email, password, phoneNr, address, postalCode, country, role);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.isAdmin = isAdmin;
     }
 
     public String getFirstName() {
@@ -42,13 +40,5 @@ public class Customer extends User{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 }
