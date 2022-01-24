@@ -1,19 +1,19 @@
 package fact.it.backend.controller;
 
-import fact.it.backend.model.Customer;
-import fact.it.backend.model.Order;
-import fact.it.backend.model.Product;
-import fact.it.backend.model.Role;
+import fact.it.backend.model.*;
 import fact.it.backend.repository.OrderRepository;
+import fact.it.backend.util.JwtUtils;
 import org.apache.coyote.Response;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(path = "/api/orders")
 @RestController
@@ -22,48 +22,103 @@ public class OrderController {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @GetMapping("")
-    public List<Order> findAll(){
-        return orderRepository.findAll();
+    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+
+        if(role.contains("ADMIN")){
+            return ResponseEntity.ok(orderRepository.findAll());
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping("/{id}")
-    public Order findOrderById(@PathVariable String id){
-        return orderRepository.findOrderById(id);
+    public ResponseEntity<?> findOrderById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+        Order retrievedOrder = orderRepository.findOrderById(id);
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId().contains(user_id))){
+            return ResponseEntity.ok(retrievedOrder);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping("/customer/{customerId}")
-    public List<Order> findOrdersByCustomerId(@PathVariable String customerId){
-        return orderRepository.findOrdersByCustomerId(customerId);
+    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String customerId){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId.contains(user_id))){
+            return ResponseEntity.ok(orderRepository.findOrdersByCustomerId(customerId));
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PostMapping("")
-    public Order addProduct(@RequestBody Order order){
-        orderRepository.save(order);
-        return order;
+    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order order){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId().contains(user_id))){
+            orderRepository.save(order);
+            return ResponseEntity.ok(order);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PutMapping("")
-    public Order updateOrder(@RequestBody Order updatedOrder){
+    public ResponseEntity<?> updateOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order updatedOrder){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
         Order retrievedOrder = orderRepository.findOrderById(updatedOrder.getId());
 
-        retrievedOrder.setCustomer(updatedOrder.getCustomer());
-        retrievedOrder.setDate(updatedOrder.getDate());
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId().contains(user_id))){
+            retrievedOrder.setCustomer(updatedOrder.getCustomer());
+            retrievedOrder.setDate(updatedOrder.getDate());
 
-        orderRepository.save(retrievedOrder);
+            orderRepository.save(retrievedOrder);
 
-        return retrievedOrder;
+            return ResponseEntity.ok(retrievedOrder);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteOrder(@PathVariable String id){
-        Order order = orderRepository.findOrderById(id);
+    public ResponseEntity deleteOrder(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
 
-        if(order != null){
-            orderRepository.delete(order);
-            return ResponseEntity.ok().build();
-        }else{
-            return ResponseEntity.notFound().build();
+        if(role.contains("ADMIN")){
+            Order order = orderRepository.findOrderById(id);
+
+            if(order != null){
+                orderRepository.delete(order);
+                return ResponseEntity.ok().build();
+            }else{
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }

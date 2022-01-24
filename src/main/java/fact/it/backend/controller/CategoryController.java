@@ -18,7 +18,6 @@ import java.util.Map;
 @RequestMapping(path = "api/categories")
 @RestController
 public class CategoryController {
-
     @Autowired
     CategoryRepository categoryRepository;
 
