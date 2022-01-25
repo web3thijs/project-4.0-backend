@@ -192,33 +192,6 @@ public class BackendApplication {
             organizationRepository.save(organizationBZN);
             organizationRepository.save(organizationBKKS);
         }
-        if(interactionRepository.count() == 0){
-            interactionRepository.save(new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4));
-            interactionRepository.save(new Interaction(productOrangoetanKnuffel, customerGianniDeHerdt,reviewGianniDeHerdtOrangoetanKnuffel, 3));
-            interactionRepository.save(new Interaction(productPandaSleutelhanger, customerThijsWouters, reviewThijsWoutersPandaSleutelhanger, 6));
-            interactionRepository.save(new Interaction(productBeertjeRK, customerThijsWouters, reviewThijsWoutersBeertjeRK, 2));
-            interactionRepository.save(new Interaction(productBalpenBlauw, customerJolienFoets, reviewJolienFoetsPen, 8));
-            interactionRepository.save(new Interaction(productKoffieKopRK, customerThijsWouters, reviewJolienFoetsKoffieKop, 3));
-        }
-        if(orderRepository.count()==0){
-            orderRepository.save(order1GianniDeHerdt);
-            orderRepository.save(order2GianniDeHerdt);
-            orderRepository.save(order1ThijsWouters);
-            orderRepository.save(order2ThijsWouters);
-            orderRepository.save(orderJolienFoets);
-        }
-        if(orderDetailRepository.count()==0){
-            orderDetailRepository.save(new OrderDetail(productOrangoetanSleutelhanger, order1GianniDeHerdt, size10cm, colorBruin, 2));
-            orderDetailRepository.save(new OrderDetail(productOrangoetanKnuffel, order1GianniDeHerdt, size15cm, colorBruin, 1));
-            orderDetailRepository.save(new OrderDetail(productPandaSleutelhanger, order2GianniDeHerdt, size10cm, colorZwartWit, 1));
-            orderDetailRepository.save(new OrderDetail(productPandaSleutelhanger, order1ThijsWouters, size10cm, colorZwartWit, 4));
-            orderDetailRepository.save(new OrderDetail(productBeertjeRK, order2ThijsWouters, size11cm, colorBeige, 1));
-            orderDetailRepository.save(new OrderDetail(productBalpenBlauw, orderJolienFoets, size14cm, colorWit, 5));
-            orderDetailRepository.save(new OrderDetail(productKoffieKopRK, orderJolienFoets, size10cm, colorWit, 2));
-            orderDetailRepository.save(new OrderDetail(productStiftenDA, order2ThijsWouters, size15cm, colorMix, 1));
-            orderDetailRepository.save(new OrderDetail(productStiftenDA, order1GianniDeHerdt, size15cm, colorMix, 2));
-
-        }
         if(productRepository.count() == 0){
             productRepository.save(productOrangoetanSleutelhanger);
             productRepository.save(productPandaSleutelhanger);
@@ -247,6 +220,34 @@ public class BackendApplication {
             reviewRepository.save(reviewJolienFoetsPen);
             reviewRepository.save(reviewJolienFoetsKoffieKop);
         }
+        if(interactionRepository.count() == 0){
+            interactionRepository.save(new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4));
+            interactionRepository.save(new Interaction(productOrangoetanKnuffel, customerGianniDeHerdt,reviewGianniDeHerdtOrangoetanKnuffel, 3));
+            interactionRepository.save(new Interaction(productPandaSleutelhanger, customerThijsWouters, reviewThijsWoutersPandaSleutelhanger, 6));
+            interactionRepository.save(new Interaction(productBeertjeRK, customerThijsWouters, reviewThijsWoutersBeertjeRK, 2));
+            interactionRepository.save(new Interaction(productBalpenBlauw, customerJolienFoets, reviewJolienFoetsPen, 8));
+            interactionRepository.save(new Interaction(productKoffieKopRK, customerThijsWouters, reviewJolienFoetsKoffieKop, 3));
+        }
+        if(orderRepository.count()==0){
+            orderRepository.save(order1GianniDeHerdt);
+            orderRepository.save(order2GianniDeHerdt);
+            orderRepository.save(order1ThijsWouters);
+            orderRepository.save(order2ThijsWouters);
+            orderRepository.save(orderJolienFoets);
+        }
+        if(orderDetailRepository.count()==0){
+            orderDetailRepository.save(new OrderDetail(productOrangoetanSleutelhanger, order1GianniDeHerdt, size10cm, colorBruin, 2));
+            orderDetailRepository.save(new OrderDetail(productOrangoetanKnuffel, order1GianniDeHerdt, size15cm, colorBruin, 1));
+            orderDetailRepository.save(new OrderDetail(productPandaSleutelhanger, order2GianniDeHerdt, size10cm, colorZwartWit, 1));
+            orderDetailRepository.save(new OrderDetail(productPandaSleutelhanger, order1ThijsWouters, size10cm, colorZwartWit, 4));
+            orderDetailRepository.save(new OrderDetail(productBeertjeRK, order2ThijsWouters, size11cm, colorBeige, 1));
+            orderDetailRepository.save(new OrderDetail(productBalpenBlauw, orderJolienFoets, size14cm, colorWit, 5));
+            orderDetailRepository.save(new OrderDetail(productKoffieKopRK, orderJolienFoets, size10cm, colorWit, 2));
+            orderDetailRepository.save(new OrderDetail(productStiftenDA, order2ThijsWouters, size15cm, colorMix, 1));
+            orderDetailRepository.save(new OrderDetail(productStiftenDA, order1GianniDeHerdt, size15cm, colorMix, 2));
+
+        }
+
         if(sizeRepository.count() == 0){
             sizeRepository.save(sizeSmall);
             sizeRepository.save(sizeMedium);
