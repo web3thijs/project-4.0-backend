@@ -166,6 +166,7 @@ public class BackendApplication {
             categoryRepository.save(categoryShirtsVrouwen);
             categoryRepository.save(categoryDrinkbussen);
             categoryRepository.save(categoryKaarsenGeuren);
+            categoryRepository.save(categoryMondmaskers);
         }
         if(colorRepository.count() == 0){
             colorRepository.save(colorRood);

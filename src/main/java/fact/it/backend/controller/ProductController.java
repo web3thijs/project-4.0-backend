@@ -45,10 +45,10 @@ public class ProductController {
         }else{
             Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
             Page<Product> products = productRepository.findAll(requestedPage);
+//            Page<Product> products = productRepository.findProductsByPriceGreaterThan(11, requestedPage);
             return products;
         }
     }
-
     @GetMapping("/organization/{organizationId}")
     public Page<Product> findProductsByOrganizationId(@PathVariable String organizationId, @RequestParam int page, @RequestParam(required = false) String sort){
         if(sort != null){
