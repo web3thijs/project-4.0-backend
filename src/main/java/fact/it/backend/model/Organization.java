@@ -1,9 +1,12 @@
 package fact.it.backend.model;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "users")
@@ -26,8 +29,9 @@ public class Organization extends User{
     public Organization() {
     }
 
-    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String organizationName, String companyRegistrationNr, String vatNr, String who, String what, String help, String supportPhoneNr, String supportEmail, List<String> imageUrl) {
-        super(email, password, phoneNr, address, postalCode, country, role);
+
+    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt, String organizationName, String companyRegistrationNr, String vatNr, String who, String what, String help, String supportPhoneNr, String supportEmail, List<String> imageUrl) {
+        super(email, password, phoneNr, address, postalCode, country, role, createdAt);
         this.organizationName = organizationName;
         this.companyRegistrationNr = companyRegistrationNr;
         this.vatNr = vatNr;

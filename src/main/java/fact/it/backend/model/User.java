@@ -1,12 +1,17 @@
 package fact.it.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "users")
-public class User {
+public class User implements Persistable<String> {
     @Id
     private String id;
     @Indexed(unique=true)
@@ -19,10 +24,16 @@ public class User {
     private String country;
     private Role role;
 
+    @CreatedDate
+    private Date createdAt;
+
+    @LastModifiedDate
+    private Date updatedAt;
+
     public User() {
     }
 
-    public User(String email, String password, String phoneNr, String address, String postalCode, String country, Role role) {
+    public User(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt) {
         this.email = email;
         this.password = password;
         this.phoneNr = phoneNr;
@@ -30,10 +41,32 @@ public class User {
         this.postalCode = postalCode;
         this.country = country;
         this.role = role;
+        this.createdAt = createdAt;
+    }
+
+    public Date getCreatedDate() {
+        return createdAt;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdAt = createdDate;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public boolean isNew() {
+        return false;
     }
 
     public void setId(String id) {

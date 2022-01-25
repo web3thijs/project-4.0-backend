@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Document(collection = "users")
 public class Customer extends User{
@@ -23,8 +24,8 @@ public class Customer extends User{
     public Customer() {
     }
 
-    public Customer(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, String firstName, String lastName) {
-        super(email, password, phoneNr, address, postalCode, country, role);
+    public Customer(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt, String firstName, String lastName) {
+        super(email, password, phoneNr, address, postalCode, country, role, createdAt);
         this.firstName = firstName;
         this.lastName = lastName;
     }
