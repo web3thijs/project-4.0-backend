@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +29,24 @@ public class CategoryController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Category> findAll(@RequestParam int page) {
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Category> categories = categoryRepository.findAll(requestedPage);
-        return categories; }
+    public Page<Category> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
+        if (sort != null) {
+            if(order != null && order.equals("desc")){
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Page<Category> categories = categoryRepository.findAll(requestedPageWithSortDesc);
+                return categories;
+            }
+            else{
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Page<Category> categories = categoryRepository.findAll(requestedPageWithSort);
+                return categories;
+            }
+        } else {
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+            Page<Category> categories = categoryRepository.findAll(requestedPage);
+            return categories;
+        }
+    }
 
     @GetMapping("/{id}")
     public Category findById(@PathVariable String id) { return categoryRepository.findCategoryById(id); }

@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.model.OrderDetail;
 import fact.it.backend.model.Product;
 import fact.it.backend.model.Size;
 import fact.it.backend.repository.SizeRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +30,22 @@ public class SizeController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Size> findAll(@RequestParam int page) {
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Size> sizes = sizeRepository.findAll(requestedPage);
-        return sizes;}
+    public Page<Size> findAll(@RequestParam int page, @RequestParam(required = false)String sort, @RequestParam(required = false)String order) {
+        if(sort != null){
+            if(order != null && order.equals("desc")){
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Page<Size> sizes = sizeRepository.findAll(requestedPageWithSortDesc);
+                return sizes;            }
+            else{
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Page<Size> sizes = sizeRepository.findAll(requestedPageWithSort);
+                return sizes;            }
+        }else{
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+            Page<Size> sizes = sizeRepository.findAll(requestedPage);
+            return sizes;
+        }
+    }
 
     @GetMapping("{/:id}")
     public Size findById(@PathVariable String id) {return sizeRepository.findSizeById(id);}

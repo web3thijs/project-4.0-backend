@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +28,23 @@ public class StockController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Stock> findAll(@RequestParam int page){
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Stock> stocks = stockRepository.findAll(requestedPage);
-        return stocks;
+    public Page<Stock> findAll(@RequestParam int page, @RequestParam(required = false)String sort, @RequestParam(required = false)String order){
+        if(sort != null){
+            if(order != null && order.equals("desc")){
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Page<Stock> stocks = stockRepository.findAll(requestedPageWithSortDesc);
+                return stocks;
+            }
+            else{
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Page<Stock> stocks = stockRepository.findAll(requestedPageWithSort);
+                return stocks;
+            }
+        }else{
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("amountInStock").ascending());
+            Page<Stock> stocks = stockRepository.findAll(requestedPage);
+            return stocks;
+        }
     }
 
     @GetMapping("/product/{productId}")
