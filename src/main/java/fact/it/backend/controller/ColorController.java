@@ -2,10 +2,14 @@ package fact.it.backend.controller;
 
 import fact.it.backend.model.Category;
 import fact.it.backend.model.Color;
+import fact.it.backend.model.Product;
 import fact.it.backend.model.Role;
 import fact.it.backend.repository.ColorRepository;
 import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +32,11 @@ public class ColorController {
     private JwtUtils jwtUtils;
   
     @GetMapping("")
-    public List<Color> findAll() {return colorRepository.findAll();}
+    public Page<Color> findAll(@RequestParam int page) {
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Color> colors = colorRepository.findAll(requestedPage);
+        return colors;
+    }
 
     @GetMapping("/{id}")
     public Color findById(@PathVariable String id) { return colorRepository.findColorById(id); }

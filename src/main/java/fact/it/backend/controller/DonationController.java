@@ -1,8 +1,12 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.Donation;
+import fact.it.backend.model.Product;
 import fact.it.backend.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +19,17 @@ public class DonationController {
     DonationRepository donationRepository;
 
     @GetMapping("")
-    public List<Donation> findAll() { return donationRepository.findAll();}
+    public Page<Donation> findAll(@RequestParam int page) {
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Donation> donations = donationRepository.findAll(requestedPage);
+        return donations;
+    }
 
     @GetMapping("/organization/{organizationId}")
-    public List<Donation> findDonationsByOrganizationId(@PathVariable String organizationId){
-        return donationRepository.findDonationsByOrganizationId(organizationId);
+    public Page<Donation> findDonationsByOrganizationId(@PathVariable String organizationId, @RequestParam int page){
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(organizationId, requestedPage);
+        return donationsByOrganizationId;
     }
 
     @PostMapping("")

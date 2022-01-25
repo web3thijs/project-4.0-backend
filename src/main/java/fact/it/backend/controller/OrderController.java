@@ -7,6 +7,9 @@ import fact.it.backend.util.JwtUtils;
 import org.apache.coyote.Response;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +34,15 @@ public class OrderController {
 
 
     @GetMapping("")
-    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix){
+    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam int page){
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Order> orders = orderRepository.findAll(requestedPage);
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
         if(role.contains("ADMIN")){
-            return ResponseEntity.ok(orderRepository.findAll());
+            return ResponseEntity.ok(orders);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
@@ -59,14 +64,16 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String customerId){
+    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String customerId, @RequestParam int page){
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPage);
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         String user_id = claims.get("user_id").toString();
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId.contains(user_id))){
-            return ResponseEntity.ok(orderRepository.findOrdersByCustomerId(customerId));
+            return ResponseEntity.ok(orders);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
