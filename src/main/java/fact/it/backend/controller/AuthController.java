@@ -106,7 +106,7 @@ public class AuthController {
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.ok(new AuthResponse("Error during authentication for client " + email));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error");
         }
 
         UserDetails retrievedUser = userService.loadUserByUsername(email);
