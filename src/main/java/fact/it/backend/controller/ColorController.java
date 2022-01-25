@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +33,23 @@ public class ColorController {
     private JwtUtils jwtUtils;
   
     @GetMapping("")
-    public Page<Color> findAll(@RequestParam int page) {
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Color> colors = colorRepository.findAll(requestedPage);
-        return colors;
+    public Page<Color> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
+        if(sort != null){
+            if(order != null){
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Page<Color> colors = colorRepository.findAll(requestedPageWithSortDesc);
+                return colors;
+            }
+            else{
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Page<Color> colors = colorRepository.findAll(requestedPageWithSort);
+                return colors;
+            }
+        }else{
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+            Page<Color> colors = colorRepository.findAll(requestedPage);
+            return colors;
+        }
     }
 
     @GetMapping("/{id}")
