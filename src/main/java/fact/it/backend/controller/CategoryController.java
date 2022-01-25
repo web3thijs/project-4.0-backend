@@ -42,7 +42,7 @@ public class CategoryController {
                 return categories;
             }
         } else {
-            Pageable requestedPage = PageRequest.of(page, 8);
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
             Page<Category> categories = categoryRepository.findAll(requestedPage);
             return categories;
         }
