@@ -1,11 +1,17 @@
 package fact.it.backend.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.UserRepository;
 import fact.it.backend.service.UserService;
 import fact.it.backend.util.JwtUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Console;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping(path = "/api")
 @RestController
@@ -89,7 +99,7 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    private ResponseEntity<?> authenticateClient(@RequestBody AuthRequest authRequest){
+    private ResponseEntity<?> authenticateClient(@RequestBody AuthRequest authRequest) throws JsonProcessingException, JSONException {
         String email = authRequest.getEmail();
         String password = authRequest.getPassword();
 
@@ -104,6 +114,11 @@ public class AuthController {
 
         String generatedToken = jwtUtils.generateToken(retrievedUser, retrievedUser2.getRole(), retrievedUser2.getId());
 
-        return ResponseEntity.ok(new AuthResponse(generatedToken));
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("token", generatedToken);
+        map.put("id", retrievedUser2.getId());
+        map.put("email", email);
+
+        return new ResponseEntity<Object>(map, HttpStatus.OK);
     }
 }
