@@ -43,7 +43,7 @@ public class ProductController {
                 return products;
             }
         }else{
-            Pageable requestedPage = PageRequest.of(page, 8);
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
             Page<Product> products = productRepository.findAll(requestedPage);
             return products;
         }
