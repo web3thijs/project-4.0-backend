@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,17 +30,29 @@ public class ProductController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Product> findAll(@RequestParam int page){
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Product> products = productRepository.findAll(requestedPage);
-        return products;
+    public Page<Product> findAll(@RequestParam int page, @RequestParam(required = false) String sort){
+        if(sort != null){
+            Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+            Page<Product> products = productRepository.findAll(requestedPageWithSort);
+            return products;
+        }else{
+            Pageable requestedPage = PageRequest.of(page, 8);
+            Page<Product> products = productRepository.findAll(requestedPage);
+            return products;
+        }
     }
 
     @GetMapping("/organization/{organizationId}")
-    public Page<Product> findProductsByOrganizationId(@PathVariable String organizationId, @RequestParam int page){
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Product> productsByOrganization = productRepository.findProductsByOrganizationId(organizationId, requestedPage);
-        return productsByOrganization;
+    public Page<Product> findProductsByOrganizationId(@PathVariable String organizationId, @RequestParam int page, @RequestParam(required = false) String sort){
+        if(sort != null){
+            Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+            Page<Product> productsByOrganization = productRepository.findProductsByOrganizationId(organizationId, requestedPageWithSort);
+            return productsByOrganization;
+        }else{
+            Pageable requestedPage = PageRequest.of(page, 8);
+            Page<Product> productsByOrganization = productRepository.findProductsByOrganizationId(organizationId, requestedPage);
+            return productsByOrganization;
+        }
     }
 
     @GetMapping("/{id}")
