@@ -38,7 +38,7 @@ public class AuthController {
     @PostMapping("/register/customer")
     private ResponseEntity<?> registerCustomer(@RequestBody Customer retrievedCustomer){
         Customer customer = new Customer();
-        
+
         customer.setCountry(retrievedCustomer.getCountry());
         customer.setPassword(passwordEncoder.encode(retrievedCustomer.getPassword()));
         customer.setEmail(retrievedCustomer.getEmail());
