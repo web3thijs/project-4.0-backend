@@ -6,6 +6,9 @@ import fact.it.backend.repository.SizeRepository;
 import fact.it.backend.util.JwtUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +28,10 @@ public class SizeController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public List<Size> findAll() {return sizeRepository.findAll();}
+    public Page<Size> findAll(@RequestParam int page) {
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Size> sizes = sizeRepository.findAll(requestedPage);
+        return sizes;}
 
     @GetMapping("{/:id}")
     public Size findById(@PathVariable String id) {return sizeRepository.findSizeById(id);}
