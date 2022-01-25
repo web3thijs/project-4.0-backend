@@ -176,6 +176,17 @@ public class BackendApplication {
             colorRepository.save(colorBeige);
             colorRepository.save(colorZwartWit);
         }
+        if(sizeRepository.count() == 0){
+            sizeRepository.save(sizeSmall);
+            sizeRepository.save(sizeMedium);
+            sizeRepository.save(sizeLarge);
+            sizeRepository.save(sizeExtraLarge);
+            sizeRepository.save(size10cm);
+            sizeRepository.save(size14cm);
+            sizeRepository.save(size15cm);
+            sizeRepository.save(size05l);
+            sizeRepository.save(size100g);
+        }
         if(userRepository.count() == 0){
             customerRepository.save(customerGianniDeHerdt);
             customerRepository.save(customerThijsWouters);
@@ -245,17 +256,6 @@ public class BackendApplication {
             orderDetailRepository.save(new OrderDetail(productStiftenDA, order1GianniDeHerdt, size15cm, colorMix, 2, new Date()));
         }
 
-        if(sizeRepository.count() == 0){
-            sizeRepository.save(sizeSmall);
-            sizeRepository.save(sizeMedium);
-            sizeRepository.save(sizeLarge);
-            sizeRepository.save(sizeExtraLarge);
-            sizeRepository.save(size10cm);
-            sizeRepository.save(size14cm);
-            sizeRepository.save(size15cm);
-            sizeRepository.save(size05l);
-            sizeRepository.save(size100g);
-        }
         if(stockRepository.count() == 0){
             stockRepository.save(new Stock(size10cm, colorBruin, productOrangoetanSleutelhanger, 50, new Date()));
             stockRepository.save(new Stock(size15cm, colorBruin, productOrangoetanKnuffel, 20, new Date()));
