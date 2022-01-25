@@ -30,11 +30,18 @@ public class ProductController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Product> findAll(@RequestParam int page, @RequestParam(required = false) String sort){
+    public Page<Product> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order){
         if(sort != null){
-            Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
-            Page<Product> products = productRepository.findAll(requestedPageWithSort);
-            return products;
+            if(order != null){
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Page<Product> products = productRepository.findAll(requestedPageWithSortDesc);
+                return products;
+            }
+            else{
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Page<Product> products = productRepository.findAll(requestedPageWithSort);
+                return products;
+            }
         }else{
             Pageable requestedPage = PageRequest.of(page, 8);
             Page<Product> products = productRepository.findAll(requestedPage);
