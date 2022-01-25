@@ -7,6 +7,9 @@ import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.util.JwtUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +28,10 @@ public class CategoryController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public List<Category> findAll() { return categoryRepository.findAll(); }
+    public Page<Category> findAll(@RequestParam int page) {
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Category> categories = categoryRepository.findAll(requestedPage);
+        return categories; }
 
     @GetMapping("/{id}")
     public Category findById(@PathVariable String id) { return categoryRepository.findCategoryById(id); }
