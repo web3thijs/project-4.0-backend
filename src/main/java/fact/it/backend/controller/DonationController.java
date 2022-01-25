@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,23 @@ public class DonationController {
     DonationRepository donationRepository;
 
     @GetMapping("")
-    public Page<Donation> findAll(@RequestParam int page) {
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Donation> donations = donationRepository.findAll(requestedPage);
-        return donations;
+    public Page<Donation> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
+        if(sort != null){
+            if(order != null && order.equals("desc")){
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
+                return donations;
+            }
+            else{
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Page<Donation> donations = donationRepository.findAll(requestedPageWithSort);
+                return donations;
+            }
+        }else{
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+            Page<Donation> donations = donationRepository.findAll(requestedPage);
+            return donations;
+        }
     }
 
     @GetMapping("/organization/{organizationId}")
