@@ -35,7 +35,7 @@ public class ColorController {
     @GetMapping("")
     public Page<Color> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
         if(sort != null){
-            if(order != null){
+            if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                 Page<Color> colors = colorRepository.findAll(requestedPageWithSortDesc);
                 return colors;

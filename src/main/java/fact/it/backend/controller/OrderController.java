@@ -86,7 +86,7 @@ public class OrderController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId.contains(user_id))){
             if(sort != null){
-                if(order != null){
+                if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                     Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPageWithSortDesc);
                     return ResponseEntity.ok(orders);

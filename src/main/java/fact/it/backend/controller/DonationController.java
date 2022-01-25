@@ -22,7 +22,7 @@ public class DonationController {
     @GetMapping("")
     public Page<Donation> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
         if(sort != null){
-            if(order != null){
+            if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                 Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
                 return donations;

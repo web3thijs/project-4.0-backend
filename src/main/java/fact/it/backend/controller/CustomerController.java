@@ -41,7 +41,7 @@ public class CustomerController {
         String role = claims.get("role").toString();
         if(role.contains("ADMIN")){
             if(sort != null){
-                if(order != null){
+                if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                     Page<Customer> customers = customerRepository.findByRole(Role.CUSTOMER, requestedPageWithSortDesc);
                     return ResponseEntity.ok(customers);

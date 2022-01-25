@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,15 +30,28 @@ public class OrganizationController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam int page){
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Organization> organizations = organizationRepository.findByRole(Role.ORGANIZATION, requestedPage);
+    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam int page, @RequestParam(required = false)String sort, @RequestParam(required = false)String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
         if(role.contains("ADMIN")){
-            return ResponseEntity.ok(organizations);
+            if(sort != null){
+                if(order != null && order.equals("desc")){
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                    Page<Organization> organizations = organizationRepository.findByRole(Role.ORGANIZATION, requestedPageWithSortDesc);
+                    return ResponseEntity.ok(organizations);
+                }
+                else{
+                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                    Page<Organization> organizations = organizationRepository.findByRole(Role.ORGANIZATION, requestedPageWithSort);
+                    return ResponseEntity.ok(organizations);
+                }
+            }else{
+                Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+                Page<Organization> organizations = organizationRepository.findByRole(Role.ORGANIZATION, requestedPage);
+                return ResponseEntity.ok(organizations);
+            }
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
