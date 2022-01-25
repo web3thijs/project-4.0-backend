@@ -36,7 +36,7 @@ public class OrderDetailController {
 
         if(role.contains("ADMIN")){
             if(sort != null){
-                if(order != null){
+                if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                     Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPageWithSortDesc);
                     return ResponseEntity.ok(orderDetails);
