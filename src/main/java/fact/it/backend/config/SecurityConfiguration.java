@@ -17,6 +17,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity @RequiredArgsConstructor
@@ -36,18 +42,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable().authorizeRequests().antMatchers("/v3/**",
-//                "/swagger-ui.html",
-//                "/swagger-ui/**",
-//                "/api/register/**",
-//                "/api/authenticate"
-//        )
-//                .permitAll().anyRequest().authenticated();
+        http.cors().configurationSource(corsConfigurationSource());
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/v3/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+
+                .antMatchers(HttpMethod.GET, "/api/organizations").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/organizations/{id}").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/api/products").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/products/organization/{id}").permitAll()
@@ -69,6 +72,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/sizes").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/sizes/{id}").permitAll()
 
+                .antMatchers(HttpMethod.GET, "/api/stocks").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/stocks/{id}").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/stocks/product/{id}").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/register/customer").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/register/organization").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
@@ -83,5 +90,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

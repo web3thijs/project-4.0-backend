@@ -44,17 +44,8 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
-        String token = tokenWithPrefix.substring(7);
-        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
-        String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
-
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && id.contains(user_id))){
-            return ResponseEntity.ok(organizationRepository.findByRoleAndId(Role.ORGANIZATION, id));
-        } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> findById(@PathVariable String id){
+        return ResponseEntity.ok(organizationRepository.findByRoleAndId(Role.ORGANIZATION, id));
     }
 
     @PutMapping
