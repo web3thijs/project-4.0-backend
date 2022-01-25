@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfigurationSource());
 
-        http.authorizeRequests()
+        http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/v3/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
@@ -74,6 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.GET, "/api/stocks").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/stocks/{id}").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/stocks/product/{id}").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/register/customer").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/register/organization").permitAll()
