@@ -5,6 +5,9 @@ import fact.it.backend.repository.StockRepository;
 import fact.it.backend.util.JwtUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +27,10 @@ public class StockController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public List<Stock> findAll(){
-        return stockRepository.findAll();
+    public Page<Stock> findAll(@RequestParam int page){
+        Pageable requestedPage = PageRequest.of(page, 8);
+        Page<Stock> stocks = stockRepository.findAll(requestedPage);
+        return stocks;
     }
 
     @GetMapping("/product/{productId}")
