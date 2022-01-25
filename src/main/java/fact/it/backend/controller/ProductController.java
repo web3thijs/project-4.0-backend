@@ -30,14 +30,14 @@ public class ProductController {
 
     @GetMapping("")
     public Page<Product> findAll(@RequestParam int page){
-        Pageable requestedPage = PageRequest.of(page, 9);
+        Pageable requestedPage = PageRequest.of(page, 8);
         Page<Product> products = productRepository.findAll(requestedPage);
         return products;
     }
 
     @GetMapping("/organization/{organizationId}")
     public Page<Product> findProductsByOrganizationId(@PathVariable String organizationId, @RequestParam int page){
-        Pageable requestedPage = PageRequest.of(page, 9);
+        Pageable requestedPage = PageRequest.of(page, 8);
         Page<Product> productsByOrganization = productRepository.findProductsByOrganizationId(organizationId, requestedPage);
         return productsByOrganization;
     }
