@@ -17,6 +17,8 @@ public class Interaction implements Persistable<String> {
     private Customer customer;
     private Review review;
     private Number amountClicks;
+    private Number amountCart;
+    private Number amountBought;
     @CreatedDate
     private Date createdAt;
 
@@ -27,11 +29,13 @@ public class Interaction implements Persistable<String> {
 
     }
 
-    public Interaction(Product product, Customer customer, Review review, Number amountClicks, Date createdAt) {
+    public Interaction(Product product, Customer customer, Review review, Number amountClicks,  Number amountCart,  Number amountBought, Date createdAt) {
         this.product = product;
         this.customer = customer;
         this.review = review;
         this.amountClicks = amountClicks;
+        this.amountCart = amountCart;
+        this.amountBought = amountBought;
         this.createdAt = createdAt;
     }
 
@@ -94,5 +98,21 @@ public class Interaction implements Persistable<String> {
 
     public void setAmountClicks(Number amountClicks) {
         this.amountClicks = amountClicks;
+    }
+
+    public Number getAmountCart() {
+        return amountCart;
+    }
+
+    public void setAmountCart(Number amountCart) {
+        this.amountCart = amountCart;
+    }
+
+    public Number getAmountBought() {
+        return amountBought;
+    }
+
+    public void setAmountBought(Number amountBought) {
+        this.amountBought = amountBought;
     }
 }

@@ -231,12 +231,12 @@ public class BackendApplication {
             reviewRepository.save(reviewJolienFoetsKoffieKop);
         }
         if(interactionRepository.count() == 0){
-            interactionRepository.save(new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, new Date()));
-            interactionRepository.save(new Interaction(productOrangoetanKnuffel, customerGianniDeHerdt,reviewGianniDeHerdtOrangoetanKnuffel, 3, new Date()));
-            interactionRepository.save(new Interaction(productPandaSleutelhanger, customerThijsWouters, reviewThijsWoutersPandaSleutelhanger, 6, new Date()));
-            interactionRepository.save(new Interaction(productBeertjeRK, customerThijsWouters, reviewThijsWoutersBeertjeRK, 2, new Date()));
-            interactionRepository.save(new Interaction(productBalpenBlauw, customerJolienFoets, reviewJolienFoetsPen, 8, new Date()));
-            interactionRepository.save(new Interaction(productKoffieKopRK, customerThijsWouters, reviewJolienFoetsKoffieKop, 3, new Date()));
+            interactionRepository.save(new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date()));
+            interactionRepository.save(new Interaction(productOrangoetanKnuffel, customerGianniDeHerdt,reviewGianniDeHerdtOrangoetanKnuffel, 3, 2, 2, new Date()));
+            interactionRepository.save(new Interaction(productPandaSleutelhanger, customerThijsWouters, reviewThijsWoutersPandaSleutelhanger, 6, 0, 0, new Date()));
+            interactionRepository.save(new Interaction(productBeertjeRK, customerThijsWouters, reviewThijsWoutersBeertjeRK, 2, 1, 1, new Date()));
+            interactionRepository.save(new Interaction(productBalpenBlauw, customerJolienFoets, reviewJolienFoetsPen, 8, 2, 0, new Date()));
+            interactionRepository.save(new Interaction(productKoffieKopRK, customerThijsWouters, reviewJolienFoetsKoffieKop, 3, 1,0, new Date()));
         }
         if(orderRepository.count()==0){
             orderRepository.save(order1GianniDeHerdt);
