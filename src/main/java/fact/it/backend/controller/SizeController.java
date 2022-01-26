@@ -30,18 +30,22 @@ public class SizeController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Size> findAll(@RequestParam int page, @RequestParam(required = false)String sort, @RequestParam(required = false)String order) {
+    public Page<Size> findAll(@RequestParam(required = false) Integer page, @RequestParam(required = false)String sort, @RequestParam(required = false)String order) {
+        Integer pageable = page;
+        if(page == null){
+            pageable = 0;
+        }
         if(sort != null){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
                 Page<Size> sizes = sizeRepository.findAll(requestedPageWithSortDesc);
                 return sizes;            }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(pageable, 8, Sort.by(sort).ascending());
                 Page<Size> sizes = sizeRepository.findAll(requestedPageWithSort);
                 return sizes;            }
         }else{
-            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+            Pageable requestedPage = PageRequest.of(pageable, 8, Sort.by("name").ascending());
             Page<Size> sizes = sizeRepository.findAll(requestedPage);
             return sizes;
         }

@@ -33,20 +33,24 @@ public class ProductController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Product> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order, @RequestParam(required = false)String categorie, @RequestParam(required = false) String vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
+    public Page<Product> findAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order, @RequestParam(required = false)String categorie, @RequestParam(required = false) String vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
+        Integer pageable = page;
+        if(page == null){
+            pageable = 0;
+        }
         if(sort != null){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
                 Page<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSortDesc);
                 return products;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(pageable, 8, Sort.by(sort).ascending());
                 Page<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSort);
                 return products;
             }
         }else{
-            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+            Pageable requestedPage = PageRequest.of(pageable, 8, Sort.by("name").ascending());
             Page<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPage);
             return products;
         }
