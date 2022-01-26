@@ -20,20 +20,24 @@ public class DonationController {
     DonationRepository donationRepository;
 
     @GetMapping("")
-    public Page<Donation> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
+    public Page<Donation> findAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
+        Integer pageable = page;
+        if(page == null){
+            pageable = 0;
+        }
         if(sort != null){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
                 Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
                 return donations;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(pageable, 8, Sort.by(sort).ascending());
                 Page<Donation> donations = donationRepository.findAll(requestedPageWithSort);
                 return donations;
             }
         }else{
-            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("organization.organizationName").ascending());
+            Pageable requestedPage = PageRequest.of(pageable, 8, Sort.by("organization.organizationName").ascending());
             Page<Donation> donations = donationRepository.findAll(requestedPage);
             return donations;
         }
