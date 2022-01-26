@@ -47,7 +47,7 @@ public class SizeController {
         }
     }
 
-    @GetMapping("{/:id}")
+    @GetMapping("/{id}")
     public Size findById(@PathVariable String id) {return sizeRepository.findSizeById(id);}
 
     @PostMapping("")
