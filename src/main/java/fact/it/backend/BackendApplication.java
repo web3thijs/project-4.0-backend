@@ -207,6 +207,7 @@ public class BackendApplication {
             productRepository.save(productOrangoetanKnuffel);
             productRepository.save(productBalpenBlauw);
             productRepository.save(productStiftenDA);
+            productRepository.save(productBeertjeRK);
             productRepository.save(productKoffieKopRK);
             productRepository.save(productMondmaskerWit);
             productRepository.save(productMondmaskerGroen);
