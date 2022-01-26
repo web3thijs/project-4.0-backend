@@ -30,15 +30,11 @@ public class OrganizationController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false) Integer page, @RequestParam(required = false)String sort, @RequestParam(required = false)String order){
-        String token = tokenWithPrefix.substring(7);
-        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
-        String role = claims.get("role").toString();
+    public ResponseEntity<?> findAll(@RequestParam(required = false) Integer page, @RequestParam(required = false)String sort, @RequestParam(required = false)String order){
         Integer pageable = page;
         if(page == null){
             pageable = 0;
         }
-        if(role.contains("ADMIN")){
             if(sort != null){
                 if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
@@ -55,10 +51,7 @@ public class OrganizationController {
                 Page<Organization> organizations = organizationRepository.findByRole(Role.ORGANIZATION, requestedPage);
                 return ResponseEntity.ok(organizations);
             }
-        } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable String id){
