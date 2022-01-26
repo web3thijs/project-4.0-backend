@@ -33,7 +33,7 @@ public class DonationController {
                 return donations;
             }
         }else{
-            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+            Pageable requestedPage = PageRequest.of(page, 8, Sort.by("organization.organizationName").ascending());
             Page<Donation> donations = donationRepository.findAll(requestedPage);
             return donations;
         }

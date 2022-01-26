@@ -16,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -30,22 +33,21 @@ public class ProductController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Product> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order){
+    public List<Product> findAll(@RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order, @RequestParam(required = false)String categorie, @RequestParam(required = false) String vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
         if(sort != null){
             if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
-                Page<Product> products = productRepository.findAll(requestedPageWithSortDesc);
+                List<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSortDesc);
                 return products;
             }
             else{
                 Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
-                Page<Product> products = productRepository.findAll(requestedPageWithSort);
+                List<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSort);
                 return products;
             }
         }else{
             Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
-            Page<Product> products = productRepository.findAll(requestedPage);
-//            Page<Product> products = productRepository.findProductsByPriceGreaterThan(11, requestedPage);
+            List<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPage);
             return products;
         }
     }

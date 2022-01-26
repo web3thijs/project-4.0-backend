@@ -47,7 +47,7 @@ public class OrderDetailController {
                     return ResponseEntity.ok(orderDetails);
                 }
             }else{
-                Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+                Pageable requestedPage = PageRequest.of(page, 8, Sort.by("order.date").descending());
                 Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPage);
                 return ResponseEntity.ok(orderDetails);
             }
