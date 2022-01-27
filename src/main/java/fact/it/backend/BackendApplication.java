@@ -30,7 +30,7 @@ public class BackendApplication {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 

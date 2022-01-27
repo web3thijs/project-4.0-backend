@@ -71,7 +71,6 @@ public class ProductController {
         }else{
             Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
             Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPage);
-//            Page<Product> products = productRepository.findProductsByPriceGreaterThan(11, requestedPage);
             return products;
         }
     }

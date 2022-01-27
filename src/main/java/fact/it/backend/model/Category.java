@@ -36,6 +36,12 @@ public class Category implements Persistable<String> {
         this.createdAt = createdAt;
     }
 
+    public Category(String id, String name, Date createdAt) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+    }
+
     public Date getCreatedDate() {
         return createdAt;
     }
@@ -55,6 +61,7 @@ public class Category implements Persistable<String> {
     public String getId() {
         return id;
     }
+
 
     @Override
     public boolean isNew() {

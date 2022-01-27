@@ -37,18 +37,15 @@ public class CategoryController {
         if (sort != null) {
             if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
-                Page<Category> categories = categoryRepository.findAll(requestedPageWithSortDesc);
-                return categories;
+                return categoryRepository.findAll(requestedPageWithSortDesc);
             }
             else{
                 Pageable requestedPageWithSort = PageRequest.of(pageable, 8, Sort.by(sort).ascending());
-                Page<Category> categories = categoryRepository.findAll(requestedPageWithSort);
-                return categories;
+                return categoryRepository.findAll(requestedPageWithSort);
             }
         } else {
             Pageable requestedPage = PageRequest.of(pageable, 8, Sort.by("name").ascending());
-            Page<Category> categories = categoryRepository.findAll(requestedPage);
-            return categories;
+            return categoryRepository.findAll(requestedPage);
         }
     }
 
