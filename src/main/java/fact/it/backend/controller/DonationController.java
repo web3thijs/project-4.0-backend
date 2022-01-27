@@ -20,44 +20,33 @@ public class DonationController {
     DonationRepository donationRepository;
 
     @GetMapping("")
-    public Page<Donation> findAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
-        Integer pageable = page;
-        if(page == null){
-            pageable = 0;
-        }
-        if(sort != null){
-            if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
-                Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
-                return donations;
-            }
-            else{
-                Pageable requestedPageWithSort = PageRequest.of(pageable, 8, Sort.by(sort).ascending());
-                Page<Donation> donations = donationRepository.findAll(requestedPageWithSort);
-                return donations;
-            }
-        }else{
-            Pageable requestedPage = PageRequest.of(pageable, 8, Sort.by("organization.organizationName").ascending());
-            Page<Donation> donations = donationRepository.findAll(requestedPage);
+    public Page<Donation> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "organization.organizationName") String sort, @RequestParam(required = false) String order) {
+        if (order != null && order.equals("desc")) {
+            Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+            Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
+            return donations;
+        } else {
+            Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+            Page<Donation> donations = donationRepository.findAll(requestedPageWithSort);
             return donations;
         }
     }
 
     @GetMapping("/organization/{organizationId}")
-    public Page<Donation> findDonationsByOrganizationId(@PathVariable String organizationId, @RequestParam int page){
+    public Page<Donation> findDonationsByOrganizationId(@PathVariable String organizationId, @RequestParam int page) {
         Pageable requestedPage = PageRequest.of(page, 8);
         Page<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(organizationId, requestedPage);
         return donationsByOrganizationId;
     }
 
     @PostMapping("")
-    public Donation addDonation(@RequestBody Donation donation){
+    public Donation addDonation(@RequestBody Donation donation) {
         donationRepository.save(donation);
         return donation;
     }
 
     @PutMapping("")
-    public Donation updateDonation(@RequestBody Donation updatedDonation){
+    public Donation updateDonation(@RequestBody Donation updatedDonation) {
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 
         retrievedDonation.setProduct(updatedDonation.getProduct());
@@ -70,13 +59,13 @@ public class DonationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDonation(@PathVariable String id){
+    public ResponseEntity deleteDonation(@PathVariable String id) {
         Donation donation = donationRepository.findDonationById(id);
 
-        if(donation != null){
+        if (donation != null) {
             donationRepository.delete(donation);
             return ResponseEntity.ok().build();
-        }   else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
