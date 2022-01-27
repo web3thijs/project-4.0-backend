@@ -32,14 +32,9 @@ public class ReviewController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public Page<Review> findAll(@RequestParam(required = false) Integer page){
-        Integer pageable = page;
-        if(page == null){
-            pageable = 0;
-        }
-        Pageable requestedPage = PageRequest.of(pageable, 8);
-        Page<Review> reviews = reviewRepository.findAll(requestedPage);
-        return reviews;
+    public Page<Review> findAll(@RequestParam(required = false, defaultValue = "0") Integer page){
+        Pageable requestedPage = PageRequest.of(page, 8);
+        return reviewRepository.findAll(requestedPage);
     }
 
     @GetMapping("/{id}")
