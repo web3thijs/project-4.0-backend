@@ -18,8 +18,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/reviews")
 @RestController
+@RequestMapping(path = "api/reviews")
 public class ReviewController {
 
     @Autowired
@@ -31,9 +31,9 @@ public class ReviewController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public Page<Review> findAll(@RequestParam(required = false, defaultValue = "0") Integer page){
-        Pageable requestedPage = PageRequest.of(page, 8);
+        Pageable requestedPage = PageRequest.of(page, 9);
         return reviewRepository.findAll(requestedPage);
     }
 
@@ -42,7 +42,7 @@ public class ReviewController {
         return reviewRepository.findReviewById(id);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addReview(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Review review){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -57,7 +57,7 @@ public class ReviewController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<?> updateReview(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Review updatedReview){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);

@@ -32,15 +32,15 @@ public class ColorController {
     @Autowired
     private JwtUtils jwtUtils;
   
-    @GetMapping("")
+    @GetMapping
     public Page<Color> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Color> colors = colorRepository.findAll(requestedPageWithSortDesc);
                 return colors;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Color> colors = colorRepository.findAll(requestedPageWithSort);
                 return colors;
             }
@@ -49,7 +49,7 @@ public class ColorController {
     @GetMapping("/{id}")
     public Color findById(@PathVariable String id) { return colorRepository.findColorById(id); }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addColor(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Color color){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -58,6 +58,24 @@ public class ColorController {
         if(role.contains("ADMIN")){
             colorRepository.save(color);
             return ResponseEntity.ok(color);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateColor(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Color updatedColor){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+
+        if(role.contains("ADMIN")){
+            Color retrievedColor = colorRepository.findColorById(updatedColor.getId());
+
+            retrievedColor.setName(updatedColor.getName());
+            colorRepository.save(updatedColor);
+
+            return ResponseEntity.ok(updatedColor);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }

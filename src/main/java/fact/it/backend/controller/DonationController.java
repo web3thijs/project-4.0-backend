@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping(path = "api/donations")
 @RestController
+@RequestMapping(path = "api/donations")
 public class DonationController {
     @Autowired
     DonationRepository donationRepository;
 
-    @GetMapping("")
+    @GetMapping
     public Page<Donation> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "organization.organizationName") String sort, @RequestParam(required = false) String order) {
         if (order != null && order.equals("desc")) {
-            Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+            Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
             Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
             return donations;
         } else {
-            Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+            Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
             Page<Donation> donations = donationRepository.findAll(requestedPageWithSort);
             return donations;
         }
@@ -34,18 +34,18 @@ public class DonationController {
 
     @GetMapping("/organization/{organizationId}")
     public Page<Donation> findDonationsByOrganizationId(@PathVariable String organizationId, @RequestParam int page) {
-        Pageable requestedPage = PageRequest.of(page, 8);
+        Pageable requestedPage = PageRequest.of(page, 9);
         Page<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(organizationId, requestedPage);
         return donationsByOrganizationId;
     }
 
-    @PostMapping("")
+    @PostMapping
     public Donation addDonation(@RequestBody Donation donation) {
         donationRepository.save(donation);
         return donation;
     }
 
-    @PutMapping("")
+    @PutMapping
     public Donation updateDonation(@RequestBody Donation updatedDonation) {
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 

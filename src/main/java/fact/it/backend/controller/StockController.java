@@ -17,8 +17,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/stocks")
 @RestController
+@RequestMapping(path = "api/stocks")
 public class StockController {
 
     @Autowired
@@ -27,15 +27,15 @@ public class StockController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public Page<Stock> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "amountInStock")String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Stock> stocks = stockRepository.findAll(requestedPageWithSortDesc);
                 return stocks;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Stock> stocks = stockRepository.findAll(requestedPageWithSort);
                 return stocks;
             }
@@ -46,7 +46,7 @@ public class StockController {
         return stockRepository.findStocksByProductId(productId);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock stock){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -61,7 +61,7 @@ public class StockController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<?> updateStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock updatedStock){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
