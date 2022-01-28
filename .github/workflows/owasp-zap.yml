@@ -10,4 +10,4 @@ jobs:
     - name: OWASP ZAP Full Scan
       uses: zaproxy/action-baseline@v0.4.0
       with:
-        target: "https://lourdauxbob.sinners.be/index.html"
+        target: "https://6tmnye3cmp.eu-west-1.awsapprunner.com/"
