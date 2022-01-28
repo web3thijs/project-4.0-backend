@@ -48,9 +48,18 @@ public class DonationController {
     }
 
     @PostMapping("")
-    public Donation addDonation(@RequestBody Donation donation) {
-        donationRepository.save(donation);
-        return donation;
+    public ResponseEntity<?> addDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation donation) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && donation.getOrder().getCustomer().getId().contains(user_id))){
+            donationRepository.save(donation);
+            return ResponseEntity.ok(donation);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PutMapping("")
