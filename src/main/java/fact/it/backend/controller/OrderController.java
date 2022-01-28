@@ -35,31 +35,21 @@ public class OrderController {
 
 
     @GetMapping("")
-    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false) Integer page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
+    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false)String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        Integer pageable = page;
-        if(page == null){
-            pageable = 0;
-        }
         if(role.contains("ADMIN")){
-            if(sort != null){
                 if(order != null){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                     Page<Order> orders = orderRepository.findAll(requestedPageWithSortDesc);
                     return ResponseEntity.ok(orders);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(pageable, 8, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
                     Page<Order> orders = orderRepository.findAll(requestedPageWithSort);
                     return ResponseEntity.ok(orders);
                 }
-            }else{
-                Pageable requestedPage = PageRequest.of(pageable, 8, Sort.by("date").descending());
-                Page<Order> orders = orderRepository.findAll(requestedPage);
-                return ResponseEntity.ok(orders);
-            }
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }

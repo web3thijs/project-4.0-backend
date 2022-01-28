@@ -29,31 +29,21 @@ public class OrderDetailController {
     private JwtUtils jwtUtils;
 
     @GetMapping("")
-    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false) Integer page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order){
+    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "order.date") String sort, @RequestParam(required = false) String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        Integer pageable = page;
-        if(page == null){
-            pageable = 0;
-        }
         if(role.contains("ADMIN")){
-            if(sort != null){
                 if(order != null && order.equals("desc")){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(pageable, 8, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                     Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPageWithSortDesc);
                     return ResponseEntity.ok(orderDetails);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(pageable, 8, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
                     Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPageWithSort);
                     return ResponseEntity.ok(orderDetails);
                 }
-            }else{
-                Pageable requestedPage = PageRequest.of(pageable, 8, Sort.by("order.date").descending());
-                Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPage);
-                return ResponseEntity.ok(orderDetails);
-            }
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
