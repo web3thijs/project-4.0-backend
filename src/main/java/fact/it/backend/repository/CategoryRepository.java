@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends MongoRepository<Category, String> {
-    Page<Category> findAll(Pageable pageable, String sort, String order);
     Page<Category> findAll(Pageable pageable);
     Category findCategoryById(String id);
 }

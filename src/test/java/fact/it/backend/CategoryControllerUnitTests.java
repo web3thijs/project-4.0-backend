@@ -7,15 +7,9 @@ import fact.it.backend.repository.CategoryRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -64,9 +58,9 @@ public class CategoryControllerUnitTests {
     public void whenGetAllCategoriesWithParams_thenReturnJsonCategory() throws Exception{
         Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
 
-        Page<Category> allCategoriesWithParams = categoryRepository.findAll(requestedPage, "name", "desc");
+        Page<Category> allCategoriesWithParams = categoryRepository.findAll(requestedPage);
 
-        given(categoryRepository.findAll(requestedPage, "name", "desc")).willReturn(allCategoriesWithParams);
+        given(categoryRepository.findAll(requestedPage)).willReturn(allCategoriesWithParams);
 
         mockMvc.perform(get("/api/categories?page=0&sort=name&order=desc"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
