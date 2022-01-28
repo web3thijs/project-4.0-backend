@@ -17,8 +17,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/organizations")
 @RestController
+@RequestMapping(path = "api/organizations")
 public class OrganizationController {
     @Autowired
     OrganizationRepository organizationRepository;
@@ -29,7 +29,7 @@ public class OrganizationController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "organizationName")String sort, @RequestParam(required = false)String order){
                 if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());

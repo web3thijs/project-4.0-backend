@@ -13,8 +13,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/interactions")
 @RestController
+@RequestMapping(path = "api/interactions")
 public class InteractionController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class InteractionController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -62,7 +62,7 @@ public class InteractionController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addInteraction(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Interaction interaction){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -76,7 +76,7 @@ public class InteractionController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<?> updateInteraction(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Interaction updatedInteraction){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);

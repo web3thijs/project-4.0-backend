@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/customers")
 @RestController
+@RequestMapping(path = "api/customers")
 public class CustomerController {
     @Autowired
     CustomerRepository customerRepository;
@@ -33,7 +33,7 @@ public class CustomerController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "email") String sort, @RequestParam(required = false) String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);

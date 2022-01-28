@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "/api/orders")
 @RestController
+@RequestMapping(path = "/api/orders")
 public class OrderController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class OrderController {
     OrderDetailRepository orderDetailRepository;
 
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false)String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -99,7 +99,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -114,7 +114,7 @@ public class OrderController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<?> updateOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order updatedOrder){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);

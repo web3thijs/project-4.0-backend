@@ -19,8 +19,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/sizes")
 @RestController
+@RequestMapping(path = "api/sizes")
 public class SizeController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class SizeController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public Page<Size> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name")String sort, @RequestParam(required = false)String order) {
             if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
@@ -44,7 +44,7 @@ public class SizeController {
     @GetMapping("/{id}")
     public Size findById(@PathVariable String id) {return sizeRepository.findSizeById(id);}
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addSize(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Size size){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
