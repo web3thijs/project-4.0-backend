@@ -13,14 +13,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/categories")
 @RestController
+@RequestMapping(path = "api/categories")
 public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
@@ -28,7 +29,7 @@ public class CategoryController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public Page<Category> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
@@ -43,7 +44,7 @@ public class CategoryController {
     @GetMapping("/{id}")
     public Category findById(@PathVariable String id) { return categoryRepository.findCategoryById(id); }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addCategory(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Category category){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -57,8 +58,8 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> updateCategory(@RequestHeader("authorization") String tokenWithPrefix, @RequestBody Category updatedCategory){
+    @PutMapping
+    public ResponseEntity<?> updateCategory(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Category updatedCategory){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
