@@ -32,11 +32,11 @@ public class CategoryController {
     @GetMapping
     public Page<Category> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 return categoryRepository.findAll(requestedPageWithSortDesc);
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 return categoryRepository.findAll(requestedPageWithSort);
             }
         }

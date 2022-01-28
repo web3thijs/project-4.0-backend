@@ -41,12 +41,12 @@ public class OrderController {
         String role = claims.get("role").toString();
         if(role.contains("ADMIN")){
                 if(order != null){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                     Page<Order> orders = orderRepository.findAll(requestedPageWithSortDesc);
                     return ResponseEntity.ok(orders);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                     Page<Order> orders = orderRepository.findAll(requestedPageWithSort);
                     return ResponseEntity.ok(orders);
                 }
@@ -80,17 +80,17 @@ public class OrderController {
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId.contains(user_id))){
             if(sort != null){
                 if(order != null && order.equals("desc")){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                     Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPageWithSortDesc);
                     return ResponseEntity.ok(orders);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                     Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPageWithSort);
                     return ResponseEntity.ok(orders);
                 }
             }else{
-                Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+                Pageable requestedPage = PageRequest.of(page, 9, Sort.by("name").ascending());
                 Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPage);
                 return ResponseEntity.ok(orders);
             }

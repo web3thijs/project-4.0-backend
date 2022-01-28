@@ -30,12 +30,12 @@ public class StockController {
     @GetMapping
     public Page<Stock> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "amountInStock")String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Stock> stocks = stockRepository.findAll(requestedPageWithSortDesc);
                 return stocks;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Stock> stocks = stockRepository.findAll(requestedPageWithSort);
                 return stocks;
             }

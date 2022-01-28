@@ -35,12 +35,12 @@ public class ProductController {
     @GetMapping
     public Page<Product> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false)String categorie, @RequestParam(required = false) String vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSortDesc);
                 return products;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSort);
                 return products;
             }
@@ -48,12 +48,12 @@ public class ProductController {
     @GetMapping("/organization/{organizationId}")
     public Page<Product> findProductsByOrganizationId(@PathVariable String organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSortDesc);
                 return products;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSort);
                 return products;
             }

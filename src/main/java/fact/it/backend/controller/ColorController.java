@@ -35,12 +35,12 @@ public class ColorController {
     @GetMapping
     public Page<Color> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Color> colors = colorRepository.findAll(requestedPageWithSortDesc);
                 return colors;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Color> colors = colorRepository.findAll(requestedPageWithSort);
                 return colors;
             }

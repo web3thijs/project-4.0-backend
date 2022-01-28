@@ -33,7 +33,7 @@ public class ReviewController {
 
     @GetMapping
     public Page<Review> findAll(@RequestParam(required = false, defaultValue = "0") Integer page){
-        Pageable requestedPage = PageRequest.of(page, 8);
+        Pageable requestedPage = PageRequest.of(page, 9);
         return reviewRepository.findAll(requestedPage);
     }
 
