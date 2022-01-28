@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface DonationRepository extends MongoRepository<Donation, String> {
     Page<Donation> findAll(Pageable pageable);
-    Page<Donation> findDonationsByOrganizationId(String organizationId, Pageable pageable);
+    Page<Donation> findDonationsByOrderId(String orderId, Pageable pageable);
     Donation findDonationById(String id);
 }

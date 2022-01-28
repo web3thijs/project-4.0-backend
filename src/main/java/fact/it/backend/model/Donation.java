@@ -13,23 +13,55 @@ public class Donation implements Persistable<String> {
 
     @Id
     private String id;
-    private Product product;
+    private Order order;
     private Organization organization;
     private Number amount;
     @CreatedDate
     private Date createdAt;
-
     @LastModifiedDate
     private Date updatedAt;
 
     public Donation() {
     }
 
-    public Donation(Product product, Organization organization, Number amount, Date createdAt) {
-        this.product = product;
+    public Donation(Order order, Organization organization, Number amount, Date createdAt) {
+        this.order = order;
         this.organization = organization;
         this.amount = amount;
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Number getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Number amount) {
+        this.amount = amount;
     }
 
     public Date getCreatedDate() {
@@ -48,36 +80,9 @@ public class Donation implements Persistable<String> {
         this.updatedAt = updatedAt;
     }
 
-    public String getId() {
-        return id;
-    }
-
     @Override
     public boolean isNew() {
         return false;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
-    public Number getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Number amount) {
-        this.amount = amount;
-    }
 }

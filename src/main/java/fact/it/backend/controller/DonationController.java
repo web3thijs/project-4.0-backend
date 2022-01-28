@@ -1,17 +1,22 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.Donation;
+import fact.it.backend.model.Order;
 import fact.it.backend.model.Product;
 import fact.it.backend.repository.DonationRepository;
+import fact.it.backend.repository.OrderRepository;
+import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(path = "api/donations")
 @RestController
@@ -19,24 +24,27 @@ public class DonationController {
     @Autowired
     DonationRepository donationRepository;
 
-    @GetMapping("")
-    public Page<Donation> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "organization.organizationName") String sort, @RequestParam(required = false) String order) {
-        if (order != null && order.equals("desc")) {
-            Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
-            Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
-            return donations;
-        } else {
-            Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
-            Page<Donation> donations = donationRepository.findAll(requestedPageWithSort);
-            return donations;
-        }
-    }
+    @Autowired
+    OrderRepository orderRepository;
 
-    @GetMapping("/organization/{organizationId}")
-    public Page<Donation> findDonationsByOrganizationId(@PathVariable String organizationId, @RequestParam int page) {
-        Pageable requestedPage = PageRequest.of(page, 8);
-        Page<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(organizationId, requestedPage);
-        return donationsByOrganizationId;
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String orderId, @RequestParam int page) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+        Order order = orderRepository.findOrderById(orderId);
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId().contains(user_id))){
+            Pageable requestedPage = PageRequest.of(page, 8);
+            Page<Donation> donationsByCustomerIdAndOrderId = donationRepository.findDonationsByOrderId(orderId, requestedPage);
+            return ResponseEntity.ok(donationsByCustomerIdAndOrderId);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PostMapping("")
@@ -49,7 +57,7 @@ public class DonationController {
     public Donation updateDonation(@RequestBody Donation updatedDonation) {
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 
-        retrievedDonation.setProduct(updatedDonation.getProduct());
+        retrievedDonation.setOrder(updatedDonation.getOrder());
         retrievedDonation.setOrganization(updatedDonation.getOrganization());
         retrievedDonation.setAmount(updatedDonation.getAmount());
 
