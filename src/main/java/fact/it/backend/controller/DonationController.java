@@ -84,14 +84,23 @@ public class DonationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDonation(@PathVariable String id) {
+    public ResponseEntity deleteDonation(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
         Donation donation = donationRepository.findDonationById(id);
 
-        if (donation != null) {
-            donationRepository.delete(donation);
-            return ResponseEntity.ok().build();
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && donation.getOrder().getCustomer().getId().contains(user_id))){
+
+            if (donation != null) {
+                donationRepository.delete(donation);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }
