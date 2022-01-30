@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "/api/orders")
 @RestController
+@RequestMapping(path = "/api/orders")
 public class OrderController {
 
     @Autowired
@@ -34,19 +34,19 @@ public class OrderController {
     OrderDetailRepository orderDetailRepository;
 
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false)String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         if(role.contains("ADMIN")){
                 if(order != null){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                     Page<Order> orders = orderRepository.findAll(requestedPageWithSortDesc);
                     return ResponseEntity.ok(orders);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                     Page<Order> orders = orderRepository.findAll(requestedPageWithSort);
                     return ResponseEntity.ok(orders);
                 }
@@ -80,17 +80,17 @@ public class OrderController {
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId.contains(user_id))){
             if(sort != null){
                 if(order != null && order.equals("desc")){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                     Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPageWithSortDesc);
                     return ResponseEntity.ok(orders);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                     Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPageWithSort);
                     return ResponseEntity.ok(orders);
                 }
             }else{
-                Pageable requestedPage = PageRequest.of(page, 8, Sort.by("name").ascending());
+                Pageable requestedPage = PageRequest.of(page, 9, Sort.by("name").ascending());
                 Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPage);
                 return ResponseEntity.ok(orders);
             }
@@ -99,7 +99,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -114,7 +114,7 @@ public class OrderController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<?> updateOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order updatedOrder){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);

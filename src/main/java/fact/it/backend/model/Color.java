@@ -39,6 +39,12 @@ public class Color implements Persistable<String> {
         this.createdAt = createdAt;
     }
 
+    public Color(String id, String name, Date createdAt){
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+    }
+
     public Date getCreatedDate() {
         return createdAt;
     }

@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/customers")
 @RestController
+@RequestMapping(path = "api/customers")
 public class CustomerController {
     @Autowired
     CustomerRepository customerRepository;
@@ -33,19 +33,19 @@ public class CustomerController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "email") String sort, @RequestParam(required = false) String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         if(role.contains("ADMIN")){
                 if(order != null && order.equals("desc")){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                     Page<Customer> customers = customerRepository.findByRole(Role.CUSTOMER, requestedPageWithSortDesc);
                     return ResponseEntity.ok(customers);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                     Page<Customer> customers = customerRepository.findByRole(Role.CUSTOMER, requestedPageWithSort);
                     return ResponseEntity.ok(customers);
                 }

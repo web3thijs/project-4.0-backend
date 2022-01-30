@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/products")
 @RestController
+@RequestMapping(path = "api/products")
 public class ProductController {
 
     @Autowired
@@ -32,15 +32,15 @@ public class ProductController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping("")
+    @GetMapping
     public Page<Product> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false)String categorie, @RequestParam(required = false) String vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSortDesc);
                 return products;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Product> products = productRepository.findProductsByProperties(categorie, vzw, prijsgt, prijslt, requestedPageWithSort);
                 return products;
             }
@@ -48,12 +48,12 @@ public class ProductController {
     @GetMapping("/organization/{organizationId}")
     public Page<Product> findProductsByOrganizationId(@PathVariable String organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSortDesc);
                 return products;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSort);
                 return products;
             }
@@ -65,7 +65,7 @@ public class ProductController {
         return productRepository.findProductById(id);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Product product){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -80,7 +80,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Product updatedProduct){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
