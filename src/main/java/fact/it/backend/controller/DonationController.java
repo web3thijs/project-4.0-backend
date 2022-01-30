@@ -63,16 +63,24 @@ public class DonationController {
     }
 
     @PutMapping("")
-    public Donation updateDonation(@RequestBody Donation updatedDonation) {
+    public ResponseEntity<?> updateDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation updatedDonation) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 
-        retrievedDonation.setOrder(updatedDonation.getOrder());
-        retrievedDonation.setOrganization(updatedDonation.getOrganization());
-        retrievedDonation.setAmount(updatedDonation.getAmount());
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedDonation.getOrder().getCustomer().getId().contains(user_id))){
+            retrievedDonation.setOrder(updatedDonation.getOrder());
+            retrievedDonation.setOrganization(updatedDonation.getOrganization());
+            retrievedDonation.setAmount(updatedDonation.getAmount());
 
-        donationRepository.save(retrievedDonation);
+            donationRepository.save(retrievedDonation);
 
-        return retrievedDonation;
+            return ResponseEntity.ok(retrievedDonation);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
