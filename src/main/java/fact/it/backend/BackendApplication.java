@@ -282,12 +282,12 @@ public class BackendApplication {
             stockRepository.save(new Stock(sizeLarge, colorZwartWit, productShirtBKKS, 30, new Date()));
         }
         if(donationRepository.count() == 0){
-            donationRepository.save(new Donation(productOrangoetanKnuffel, organizationWWF, 2.5, new Date()));
-            donationRepository.save(new Donation(productPandaSleutelhanger, organizationWWF, 1.5, new Date()));
-            donationRepository.save(new Donation(productShirtVrouwenTP, organizationThinkPink, 15, new Date()));
-            donationRepository.save(new Donation(productStiftenDA, organizationDamiaanactie, 1, new Date()));
-            donationRepository.save(new Donation(productMondmaskerGroen, organizationDamiaanactie, 2, new Date()));
-            donationRepository.save(new Donation(productKoffieKopRK, organizationRodeKruis, 10, new Date()));
+            donationRepository.save(new Donation(order1ThijsWouters, organizationWWF, 2.5, new Date()));
+            donationRepository.save(new Donation(order1GianniDeHerdt, organizationWWF, 1.5, new Date()));
+            donationRepository.save(new Donation(order1ThijsWouters, organizationThinkPink, 15, new Date()));
+            donationRepository.save(new Donation(order1GianniDeHerdt, organizationDamiaanactie, 1, new Date()));
+            donationRepository.save(new Donation(orderJolienFoets, organizationDamiaanactie, 2, new Date()));
+            donationRepository.save(new Donation(orderJolienFoets, organizationRodeKruis, 10, new Date()));
         }
 
         System.out.println("DB test categories: " + categoryRepository.findAll().size() + " categories.");

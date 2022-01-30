@@ -1,72 +1,106 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.Donation;
+import fact.it.backend.model.Order;
 import fact.it.backend.model.Product;
 import fact.it.backend.repository.DonationRepository;
+import fact.it.backend.repository.OrderRepository;
+import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
-@RestController
 @RequestMapping(path = "api/donations")
+@RestController
 public class DonationController {
     @Autowired
     DonationRepository donationRepository;
 
-    @GetMapping
-    public Page<Donation> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "organization.organizationName") String sort, @RequestParam(required = false) String order) {
-        if (order != null && order.equals("desc")) {
-            Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-            Page<Donation> donations = donationRepository.findAll(requestedPageWithSortDesc);
-            return donations;
+    @Autowired
+    OrderRepository orderRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String orderId, @RequestParam int page) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+        Order order = orderRepository.findOrderById(orderId);
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId().contains(user_id))){
+            Pageable requestedPage = PageRequest.of(page, 8);
+            Page<Donation> donationsByCustomerIdAndOrderId = donationRepository.findDonationsByOrderId(orderId, requestedPage);
+            return ResponseEntity.ok(donationsByCustomerIdAndOrderId);
         } else {
-            Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-            Page<Donation> donations = donationRepository.findAll(requestedPageWithSort);
-            return donations;
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 
-    @GetMapping("/organization/{organizationId}")
-    public Page<Donation> findDonationsByOrganizationId(@PathVariable String organizationId, @RequestParam int page) {
-        Pageable requestedPage = PageRequest.of(page, 9);
-        Page<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(organizationId, requestedPage);
-        return donationsByOrganizationId;
+    @PostMapping("")
+    public ResponseEntity<?> addDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation donation) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && donation.getOrder().getCustomer().getId().contains(user_id))){
+            donationRepository.save(donation);
+            return ResponseEntity.ok(donation);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
-    @PostMapping
-    public Donation addDonation(@RequestBody Donation donation) {
-        donationRepository.save(donation);
-        return donation;
-    }
-
-    @PutMapping
-    public Donation updateDonation(@RequestBody Donation updatedDonation) {
+    @PutMapping("")
+    public ResponseEntity<?> updateDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation updatedDonation) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 
-        retrievedDonation.setProduct(updatedDonation.getProduct());
-        retrievedDonation.setOrganization(updatedDonation.getOrganization());
-        retrievedDonation.setAmount(updatedDonation.getAmount());
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedDonation.getOrder().getCustomer().getId().contains(user_id))){
+            retrievedDonation.setOrder(updatedDonation.getOrder());
+            retrievedDonation.setOrganization(updatedDonation.getOrganization());
+            retrievedDonation.setAmount(updatedDonation.getAmount());
 
-        donationRepository.save(retrievedDonation);
+            donationRepository.save(retrievedDonation);
 
-        return retrievedDonation;
+            return ResponseEntity.ok(retrievedDonation);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDonation(@PathVariable String id) {
+    public ResponseEntity deleteDonation(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
         Donation donation = donationRepository.findDonationById(id);
 
-        if (donation != null) {
-            donationRepository.delete(donation);
-            return ResponseEntity.ok().build();
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && donation.getOrder().getCustomer().getId().contains(user_id))){
+
+            if (donation != null) {
+                donationRepository.delete(donation);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }
