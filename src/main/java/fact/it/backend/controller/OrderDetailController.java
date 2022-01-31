@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,27 @@ public class OrderDetailController {
                     Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPageWithSort);
                     return ResponseEntity.ok(orderDetails);
                 }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @GetMapping("/organization")
+    public ResponseEntity<?> findOrderDetailByOrganizationId(@RequestHeader("Authorization") String tokenWithPrefix){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        String user_id = claims.get("user_id").toString();
+        List<OrderDetail> retrievedOrderDetails = orderDetailRepository.findAll();
+        List<OrderDetail> correctOrderDetails = new ArrayList();
+
+        if(role.contains("ORGANIZATION")){
+            for(int i = 0; i < retrievedOrderDetails.size(); i++){
+                if(retrievedOrderDetails.get(i).getProduct().getOrganization().getId().contains(user_id)){
+                    correctOrderDetails.add(retrievedOrderDetails.get(i));
+                }
+            }
+            return ResponseEntity.ok(correctOrderDetails);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
