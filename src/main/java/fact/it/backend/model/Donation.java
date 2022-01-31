@@ -30,6 +30,13 @@ public class Donation implements Persistable<String> {
         this.amount = amount;
         this.createdAt = createdAt;
     }
+    public Donation(String id, Order order, Organization organization, Number amount, Date createdAt) {
+        this.id = id;
+        this.order = order;
+        this.organization = organization;
+        this.amount = amount;
+        this.createdAt = createdAt;
+    }
 
     @Override
     public String getId() {

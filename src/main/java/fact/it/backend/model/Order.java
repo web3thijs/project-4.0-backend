@@ -35,6 +35,12 @@ public class Order implements Persistable<String> {
         this.date = date;
         this.createdAt = createdAt;
     }
+    public Order(String id, Customer customer, Date date, Date createdAt) {
+        this.id = id;
+        this.customer = customer;
+        this.date = date;
+        this.createdAt = createdAt;
+    }
 
     public Date getCreatedDate() {
         return createdAt;
