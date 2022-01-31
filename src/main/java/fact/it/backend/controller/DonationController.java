@@ -31,7 +31,7 @@ public class DonationController {
     private JwtUtils jwtUtils;
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String orderId, @RequestParam int page) {
+    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String orderId, @RequestParam(required = false, defaultValue = "0") int page) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -47,7 +47,7 @@ public class DonationController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> addDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation donation) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -62,7 +62,7 @@ public class DonationController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<?> updateDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation updatedDonation) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);

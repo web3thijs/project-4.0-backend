@@ -1,12 +1,13 @@
 package fact.it.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fact.it.backend.controller.CategoryController;
 import fact.it.backend.model.Category;
 import fact.it.backend.repository.CategoryRepository;
+import fact.it.backend.service.TokenGetService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,13 +16,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isA;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,14 +28,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequestMapping(path = "api/categories")
 @WithMockUser(username="admin", roles="ADMIN")
 public class CategoryControllerUnitTests {
-
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private TokenGetService tokenGetService;
 
     @MockBean
     private CategoryRepository categoryRepository;
 
     private ObjectMapper mapper = new ObjectMapper();
+
+    @Value("giannideherdt@gmail.com")
+    private String emailAdmin;
+    @Value("jolienfoets@gmail.com")
+    private String emailCustomer;
+    @Value("Password123")
+    private String password;
+
 
    /* @Test
     public void whenGetAllCategories_thenReturnJsonCategory() throws Exception{
@@ -85,8 +92,7 @@ public class CategoryControllerUnitTests {
     public void whenPostCategory_thenReturnJsonCategory() throws Exception{
         Category categoryPost = new Category( new ObjectId().toString(),"schoenen", new Date());
 
-
-        mockMvc.perform(post("/api/categories").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(post("/api/categories").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .content(mapper.writeValueAsString(categoryPost))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -98,7 +104,7 @@ public class CategoryControllerUnitTests {
     public void whenPostCategoryNotAuthorized_thenReturnForbidden() throws Exception{
         Category categoryPost = new Category( new ObjectId().toString(),"schoenen", new Date());
 
-        mockMvc.perform(post("/api/categories").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudEBnbWFpbC5jb20iLCJyb2xlIjoiQ1VTVE9NRVIiLCJ1c2VyX2lkIjoiNjFmMjZlMzkzYTQzYWQ1NGU1MWI2MmIxIiwiZXhwIjoxNjQzNTQwMjk4LCJpYXQiOjE2NDMzNjc0OTh9.5nr_doX1g42mjzunRcqg_vg20Gjj43G79NIUGV6Nz8o")
+        mockMvc.perform(post("/api/categories").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .content(mapper.writeValueAsString(categoryPost))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -113,7 +119,7 @@ public class CategoryControllerUnitTests {
 
         Category updatedCategory = new Category(categoryPut.getId(),"pennen", date);
 
-        mockMvc.perform(put("/api/categories").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(put("/api/categories").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .content(mapper.writeValueAsString(updatedCategory))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -130,7 +136,7 @@ public class CategoryControllerUnitTests {
 
         Category updatedCategory = new Category(categoryPut.getId(),"pennen", date);
 
-        mockMvc.perform(put("/api/categories").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudEBnbWFpbC5jb20iLCJyb2xlIjoiQ1VTVE9NRVIiLCJ1c2VyX2lkIjoiNjFmMjZlMzkzYTQzYWQ1NGU1MWI2MmIxIiwiZXhwIjoxNjQzNTQwMjk4LCJpYXQiOjE2NDMzNjc0OTh9.5nr_doX1g42mjzunRcqg_vg20Gjj43G79NIUGV6Nz8o")
+        mockMvc.perform(put("/api/categories").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .content(mapper.writeValueAsString(updatedCategory))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -143,7 +149,7 @@ public class CategoryControllerUnitTests {
 
         given(categoryRepository.findCategoryById(id)).willReturn(categoryToBeDeleted);
 
-        mockMvc.perform(delete("/api/categories/{id}", id).header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(delete("/api/categories/{id}", id).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -152,7 +158,7 @@ public class CategoryControllerUnitTests {
     public void givenCategory_whenDeleteCategory_thenStatusNotFound() throws Exception {
         given(categoryRepository.findCategoryById("XXX")).willReturn(null);
 
-        mockMvc.perform(delete("/api/categories/{id}", "XXX").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(delete("/api/categories/{id}", "XXX").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
@@ -162,7 +168,7 @@ public class CategoryControllerUnitTests {
     public void whenDeleteCategoryNotAuthorized_thenReturnForbidden() throws Exception{
         given(categoryRepository.findCategoryById("XXX")).willReturn(null);
 
-        mockMvc.perform(delete("/api/categories/{id}", "XXX").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudEBnbWFpbC5jb20iLCJyb2xlIjoiQ1VTVE9NRVIiLCJ1c2VyX2lkIjoiNjFmMjZlMzkzYTQzYWQ1NGU1MWI2MmIxIiwiZXhwIjoxNjQzNTQwMjk4LCJpYXQiOjE2NDMzNjc0OTh9.5nr_doX1g42mjzunRcqg_vg20Gjj43G79NIUGV6Nz8o")
+        mockMvc.perform(delete("/api/categories/{id}", "XXX").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }

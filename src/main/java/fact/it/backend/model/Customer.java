@@ -31,7 +31,7 @@ public class Customer extends User{
     }
 
     public Customer(String id,String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt, String firstName, String lastName) {
-        super(email, password, phoneNr, address, postalCode, country, role, createdAt);
+        super(id, email, password, phoneNr, address, postalCode, country, role, createdAt);
         this.firstName = firstName;
         this.lastName = lastName;
     }

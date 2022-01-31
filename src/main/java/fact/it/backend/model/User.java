@@ -43,6 +43,17 @@ public class User implements Persistable<String> {
         this.role = role;
         this.createdAt = createdAt;
     }
+    public User(String id, String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.phoneNr = phoneNr;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.country = country;
+        this.role = role;
+        this.createdAt = createdAt;
+    }
 
     public Date getCreatedDate() {
         return createdAt;
