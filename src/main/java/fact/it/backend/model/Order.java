@@ -19,6 +19,7 @@ public class Order implements Persistable<String> {
     private Date date;
     @CreatedDate
     private Date createdAt;
+    private boolean completed = false;
 
     @LastModifiedDate
     private Date updatedAt;
@@ -30,10 +31,19 @@ public class Order implements Persistable<String> {
 
     }
 
-    public Order(Customer customer, Date date, Date createdAt) {
+    public Order(Customer customer, Date date, boolean completed, Date createdAt) {
         this.customer = customer;
         this.date = date;
+        this.completed = completed;
         this.createdAt = createdAt;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public Date getCreatedDate() {
