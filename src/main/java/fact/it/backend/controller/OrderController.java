@@ -125,6 +125,7 @@ public class OrderController {
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId().contains(user_id))){
             retrievedOrder.setCustomer(updatedOrder.getCustomer());
             retrievedOrder.setDate(updatedOrder.getDate());
+            retrievedOrder.setCompleted(updatedOrder.isCompleted());
 
             orderRepository.save(retrievedOrder);
 
