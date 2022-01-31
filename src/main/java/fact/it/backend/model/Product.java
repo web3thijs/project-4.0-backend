@@ -52,6 +52,17 @@ public class Product implements Persistable<String>{
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
     }
+    public Product(String id, Category category, Organization organization, String name, Number price, String description, Boolean isActive, List<String> imageUrl, Date createdAt) {
+        this.id = id;
+        this.category = category;
+        this.organization = organization;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.isActive = isActive;
+        this.imageUrl = imageUrl;
+        this.createdAt = createdAt;
+    }
 
     public Date getCreatedDate() {
         return createdAt;
