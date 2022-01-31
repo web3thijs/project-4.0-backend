@@ -71,7 +71,7 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String customerId, @RequestParam int page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
+    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String customerId, @RequestParam(required = false) int page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
