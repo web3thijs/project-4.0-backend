@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fact.it.backend.model.Color;
 import fact.it.backend.model.Color;
 import fact.it.backend.repository.ColorRepository;
+import fact.it.backend.service.TokenGetService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,10 +41,20 @@ public class ColorControllerUnitTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private TokenGetService tokenGetService;
+
     @MockBean
     private ColorRepository colorRepository;
 
     private ObjectMapper mapper = new ObjectMapper();
+
+    @Value("giannideherdt@gmail.com")
+    private String emailAdmin;
+    @Value("jolienfoets@gmail.com")
+    private String emailCustomer;
+    @Value("Password123")
+    private String password;
 
     /*@Test
     public void whenGetAllColors_thenReturnJsonColor() throws Exception{
@@ -90,7 +102,7 @@ public class ColorControllerUnitTests {
         Color colorPost = new Color( new ObjectId().toString(),"geel", new Date());
 
 
-        mockMvc.perform(post("/api/colors").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(post("/api/colors").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .content(mapper.writeValueAsString(colorPost))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -102,7 +114,7 @@ public class ColorControllerUnitTests {
     public void whenPostColorNotAuthorized_thenReturnForbidden() throws Exception{
         Color colorPost = new Color( new ObjectId().toString(),"geel", new Date());
 
-        mockMvc.perform(post("/api/colors").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudEBnbWFpbC5jb20iLCJyb2xlIjoiQ1VTVE9NRVIiLCJ1c2VyX2lkIjoiNjFmMjZlMzkzYTQzYWQ1NGU1MWI2MmIxIiwiZXhwIjoxNjQzNTQwMjk4LCJpYXQiOjE2NDMzNjc0OTh9.5nr_doX1g42mjzunRcqg_vg20Gjj43G79NIUGV6Nz8o")
+        mockMvc.perform(post("/api/colors").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .content(mapper.writeValueAsString(colorPost))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -117,7 +129,7 @@ public class ColorControllerUnitTests {
 
         Color updatedColor = new Color(colorPut.getId(),"blauw", date);
 
-        mockMvc.perform(put("/api/colors").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(put("/api/colors").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .content(mapper.writeValueAsString(updatedColor))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -134,7 +146,7 @@ public class ColorControllerUnitTests {
 
         Color updatedColor = new Color(colorPut.getId(),"paars", date);
 
-        mockMvc.perform(put("/api/colors").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudEBnbWFpbC5jb20iLCJyb2xlIjoiQ1VTVE9NRVIiLCJ1c2VyX2lkIjoiNjFmMjZlMzkzYTQzYWQ1NGU1MWI2MmIxIiwiZXhwIjoxNjQzNTQwMjk4LCJpYXQiOjE2NDMzNjc0OTh9.5nr_doX1g42mjzunRcqg_vg20Gjj43G79NIUGV6Nz8o")
+        mockMvc.perform(put("/api/colors").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .content(mapper.writeValueAsString(updatedColor))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -147,7 +159,7 @@ public class ColorControllerUnitTests {
 
         given(colorRepository.findColorById(id)).willReturn(colorToBeDeleted);
 
-        mockMvc.perform(delete("/api/colors/{id}", id).header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(delete("/api/colors/{id}", id).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -156,7 +168,7 @@ public class ColorControllerUnitTests {
     public void givenColor_whenDeleteColor_thenStatusNotFound() throws Exception {
         given(colorRepository.findColorById("XXX")).willReturn(null);
 
-        mockMvc.perform(delete("/api/colors/{id}", "XXX").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsInVzZXJfaWQiOiI2MWYyNmYzNmVlYWU4OTFhN2RlNWVmZDkiLCJleHAiOjE2NDM1MzY1NjksImlhdCI6MTY0MzM2Mzc2OX0.KAvf7O4sVla9O96oCVSw3QBZWABn8IF_bFb_ADZ_yNQ")
+        mockMvc.perform(delete("/api/colors/{id}", "XXX").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
@@ -166,7 +178,7 @@ public class ColorControllerUnitTests {
     public void whenDeleteColorNotAuthorized_thenReturnForbidden() throws Exception{
         given(colorRepository.findColorById("XXX")).willReturn(null);
 
-        mockMvc.perform(delete("/api/colors/{id}", "XXX").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudEBnbWFpbC5jb20iLCJyb2xlIjoiQ1VTVE9NRVIiLCJ1c2VyX2lkIjoiNjFmMjZlMzkzYTQzYWQ1NGU1MWI2MmIxIiwiZXhwIjoxNjQzNTQwMjk4LCJpYXQiOjE2NDMzNjc0OTh9.5nr_doX1g42mjzunRcqg_vg20Gjj43G79NIUGV6Nz8o")
+        mockMvc.perform(delete("/api/colors/{id}", "XXX").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
