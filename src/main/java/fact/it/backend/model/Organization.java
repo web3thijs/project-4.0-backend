@@ -11,11 +11,8 @@ public class Organization extends User{
     private String organizationName;
     private String companyRegistrationNr;
     private String vatNr;
-    @Column(length=5000)
     private String who;
-    @Column(length=5000)
     private String what;
-    @Column(length=5000)
     private String help;
     private String supportPhoneNr;
     private String supportEmail;
