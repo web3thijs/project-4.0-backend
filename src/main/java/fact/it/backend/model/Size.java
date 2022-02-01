@@ -1,7 +1,5 @@
 package fact.it.backend.model;
 
-import jdk.jfr.Enabled;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
