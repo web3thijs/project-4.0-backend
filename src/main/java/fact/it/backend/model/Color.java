@@ -1,76 +1,35 @@
 package fact.it.backend.model;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Collection;
-import java.util.Date;
-
-@Document(collection = "colors")
-public class Color implements Persistable<String> {
-
+@Entity
+public class Color {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String name;
 
-    @CreatedDate
-    private Date createdAt;
+    @OneToMany(mappedBy = "color")
+    private List<Stock> stocks = new ArrayList<>();
 
-    @LastModifiedDate
-    private Date updatedAt;
+    @OneToMany(mappedBy = "color")
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
-    @DBRef
-    private Collection<OrderDetail> orderDetails;
-
-    @DBRef
-    private Collection<Stock> stocks;
-
-    public Color(){
-
+    public Color() {
     }
 
-    public Color(String name, Date createdAt){
+    public Color(String name) {
         this.name = name;
-        this.createdAt = createdAt;
     }
 
-    public Color(String id, String name, Date createdAt){
-        this.id = id;
-        this.name = name;
-        this.createdAt = createdAt;
-    }
-
-    public Date getCreatedDate() {
-        return createdAt;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdAt = createdDate;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    @Override
-    public boolean isNew() {
-        return false;
-    }
-
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -80,5 +39,21 @@ public class Color implements Persistable<String> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }

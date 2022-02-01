@@ -1,15 +1,14 @@
 package fact.it.backend.repository;
 
-import fact.it.backend.model.Organization;
 import fact.it.backend.model.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
-    User findUserById(String id);
+    User findUserById(long id);
     User findUserByEmail(String email);
 }

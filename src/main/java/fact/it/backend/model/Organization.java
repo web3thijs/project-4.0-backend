@@ -1,37 +1,37 @@
 package fact.it.backend.model;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Collection;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "users")
+@Entity
 public class Organization extends User{
     private String organizationName;
     private String companyRegistrationNr;
     private String vatNr;
+    @Column(length=5000)
     private String who;
+    @Column(length=5000)
     private String what;
+    @Column(length=5000)
     private String help;
     private String supportPhoneNr;
     private String supportEmail;
-    private List<String> imageUrl;
+    private String imageUrl;
 
+    @OneToMany(mappedBy = "organization")
+    private List<Product> products = new ArrayList<>();
 
-    @DBRef
-    private Collection<Product> products;
-
+    @OneToMany(mappedBy = "organization")
+    private List<Donation> donations = new ArrayList<>();
 
     public Organization() {
     }
 
-
-    public Organization(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt, String organizationName, String companyRegistrationNr, String vatNr, String who, String what, String help, String supportPhoneNr, String supportEmail, List<String> imageUrl) {
-        super(email, password, phoneNr, address, postalCode, country, role, createdAt);
+    public Organization(String email, String password, String phoneNr, String country, String postalCode, String address, Role role, String organizationName, String companyRegistrationNr, String vatNr, String who, String what, String help, String supportPhoneNr, String supportEmail, String imageUrl) {
+        super(email, password, phoneNr, country, postalCode, address, role);
         this.organizationName = organizationName;
         this.companyRegistrationNr = companyRegistrationNr;
         this.vatNr = vatNr;
@@ -107,11 +107,27 @@ public class Organization extends User{
         this.supportEmail = supportEmail;
     }
 
-    public List<String> getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(List<String> imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public List<Donation> getDonations() {
+        return donations;
+    }
+
+    public void setDonations(List<Donation> donations) {
+        this.donations = donations;
     }
 }

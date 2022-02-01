@@ -1,85 +1,97 @@
 package fact.it.backend.model;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Version;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Collection;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "products")
-public class Product implements Persistable<String>{
+@Entity
+public class Product {
     @Id
-    private String id;
-    private Category category;
-    private Organization organization;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String name;
-    private Number price;
     private String description;
-    private Boolean isActive;
+    private double price;
+    private boolean isActive;
+
+    @ElementCollection
     private List<String> imageUrl;
-    @CreatedDate
-    private Date createdAt;
-    @LastModifiedDate
-    private Date updatedAt;
 
-    @DBRef
-    private Collection<Stock> stock;
+    @ManyToOne
+    private Category category;
 
-    @DBRef
-    private Collection<OrderDetail> orderDetails;
+    @ManyToOne
+    private Organization organization;
 
-    @DBRef
-    private Collection<Interaction> interactions;
+    @OneToMany(mappedBy = "product")
+    private List<Interaction> interactions = new ArrayList<>();
 
-    public Product(){
+    @OneToMany(mappedBy = "product")
+    private List<Stock> stocks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    public Product() {
     }
 
-    public Product(Category category, Organization organization, String name, Number price, String description, Boolean isActive, List<String> imageUrl, Date createdAt) {
-        this.category = category;
-        this.organization = organization;
+    public Product(String name, String description, double price, boolean isActive, List<String> imageUrl, Category category, Organization organization) {
         this.name = name;
-        this.price = price;
         this.description = description;
+        this.price = price;
         this.isActive = isActive;
         this.imageUrl = imageUrl;
-        this.createdAt = createdAt;
+        this.category = category;
+        this.organization = organization;
     }
 
-    public Date getCreatedDate() {
-        return createdAt;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdAt = createdDate;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    @Override
-    public boolean isNew() {
-        return false;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public List<String> getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(List<String> imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Category getCategory() {
@@ -98,47 +110,27 @@ public class Product implements Persistable<String>{
         this.organization = organization;
     }
 
-    public String getName() {
-        return name;
+    public List<Interaction> getInteractions() {
+        return interactions;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 
-    public Number getPrice() {
-        return price;
+    public List<Stock> getStocks() {
+        return stocks;
     }
 
-    public void setPrice(Number price) {
-        this.price = price;
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
     }
 
-    public String getDescription() {
-        return description;
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    public List<String> getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(List<String> imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }

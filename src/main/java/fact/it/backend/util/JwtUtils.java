@@ -14,9 +14,9 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtils {
-    private static final String SECRET_KEY = "secret";
+    private static final String SECRET_KEY = "PP85ZZFFDOZ1";
 
-    public String generateToken(UserDetails userDetails, Role role, String user_id) {
+    public String generateToken(UserDetails userDetails, Role role, long user_id) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
         claims.put("user_id", user_id);

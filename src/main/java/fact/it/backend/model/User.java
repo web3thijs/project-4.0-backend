@@ -1,86 +1,44 @@
 package fact.it.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Document(collection = "users")
-public class User implements Persistable<String> {
+@Entity
+@Table(name="appUsers")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class User {
     @Id
-    private String id;
-    @Indexed(unique=true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String phoneNr;
-    private String address;
-    private String postalCode;
     private String country;
+    private String postalCode;
+    private String address;
     private Role role;
-
-    @CreatedDate
-    private Date createdAt;
-
-    @LastModifiedDate
-    private Date updatedAt;
 
     public User() {
     }
 
-    public User(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt) {
+    public User(String email, String password, String phoneNr, String country, String postalCode, String address, Role role) {
         this.email = email;
         this.password = password;
         this.phoneNr = phoneNr;
-        this.address = address;
-        this.postalCode = postalCode;
         this.country = country;
-        this.role = role;
-        this.createdAt = createdAt;
-    }
-    public User(String id, String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.phoneNr = phoneNr;
-        this.address = address;
         this.postalCode = postalCode;
-        this.country = country;
+        this.address = address;
         this.role = role;
-        this.createdAt = createdAt;
     }
 
-    public Date getCreatedDate() {
-        return createdAt;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdAt = createdDate;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    @Override
-    public boolean isNew() {
-        return false;
-    }
-
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -108,12 +66,12 @@ public class User implements Persistable<String> {
         this.phoneNr = phoneNr;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCountry() {
+        return country;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getPostalCode() {
@@ -124,12 +82,12 @@ public class User implements Persistable<String> {
         this.postalCode = postalCode;
     }
 
-    public String getCountry() {
-        return country;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Role getRole() {

@@ -8,8 +8,6 @@ import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.UserRepository;
 import fact.it.backend.service.UserService;
 import fact.it.backend.util.JwtUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Console;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RequestMapping(path = "/api")
 @RestController
@@ -99,7 +93,7 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    private ResponseEntity<?> authenticateClient(@RequestBody AuthRequest authRequest) throws JsonProcessingException, JSONException {
+    private ResponseEntity<?> authenticateClient(@RequestBody AuthRequest authRequest) throws JsonProcessingException {
         String email = authRequest.getEmail();
         String password = authRequest.getPassword();
 

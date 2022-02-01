@@ -1,11 +1,11 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.model.Category;
 import fact.it.backend.model.OrderDetail;
 import fact.it.backend.model.Product;
 import fact.it.backend.model.Size;
 import fact.it.backend.repository.SizeRepository;
 import fact.it.backend.util.JwtUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +29,21 @@ public class SizeController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @PostConstruct
+    public void fillDatabase(){
+        sizeRepository.save(new Size("Small"));
+        sizeRepository.save(new Size("Medium"));
+        sizeRepository.save(new Size("Large"));
+        sizeRepository.save(new Size("ExtraLarge"));
+        sizeRepository.save(new Size("10 cm"));
+        sizeRepository.save(new Size("11 cm"));
+        sizeRepository.save(new Size("14 cm"));
+        sizeRepository.save(new Size("15 cm"));
+        sizeRepository.save(new Size("0,5 liter"));
+        sizeRepository.save(new Size("100 gram"));
+        sizeRepository.save(new Size("100 gram"));
+    }
+
     @GetMapping
     public Page<Size> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name")String sort, @RequestParam(required = false)String order) {
             if(order != null && order.equals("desc")){
@@ -42,14 +57,14 @@ public class SizeController {
         }
 
     @GetMapping("/{id}")
-    public Size findById(@PathVariable String id) {return sizeRepository.findSizeById(id);}
+    public Size findById(@PathVariable long id) {return sizeRepository.findSizeById(id);}
 
     @PostMapping
     public ResponseEntity<?> addSize(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Size size){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN")){
             sizeRepository.save(size);
@@ -60,7 +75,7 @@ public class SizeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSize(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity deleteSize(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

@@ -1,71 +1,76 @@
 package fact.it.backend.model;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
 
-import java.util.Date;
-
-@Document(collection = "interactions")
-public class Interaction implements Persistable<String> {
-
+@Entity
+public class Interaction {
     @Id
-    private String id;
-    private Product product;
-    private Customer customer;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private int amountClicks;
+    private int amountCart;
+    private int amountBought;
+
+    @OneToOne
     private Review review;
-    private Number amountClicks;
-    private Number amountCart;
-    private Number amountBought;
-    @CreatedDate
-    private Date createdAt;
 
-    @LastModifiedDate
-    private Date updatedAt;
+    @ManyToOne
+    private Product product;
 
-    public Interaction(){
+    @OneToOne
+    private Customer customer;
 
+    public Interaction() {
     }
 
-    public Interaction(Product product, Customer customer, Review review, Number amountClicks,  Number amountCart,  Number amountBought, Date createdAt) {
-        this.product = product;
-        this.customer = customer;
-        this.review = review;
+    public Interaction(int amountClicks, int amountCart, int amountBought, Review review, Product product, Customer customer) {
         this.amountClicks = amountClicks;
         this.amountCart = amountCart;
         this.amountBought = amountBought;
-        this.createdAt = createdAt;
+        this.review = review;
+        this.product = product;
+        this.customer = customer;
     }
 
-    public Date getCreatedDate() {
-        return createdAt;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdAt = createdDate;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    @Override
-    public boolean isNew() {
-        return false;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public int getAmountClicks() {
+        return amountClicks;
+    }
+
+    public void setAmountClicks(int amountClicks) {
+        this.amountClicks = amountClicks;
+    }
+
+    public int getAmountCart() {
+        return amountCart;
+    }
+
+    public void setAmountCart(int amountCart) {
+        this.amountCart = amountCart;
+    }
+
+    public int getAmountBought() {
+        return amountBought;
+    }
+
+    public void setAmountBought(int amountBought) {
+        this.amountBought = amountBought;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public Product getProduct() {
@@ -82,37 +87,5 @@ public class Interaction implements Persistable<String> {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public Review getReview() {
-        return review;
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
-    }
-
-    public Number getAmountClicks() {
-        return amountClicks;
-    }
-
-    public void setAmountClicks(Number amountClicks) {
-        this.amountClicks = amountClicks;
-    }
-
-    public Number getAmountCart() {
-        return amountCart;
-    }
-
-    public void setAmountCart(Number amountCart) {
-        this.amountCart = amountCart;
-    }
-
-    public Number getAmountBought() {
-        return amountBought;
-    }
-
-    public void setAmountBought(Number amountBought) {
-        this.amountBought = amountBought;
     }
 }

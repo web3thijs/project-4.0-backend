@@ -1,11 +1,10 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.*;
+import fact.it.backend.repository.CustomerRepository;
 import fact.it.backend.repository.OrderDetailRepository;
 import fact.it.backend.repository.OrderRepository;
 import fact.it.backend.util.JwtUtils;
-import org.apache.coyote.Response;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,8 +30,20 @@ public class OrderController {
     private JwtUtils jwtUtils;
 
     @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
     OrderDetailRepository orderDetailRepository;
 
+    @PostConstruct
+    public void fillDatabase(){
+
+        orderRepository.save(new Order(new Date(), true, customerRepository.findById(1)));
+        orderRepository.save(new Order(new Date(), false , customerRepository.findById(1)));
+        orderRepository.save(new Order(new Date(),true, customerRepository.findById(2)));
+        orderRepository.save(new Order(new Date(), false , customerRepository.findById(2)));
+        orderRepository.save(new Order(new Date(), false , customerRepository.findById(3)));
+    }
 
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false)String order){
@@ -56,14 +67,14 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findOrderById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity<?> findOrderById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
         Order retrievedOrder = orderRepository.findOrderById(id);
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)){
             return ResponseEntity.ok(retrievedOrder);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
@@ -71,13 +82,13 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String customerId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
+    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long customerId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId.contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId == user_id)){
             if(sort != null){
                 if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
@@ -104,9 +115,9 @@ public class OrderController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId() == user_id)){
             orderRepository.save(order);
             return ResponseEntity.ok(order);
         } else {
@@ -119,10 +130,10 @@ public class OrderController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
         Order retrievedOrder = orderRepository.findOrderById(updatedOrder.getId());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)){
             retrievedOrder.setCustomer(updatedOrder.getCustomer());
             retrievedOrder.setDate(updatedOrder.getDate());
             retrievedOrder.setCompleted(updatedOrder.isCompleted());
@@ -136,7 +147,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteOrder(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity deleteOrder(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

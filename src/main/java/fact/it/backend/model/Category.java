@@ -1,74 +1,34 @@
 package fact.it.backend.model;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Collection;
-import java.util.Date;
-
-@Document(collection = "categories")
-public class Category implements Persistable<String> {
-
+@Entity
+public class Category {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String name;
 
-    @CreatedDate
-    private Date createdAt;
-
-    @LastModifiedDate
-    private Date updatedAt;
-
-
-    @DBRef
-    private Collection<Product> products;
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
 
     public Category() {
     }
 
-    public Category(String name, Date createdAt) {
+    public Category(String name) {
         this.name = name;
-        this.createdAt = createdAt;
     }
 
-    public Category(String id, String name, Date createdAt) {
-        this.id = id;
-        this.name = name;
-        this.createdAt = createdAt;
-    }
 
-    public Date getCreatedDate() {
-        return createdAt;
-    }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-
-    @Override
-    public boolean isNew() {
-        return false;
-    }
-
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -78,5 +38,13 @@ public class Category implements Persistable<String> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }
