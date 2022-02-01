@@ -2,10 +2,7 @@ package fact.it.backend.controller;
 
 import fact.it.backend.model.*;
 import fact.it.backend.repository.CustomerRepository;
-import fact.it.backend.repository.ProductRepository;
-import fact.it.backend.repository.CustomerRepository;
 import fact.it.backend.util.JwtUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,12 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
-import java.util.List;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -32,6 +29,18 @@ public class CustomerController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @PostConstruct
+    public void fillDatabase(){
+        String password = new BCryptPasswordEncoder().encode("Password123");
+
+        customerRepository.save(new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt"));
+        customerRepository.save(new Customer("thijswouters@gmail.com", password, "0479954719", "Belgium", "1680", "Hoekstraat 165", Role.ADMIN, "Thijs" , "Wouters"));
+        customerRepository.save(new Customer("jolienfoets@gmail.com", password, "0466544922", "Belgium", "1700", "Stepelaar 6A", Role.CUSTOMER, "Jolien" , "Foets"));
+        customerRepository.save(new Customer("boblourdaux@gmail.com", password, "0495946569", "Belgium", "3040", "Sint-Schepersberg 45", Role.CUSTOMER, "Bob" , "Lourdaux"));
+        customerRepository.save(new Customer("kevinmaes@gmail.com", password, "0476281912", "Belgium", "2260", "Lambertuslaan 42", Role.CUSTOMER, "Kevin" , "Maes"));
+        customerRepository.save(new Customer("helderceyssens@gmail.com", password, "0476596168", "Belgium", "1540", "Koepel 186", Role.CUSTOMER, "Helder" , "Ceyssens"));
+    }
 
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "email") String sort, @RequestParam(required = false) String order){
@@ -56,13 +65,13 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity<?> findById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && id.contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && id == user_id)){
             return ResponseEntity.ok(customerRepository.findByRoleAndId(Role.CUSTOMER, id));
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
@@ -74,9 +83,9 @@ public class CustomerController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && updatedCustomer.getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && updatedCustomer.getId() == user_id)){
             Customer retrievedCustomer = customerRepository.findByRoleAndId(Role.CUSTOMER, updatedCustomer.getId());
 
             retrievedCustomer.setEmail(updatedCustomer.getEmail());
@@ -98,7 +107,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity<?> deleteCustomer(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

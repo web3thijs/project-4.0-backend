@@ -5,7 +5,6 @@ import fact.it.backend.model.Category;
 import fact.it.backend.model.Product;
 import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.util.JwtUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -29,6 +27,19 @@ public class CategoryController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @PostConstruct
+    public void fillDatabase(){
+        categoryRepository.save(new Category("knuffels"));
+        categoryRepository.save(new Category("sleutelhangers"));
+        categoryRepository.save(new Category("pennen"));
+        categoryRepository.save(new Category("shirts mannen"));
+        categoryRepository.save(new Category("shirts vrouwen"));
+        categoryRepository.save(new Category("koffiekoppen"));
+        categoryRepository.save(new Category("drinkbussen"));
+        categoryRepository.save(new Category("mondmaskers"));
+        categoryRepository.save(new Category("kaarsen en geuren"));
+    }
+
     @GetMapping
     public Page<Category> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){
@@ -42,7 +53,7 @@ public class CategoryController {
         }
 
     @GetMapping("/{id}")
-    public Category findById(@PathVariable String id) { return categoryRepository.findCategoryById(id); }
+    public Category findById(@PathVariable long id) { return categoryRepository.findCategoryById(id); }
 
     @PostMapping
     public ResponseEntity<?> addCategory(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Category category){
@@ -78,7 +89,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCategory(@RequestHeader("authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity deleteCategory(@RequestHeader("authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

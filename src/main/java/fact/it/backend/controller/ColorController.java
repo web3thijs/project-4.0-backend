@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,19 @@ public class ColorController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @PostConstruct
+    public void fillDatabase(){
+        colorRepository.save(new Color("rood"));
+        colorRepository.save(new Color("wit"));
+        colorRepository.save(new Color("groen"));
+        colorRepository.save(new Color("bruin"));
+        colorRepository.save(new Color("geel"));
+        colorRepository.save(new Color("roze"));
+        colorRepository.save(new Color("beige"));
+        colorRepository.save(new Color("mix"));
+        colorRepository.save(new Color("zwart en wit"));
+    }
   
     @GetMapping
     public Page<Color> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
@@ -47,7 +61,7 @@ public class ColorController {
         }
 
     @GetMapping("/{id}")
-    public Color findById(@PathVariable String id) { return colorRepository.findColorById(id); }
+    public Color findById(@PathVariable long id) { return colorRepository.findColorById(id); }
 
     @PostMapping
     public ResponseEntity<?> addColor(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Color color){
@@ -82,7 +96,7 @@ public class ColorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteColor(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity deleteColor(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

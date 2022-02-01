@@ -5,7 +5,6 @@ import fact.it.backend.repository.CustomerRepository;
 import fact.it.backend.repository.OrganizationRepository;
 import fact.it.backend.repository.ReviewRepository;
 import fact.it.backend.util.JwtUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +30,17 @@ public class ReviewController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @PostConstruct
+    public void fillDatabase(){
+        reviewRepository.save(new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerRepository.findById(1)));
+        reviewRepository.save(new Review(3.5, "Mooi", "", customerRepository.findById(2)));
+        reviewRepository.save(new Review( 5, "Zeer leuke knuffel", "", customerRepository.findById(1)));
+        reviewRepository.save(new Review(3.5, "Mooi", "", customerRepository.findById(2)));
+        reviewRepository.save(new Review(3.5, "De beer", "Beetje lelijk maar heeft een groot hart", customerRepository.findById(2)));
+        reviewRepository.save(new Review(4.5, "Schrijft goed!", "", customerRepository.findById(3)));
+        reviewRepository.save(new Review(5, "Stevige kop.", "Perfect om de ochtend mee te beginnen, warmte blijft goed binnen de koffiekop.", customerRepository.findById(3)));
+    }
+
     @GetMapping
     public Page<Review> findAll(@RequestParam(required = false, defaultValue = "0") Integer page){
         Pageable requestedPage = PageRequest.of(page, 9);
@@ -38,7 +48,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public Review findById(@PathVariable String id){
+    public Review findById(@PathVariable long id){
         return reviewRepository.findReviewById(id);
     }
 
@@ -47,9 +57,9 @@ public class ReviewController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && review.getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && review.getCustomer().getId() == user_id)){
             reviewRepository.save(review);
             return ResponseEntity.ok(review);
         } else {
@@ -62,9 +72,9 @@ public class ReviewController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && updatedReview.getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && updatedReview.getCustomer().getId() == user_id)){
             Review retrievedReview = reviewRepository.findReviewById(updatedReview.getId());
 
             retrievedReview.setScore(updatedReview.getScore());
@@ -80,7 +90,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteReview(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity deleteReview(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

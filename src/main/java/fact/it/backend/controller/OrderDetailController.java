@@ -1,9 +1,8 @@
 package fact.it.backend.controller;
 
 import fact.it.backend.model.*;
-import fact.it.backend.repository.OrderDetailRepository;
+import fact.it.backend.repository.*;
 import fact.it.backend.util.JwtUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +26,32 @@ public class OrderDetailController {
     OrderDetailRepository orderDetailRepository;
 
     @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    OrderRepository orderRepository;
+
+    @Autowired
+    SizeRepository sizeRepository;
+
+    @Autowired
+    ColorRepository colorRepository;
+
+    @Autowired
     private JwtUtils jwtUtils;
+
+    @PostConstruct
+    public void fillDatabase(){
+        orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(1), orderRepository.findOrderById(1), sizeRepository.findSizeById(7), colorRepository.findColorById(4)));
+        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(1), sizeRepository.findSizeById(8), colorRepository.findColorById(4)));
+        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(2), orderRepository.findOrderById(2), sizeRepository.findSizeById(5), colorRepository.findColorById(9)));
+        orderDetailRepository.save(new OrderDetail(4, productRepository.findProductById(2), orderRepository.findOrderById(3), sizeRepository.findSizeById(5), colorRepository.findColorById(9)));
+        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(4), sizeRepository.findSizeById(6), colorRepository.findColorById(7)));
+        orderDetailRepository.save(new OrderDetail(5, productRepository.findProductById(4), orderRepository.findOrderById(5), sizeRepository.findSizeById(7), colorRepository.findColorById(2)));
+        orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(6), orderRepository.findOrderById(5), sizeRepository.findSizeById(5), colorRepository.findColorById(2)));
+        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(5), orderRepository.findOrderById(4), sizeRepository.findSizeById(8), colorRepository.findColorById(8)));
+        orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(5), orderRepository.findOrderById(1), sizeRepository.findSizeById(8), colorRepository.findColorById(8)));
+    }
 
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "order.date") String sort, @RequestParam(required = false) String order){
@@ -55,13 +79,13 @@ public class OrderDetailController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
         List<OrderDetail> retrievedOrderDetails = orderDetailRepository.findAll();
         List<OrderDetail> correctOrderDetails = new ArrayList();
 
         if(role.contains("ORGANIZATION")){
             for(int i = 0; i < retrievedOrderDetails.size(); i++){
-                if(retrievedOrderDetails.get(i).getProduct().getOrganization().getId().contains(user_id)){
+                if(retrievedOrderDetails.get(i).getProduct().getOrganization().getId() == user_id){
                     correctOrderDetails.add(retrievedOrderDetails.get(i));
                 }
             }
@@ -72,14 +96,14 @@ public class OrderDetailController {
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> findOrderDetailByOrderId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String orderId){
+    public ResponseEntity<?> findOrderDetailByOrderId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long orderId){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
         List<OrderDetail> retrievedOrderDetails = orderDetailRepository.findOrderDetailsByOrderId(orderId);
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrderDetails.get(0) != null && retrievedOrderDetails.get(0).getOrder().getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrderDetails.get(0) != null && retrievedOrderDetails.get(0).getOrder().getCustomer().getId() == user_id)){
             return ResponseEntity.ok(retrievedOrderDetails);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
@@ -91,9 +115,9 @@ public class OrderDetailController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && orderDetail.getOrder().getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && orderDetail.getOrder().getCustomer().getId() == user_id)){
             orderDetailRepository.save(orderDetail);
             return ResponseEntity.ok(orderDetail);
         } else {
@@ -106,10 +130,10 @@ public class OrderDetailController {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        String user_id = claims.get("user_id").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
         OrderDetail retrievedOrderDetail = orderDetailRepository.findOrderDetailById(updatedOrderDetail.getId());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrderDetail.getOrder().getCustomer().getId().contains(user_id))){
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrderDetail.getOrder().getCustomer().getId() == user_id)){
             retrievedOrderDetail.setProduct(updatedOrderDetail.getProduct());
             retrievedOrderDetail.setOrder(updatedOrderDetail.getOrder());
             retrievedOrderDetail.setSize(updatedOrderDetail.getSize());
@@ -126,7 +150,7 @@ public class OrderDetailController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable String id){
+    public ResponseEntity deleteOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

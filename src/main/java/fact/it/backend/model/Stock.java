@@ -1,62 +1,50 @@
 package fact.it.backend.model;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Date;
-
-@Document(collection = "stocks")
-public class Stock implements Persistable<String> {
-
+@Entity
+public class Stock {
     @Id
-    private String id;
-    private Size size;
-    private Color color;
-    private Product product;
-    private int amountInStock;
-    @CreatedDate
-    private Date createdAt;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @LastModifiedDate
-    private Date updatedAt;
+    private int amountInStock;
+
+    @ManyToOne
+    private Size size;
+
+    @ManyToOne
+    private Color color;
+
+    @ManyToOne
+    private Product product;
 
     public Stock() {
     }
 
-    public Stock(Size size, Color color, Product product, int amountInStock, Date createdAt) {
+    public Stock(int amountInStock, Size size, Color color, Product product) {
+        this.amountInStock = amountInStock;
         this.size = size;
         this.color = color;
         this.product = product;
-        this.amountInStock = amountInStock;
-        this.createdAt = createdAt;
     }
 
-    public Date getCreatedDate() {
-        return createdAt;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdAt = createdDate;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    @Override
-    public boolean isNew() {
-        return false;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getAmountInStock() {
+        return amountInStock;
+    }
+
+    public void setAmountInStock(int amountInStock) {
+        this.amountInStock = amountInStock;
     }
 
     public Size getSize() {
@@ -81,13 +69,5 @@ public class Stock implements Persistable<String> {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public int getAmountInStock() {
-        return amountInStock;
-    }
-
-    public void setAmountInStock(int amountInStock) {
-        this.amountInStock = amountInStock;
     }
 }

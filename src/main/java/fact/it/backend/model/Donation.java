@@ -1,50 +1,46 @@
 package fact.it.backend.model;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Date;
-
-@Document(collection = "donations")
-public class Donation implements Persistable<String> {
-
+@Entity
+public class Donation {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private double amount;
+
+    @ManyToOne
     private Order order;
+
+    @ManyToOne
     private Organization organization;
-    private Number amount;
-    @CreatedDate
-    private Date createdAt;
-    @LastModifiedDate
-    private Date updatedAt;
 
     public Donation() {
     }
 
-    public Donation(Order order, Organization organization, Number amount, Date createdAt) {
+    public Donation(double amount, Order order, Organization organization) {
+        this.amount = amount;
         this.order = order;
         this.organization = organization;
-        this.amount = amount;
-        this.createdAt = createdAt;
-    }
-    public Donation(String id, Order order, Organization organization, Number amount, Date createdAt) {
-        this.id = id;
-        this.order = order;
-        this.organization = organization;
-        this.amount = amount;
-        this.createdAt = createdAt;
     }
 
-    @Override
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public Order getOrder() {
@@ -62,34 +58,4 @@ public class Donation implements Persistable<String> {
     public void setOrganization(Organization organization) {
         this.organization = organization;
     }
-
-    public Number getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Number amount) {
-        this.amount = amount;
-    }
-
-    public Date getCreatedDate() {
-        return createdAt;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdAt = createdDate;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public boolean isNew() {
-        return false;
-    }
-
 }

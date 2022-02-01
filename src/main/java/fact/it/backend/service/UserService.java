@@ -1,6 +1,5 @@
 package fact.it.backend.service;
 
-import fact.it.backend.model.Role;
 import fact.it.backend.model.User;
 import fact.it.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

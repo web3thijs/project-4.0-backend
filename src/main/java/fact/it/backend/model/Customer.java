@@ -1,37 +1,33 @@
 package fact.it.backend.model;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.util.Collection;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Document(collection = "users")
+@Entity
 public class Customer extends User{
     private String firstName;
     private String lastName;
 
-    @DBRef
-    private Collection<Order> orders;
+    @OneToMany(targetEntity = Review.class)
+    private List<Review> reviews = new ArrayList<>();
 
-    @DBRef
-    private Collection<Interaction> interactions;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Order> orders = new ArrayList<>();
 
-    @DBRef
-    private Collection<Review> reviews;
-
+    @OneToOne
+    private Interaction interaction;
 
     public Customer() {
     }
 
-    public Customer(String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt, String firstName, String lastName) {
-        super(email, password, phoneNr, address, postalCode, country, role, createdAt);
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Customer(String id,String email, String password, String phoneNr, String address, String postalCode, String country, Role role, Date createdAt, String firstName, String lastName) {
-        super(id, email, password, phoneNr, address, postalCode, country, role, createdAt);
+    public Customer(String email, String password, String phoneNr, String country, String postalCode, String address, Role role, String firstName, String lastName) {
+        super(email, password, phoneNr, country, postalCode, address, role);
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -50,5 +46,29 @@ public class Customer extends User{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Interaction getInteraction() {
+        return interaction;
+    }
+
+    public void setInteraction(Interaction interaction) {
+        this.interaction = interaction;
     }
 }
