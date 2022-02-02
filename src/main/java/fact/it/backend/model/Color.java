@@ -1,5 +1,7 @@
 package fact.it.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,11 @@ public class Color {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "color")
     private List<Stock> stocks = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "color")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
@@ -33,10 +37,6 @@ public class Color {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -49,15 +49,7 @@ public class Color {
         return stocks;
     }
 
-    public void setStocks(List<Stock> stocks) {
-        this.stocks = stocks;
-    }
-
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
     }
 }

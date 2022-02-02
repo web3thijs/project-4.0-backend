@@ -15,7 +15,8 @@ public class Interaction {
     @OneToOne
     private Review review;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     @OneToOne
@@ -35,10 +36,6 @@ public class Interaction {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public int getAmountClicks() {
