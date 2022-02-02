@@ -56,8 +56,8 @@ public class CustomerControllerUnitTests {
     @Value("Password123")
     private String password;
 
-    */
-/*@Test
+
+@Test
     public void whenGetAllCustomers_thenReturnJsonCustomer() throws Exception{
         Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
 
@@ -69,7 +69,7 @@ public class CustomerControllerUnitTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-    }*//*
+    }
 
 
 
@@ -165,5 +165,5 @@ public class CustomerControllerUnitTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
-}
-*/
+}*/
+

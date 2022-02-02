@@ -43,6 +43,18 @@ public class Organization extends User{
         this.supportEmail = supportEmail;
         this.imageUrl = imageUrl;
     }
+    public Organization(long id, String email, String password, String phoneNr, String country, String postalCode, String address, Role role, String organizationName, String companyRegistrationNr, String vatNr, String who, String what, String help, String supportPhoneNr, String supportEmail, String imageUrl) {
+        super(id, email, password, phoneNr, country, postalCode, address, role);
+        this.organizationName = organizationName;
+        this.companyRegistrationNr = companyRegistrationNr;
+        this.vatNr = vatNr;
+        this.who = who;
+        this.what = what;
+        this.help = help;
+        this.supportPhoneNr = supportPhoneNr;
+        this.supportEmail = supportEmail;
+        this.imageUrl = imageUrl;
+    }
 
     public String getOrganizationName() {
         return organizationName;
