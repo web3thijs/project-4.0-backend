@@ -29,21 +29,6 @@ public class SizeController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostConstruct
-    public void fillDatabase(){
-        sizeRepository.save(new Size("Small"));
-        sizeRepository.save(new Size("Medium"));
-        sizeRepository.save(new Size("Large"));
-        sizeRepository.save(new Size("ExtraLarge"));
-        sizeRepository.save(new Size("10 cm"));
-        sizeRepository.save(new Size("11 cm"));
-        sizeRepository.save(new Size("14 cm"));
-        sizeRepository.save(new Size("15 cm"));
-        sizeRepository.save(new Size("0,5 liter"));
-        sizeRepository.save(new Size("100 gram"));
-        sizeRepository.save(new Size("100 gram"));
-    }
-
     @GetMapping
     public Page<Size> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name")String sort, @RequestParam(required = false)String order) {
             if(order != null && order.equals("desc")){

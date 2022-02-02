@@ -40,19 +40,6 @@ public class OrderDetailController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostConstruct
-    public void fillDatabase(){
-        orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(1), orderRepository.findOrderById(1), sizeRepository.findSizeById(7), colorRepository.findColorById(4)));
-        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(1), sizeRepository.findSizeById(8), colorRepository.findColorById(4)));
-        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(2), orderRepository.findOrderById(2), sizeRepository.findSizeById(5), colorRepository.findColorById(9)));
-        orderDetailRepository.save(new OrderDetail(4, productRepository.findProductById(2), orderRepository.findOrderById(3), sizeRepository.findSizeById(5), colorRepository.findColorById(9)));
-        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(4), sizeRepository.findSizeById(6), colorRepository.findColorById(7)));
-        orderDetailRepository.save(new OrderDetail(5, productRepository.findProductById(4), orderRepository.findOrderById(5), sizeRepository.findSizeById(7), colorRepository.findColorById(2)));
-        orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(6), orderRepository.findOrderById(5), sizeRepository.findSizeById(5), colorRepository.findColorById(2)));
-        orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(5), orderRepository.findOrderById(4), sizeRepository.findSizeById(8), colorRepository.findColorById(8)));
-        orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(5), orderRepository.findOrderById(1), sizeRepository.findSizeById(8), colorRepository.findColorById(8)));
-    }
-
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "order.date") String sort, @RequestParam(required = false) String order){
         String token = tokenWithPrefix.substring(7);

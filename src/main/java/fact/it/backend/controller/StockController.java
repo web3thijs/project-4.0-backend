@@ -38,32 +38,6 @@ public class StockController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostConstruct
-    public void fillDatabase(){
-        stockRepository.save(new Stock(50, sizeRepository.findSizeById(5), colorRepository.findColorById(4), productRepository.findProductById(1)));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(8), colorRepository.findColorById(4), productOrangoetanKnuffel, 20));
-        stockRepository.save(new Stock(50, sizeRepository.findSizeById(8), colorRepository.findColorById(9), productRepository.findProductById(2)));
-        stockRepository.save(new Stock(200, sizeRepository.findSizeById(8), colorRepository.findColorById(2), productRepository.findProductById(4)));
-        stockRepository.save(new Stock(100, sizeRepository.findSizeById(8), colorRepository.findColorById(8), productRepository.findProductById(5)));
-        stockRepository.save(new Stock(50, sizeRepository.findSizeById(5), colorRepository.findColorById(2), productRepository.findProductById(6)));
-        stockRepository.save(new Stock(200, sizeRepository.findSizeById(2), colorRepository.findColorById(2), productRepository.findProductById(7)));
-        stockRepository.save(new Stock(150, sizeRepository.findSizeById(2), colorRepository.findColorById(3), productRepository.findProductById(8)));
-        stockRepository.save(new Stock(200, sizeRepository.findSizeById(2), colorRepository.findColorById(2), productRepository.findProductById(9)));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(2), productShirtMannenTP, 25));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(3), colorRepository.findColorById(2), productShirtMannenTP, 50));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(6), productShirtVrouwenTP, 50));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(1), colorRepository.findColorById(6), productShirtVrouwenTP, 40));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(9), colorRepository.findColorById(6), productDrinkbusTP, 80));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(10), colorRepository.findColorById(1), productGeurkaarsBZN, 40));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(8), colorRepository.findColorById(5), productGeurstokjesBZN, 30));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(10), colorRepository.findColorById(2), productSojakaarsBZN, 20));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(8), colorRepository.findColorById(2), product3pennenBKKS, 60));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(2), productMondmaskerBKKS, 25));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(1), colorRepository.findColorById(9), productShirtBKKS, 15));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(9), productShirtBKKS, 30));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(3), colorRepository.findColorById(9), productShirtBKKS, 30));
-    }
-
     @GetMapping
     public Page<Stock> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "amountInStock")String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){

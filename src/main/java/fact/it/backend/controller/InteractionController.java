@@ -36,12 +36,7 @@ public class InteractionController {
 
     @PostConstruct
     public void fillDatabase(){
-        interactionRepository.save(new Interaction(4, 3, 1, reviewRepository.findReviewById(1), productRepository.findProductById(1), customerRepository.findById(1)));
-        interactionRepository.save(new Interaction(3, 2, 2, reviewRepository.findReviewById(3), productRepository.findProductById(1), customerRepository.findById(1)));
-        interactionRepository.save(new Interaction(6, 0, 0, reviewRepository.findReviewById(2), productRepository.findProductById(2), customerRepository.findById(2)));
-        interactionRepository.save(new Interaction(2, 1, 1, reviewRepository.findReviewById(5), productRepository.findProductById(3), customerRepository.findById(2)));
-        interactionRepository.save(new Interaction(8, 2, 0, reviewRepository.findReviewById(6), productRepository.findProductById(4), customerRepository.findById(3)));
-        interactionRepository.save(new Interaction(3, 1,0, reviewRepository.findReviewById(7), productRepository.findProductById(6), customerRepository.findById(2)));
+
     }
 
     @GetMapping
