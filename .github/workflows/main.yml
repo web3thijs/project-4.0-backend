@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
+    
     name: Java 11 build, test, deliver container
     steps:
       - name: Check out repository
