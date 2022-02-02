@@ -12,13 +12,16 @@ public class Stock {
 
     private int amountInStock;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Size size;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "color_id", referencedColumnName = "id")
     private Color color;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     public Stock() {
@@ -33,10 +36,6 @@ public class Stock {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public int getAmountInStock() {

@@ -60,15 +60,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<Product> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false)long categorie, @RequestParam(required = false) long vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
+    public Page<Product> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false)String categorie, @RequestParam(required = false) String vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
             if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                Page<Product> products = productRepository.findProductsByCategoryIdAndOrganizationId(categorie, vzw, requestedPageWithSortDesc);
+                Page<Product> products = productRepository.findAll(requestedPageWithSortDesc);
                 return products;
             }
             else{
                 Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                Page<Product> products = productRepository.findProductsByCategoryIdAndOrganizationId(categorie, vzw, requestedPageWithSort);
+                Page<Product> products = productRepository.findAll(requestedPageWithSort);
                 return products;
             }
         }

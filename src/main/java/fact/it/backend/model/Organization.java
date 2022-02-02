@@ -1,5 +1,7 @@
 package fact.it.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -18,9 +20,11 @@ public class Organization extends User{
     private String supportEmail;
     private String imageUrl;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "organization")
     private List<Product> products = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "organization")
     private List<Donation> donations = new ArrayList<>();
 

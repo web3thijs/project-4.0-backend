@@ -17,9 +17,8 @@ public class Review {
 
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JoinColumn(name = "customer_id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
     @OneToOne
@@ -37,10 +36,6 @@ public class Review {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public double getScore() {
