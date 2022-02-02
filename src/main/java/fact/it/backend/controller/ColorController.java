@@ -32,19 +32,6 @@ public class ColorController {
 
     @Autowired
     private JwtUtils jwtUtils;
-
-    @PostConstruct
-    public void fillDatabase(){
-        colorRepository.save(new Color("rood"));
-        colorRepository.save(new Color("wit"));
-        colorRepository.save(new Color("groen"));
-        colorRepository.save(new Color("bruin"));
-        colorRepository.save(new Color("geel"));
-        colorRepository.save(new Color("roze"));
-        colorRepository.save(new Color("beige"));
-        colorRepository.save(new Color("mix"));
-        colorRepository.save(new Color("zwart en wit"));
-    }
   
     @GetMapping
     public Page<Color> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {

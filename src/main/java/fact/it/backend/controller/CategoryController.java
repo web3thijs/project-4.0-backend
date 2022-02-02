@@ -27,19 +27,6 @@ public class CategoryController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostConstruct
-    public void fillDatabase(){
-        categoryRepository.save(new Category("knuffels"));
-        categoryRepository.save(new Category("sleutelhangers"));
-        categoryRepository.save(new Category("pennen"));
-        categoryRepository.save(new Category("shirts mannen"));
-        categoryRepository.save(new Category("shirts vrouwen"));
-        categoryRepository.save(new Category("koffiekoppen"));
-        categoryRepository.save(new Category("drinkbussen"));
-        categoryRepository.save(new Category("mondmaskers"));
-        categoryRepository.save(new Category("kaarsen en geuren"));
-    }
-
     @GetMapping
     public Page<Category> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
             if(order != null && order.equals("desc")){

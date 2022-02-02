@@ -35,16 +35,6 @@ public class OrderController {
     @Autowired
     OrderDetailRepository orderDetailRepository;
 
-    @PostConstruct
-    public void fillDatabase(){
-
-        orderRepository.save(new Order(new Date(), true, customerRepository.findById(1)));
-        orderRepository.save(new Order(new Date(), false , customerRepository.findById(1)));
-        orderRepository.save(new Order(new Date(),true, customerRepository.findById(2)));
-        orderRepository.save(new Order(new Date(), false , customerRepository.findById(2)));
-        orderRepository.save(new Order(new Date(), false , customerRepository.findById(3)));
-    }
-
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false)String order){
         String token = tokenWithPrefix.substring(7);

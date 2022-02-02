@@ -30,17 +30,6 @@ public class ReviewController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostConstruct
-    public void fillDatabase(){
-        reviewRepository.save(new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerRepository.findById(1)));
-        reviewRepository.save(new Review(3.5, "Mooi", "", customerRepository.findById(2)));
-        reviewRepository.save(new Review( 5, "Zeer leuke knuffel", "", customerRepository.findById(1)));
-        reviewRepository.save(new Review(3.5, "Mooi", "", customerRepository.findById(2)));
-        reviewRepository.save(new Review(3.5, "De beer", "Beetje lelijk maar heeft een groot hart", customerRepository.findById(2)));
-        reviewRepository.save(new Review(4.5, "Schrijft goed!", "", customerRepository.findById(3)));
-        reviewRepository.save(new Review(5, "Stevige kop.", "Perfect om de ochtend mee te beginnen, warmte blijft goed binnen de koffiekop.", customerRepository.findById(3)));
-    }
-
     @GetMapping
     public Page<Review> findAll(@RequestParam(required = false, defaultValue = "0") Integer page){
         Pageable requestedPage = PageRequest.of(page, 9);

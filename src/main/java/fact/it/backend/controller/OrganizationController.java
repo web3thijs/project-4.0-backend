@@ -102,18 +102,4 @@ public class OrganizationController {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
-
-
-    @PostConstruct
-    public void fillDatabase(){
-        String password =  passwordEncoder.encode("Password123");
-
-        organizationRepository.save(new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION,"WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966", "Onze slogan ‘Together Possible!’", "WWF zet zich in", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        organizationRepository.save(new Organization("info@bkks.be", password, "+3211192819", "Diesterstraat 67A bus 001", "3800", "Belgium", Role.ORGANIZATION,"Belgisch KinderKanker Steunfonds", "BE0835627680", "0835627680", "Het Belgisch Kinder Kanker", "Het Belgisch Kinder", "Zelfsn dan financiële steun om deze moeilijke", "+3223400920", "supporters@wwf.be", "https://belgischkinderkankersteunfonds.be/wp-content/uploads/2020/02/cropped-logo-bkks-1.png"));
-        organizationRepository.save(new Organization("welkom@bzn.be", password, "032012210", "Herentalsebaan 74", "2100", "Belgium", Role.ORGANIZATION,"Bond Zonder Naam", "BE0469514642", "BE0469514642", "De Bond zonder Naam (BZN) is een Vlaamse", "Bond zonder Naam schreef voor de", "Bond zonder Naam wil zoveel", "+3223400920", "supporters@wwf.be", "https://www.bzn.be/graphics/default-socialmedia.jpg"));
-        organizationRepository.save(new Organization("maite@think-pink.be", password, "+32475406602", "Researchdreef 12", "1070", "Belgium", Role.ORGANIZATION,"Think Pink", "0810893274", "BE0810893274", "Think Pink is de nationale",
-                "ondersteunen van zorg- en nazorgprojecten", "Borstkankanker steunen.", "+32475406602", "info@think-pink.be", "https://upload.wikimedia.org/wikipedia/commons/4/4b/Logo_think-pink.jpg"));
-        organizationRepository.save(new Organization("info@damiaanactie.be", password, "+3224225911", "Leopold II-laan 263", "1081", "Belgium", Role.ORGANIZATION,"Damiaanactie", "0406694670", "BE05000000007575", "Damiaanactie is een Belgische medische non-profitorganisatie die zich inzet voor mensen met lepra, tuberculose en andere ziektes die vooral de kwetsbaarste bevolkingsgroepen treffen.", "Om lepra, tbc", "Bij Damiaanactie", "+3224225911", "info@damiaanactie.be", "https://damiaanactie.be/wp-content/uploads/2019/10/RGB-LOGO-DA-NL-transparant.png"));
-        organizationRepository.save(new Organization("info@rodekruis.be", password, "+3215443322", "Motstraat 40", "2800", "Belgium", Role.ORGANIZATION,"Rode Kruis Vlaanderen", "2154897956", "BE0455024129", "Wij zijn", "Hulp", "Bij een ramp ", "+3215443322", "info@rodekruis.be", "https://www.rodekruis.be/img/logo.svg?1557833551"));
-    }
 }
