@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.InteractionRepository;
 import fact.it.backend.service.TokenGetService;
-import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

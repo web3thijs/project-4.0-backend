@@ -38,7 +38,7 @@ public class CategoryControllerUnitTests {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    @Value("admin@gmail.com")
+    @Value("giannideherdt@gmail.com")
     private String emailAdmin;
     @Value("jolienfoets@gmail.com")
     private String emailCustomer;
@@ -124,6 +124,7 @@ public class CategoryControllerUnitTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(0)))
                 .andExpect(jsonPath("$.name", is("pennen")));
     }
 
@@ -154,7 +155,7 @@ public class CategoryControllerUnitTests {
 
     @Test
     public void givenCategory_whenDeleteCategory_thenStatusNotFound() throws Exception {
-        given(categoryRepository.findCategoryById(123456789)).willReturn(null);
+        given(categoryRepository.findCategoryById(12345)).willReturn(null);
 
         mockMvc.perform(delete("/api/categories/{id}", 123456789).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
