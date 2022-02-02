@@ -46,7 +46,7 @@ public class OrganizationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable long id){
-        return ResponseEntity.ok(organizationRepository.findByRoleAndId(Role.ORGANIZATION, id));
+        return ResponseEntity.ok(organizationRepository.findById(id));
     }
 
     @PutMapping
