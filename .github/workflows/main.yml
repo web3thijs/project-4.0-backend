@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
     name: Java 11 build, test, deliver container
     steps:
       - name: Check out repository
@@ -22,6 +23,11 @@ jobs:
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
+        env:
+          MYSQL_HOST: mysql
+          DB_DATABASE: mus_db
+          DB_USER: root
+          DB_PASSWORD: root
         with:
           java-version: 11
 
