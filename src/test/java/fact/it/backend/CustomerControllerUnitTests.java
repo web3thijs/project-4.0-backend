@@ -48,7 +48,7 @@ public class CustomerControllerUnitTests {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    @Value("giannideherdt@gmail.com")
+    @Value("thijswouters@gmail.com")
     private String emailAdmin;
     @Value("jolienfoets@gmail.com")
     private String emailCustomer;
@@ -73,15 +73,15 @@ public class CustomerControllerUnitTests {
     @Test
     public void whenGetCustomerById_thenReturnJsonCustomer() throws Exception{
         String passwordTest = new BCryptPasswordEncoder().encode("Password123");
-        Customer customerTest = new Customer("giannideherdt@gmail.com", passwordTest, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer customerTest = new Customer("jolienfoets@gmail.com", passwordTest, "0479994786", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
 
-        given(customerRepository.findByRoleAndId(Role.CUSTOMER,customerTest.getId())).willReturn(customerTest);
+        given(customerRepository.findByRoleAndId(Role.CUSTOMER,0)).willReturn(customerTest);
 
         mockMvc.perform(get("/api/customers/{id}", customerTest.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(0)))
-                .andExpect(jsonPath("$.email", is("giannideherdt@gmail.com")))
+                .andExpect(jsonPath("$.email", is("jolienfoets@gmail.com")))
                 .andExpect(jsonPath("$.phoneNr", is("0479994529")))
                 .andExpect(jsonPath("$.country", is("Belgium")))
                 .andExpect(jsonPath("$.postalCode", is("2200")))
@@ -94,17 +94,17 @@ public class CustomerControllerUnitTests {
     @Test
     public void givenCustomer_whenPutCustomer_thenReturnJsonCustomer() throws Exception{
         String passwordTest = new BCryptPasswordEncoder().encode("Password123");
-        Customer customerPut = new Customer("giannideherdt@gmail.com", passwordTest, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer customerPut = new Customer("jolienfoets@gmail.com", passwordTest, "0479994786", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
 
-        given(customerRepository.findByRoleAndId(Role.CUSTOMER, customerPut.getId())).willReturn(customerPut);
+        given(customerRepository.findByRoleAndId(Role.CUSTOMER, 0)).willReturn(customerPut);
 
-        Customer updatedCustomer = new Customer("giannideherdt@gmail.com", passwordTest, "0479995875", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer updatedCustomer = new Customer("jolienfoets@gmail.com", passwordTest, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
         mockMvc.perform(put("/api/customers").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .content(mapper.writeValueAsString(updatedCustomer))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", is("giannideherdt@gmail.com")))
+                .andExpect(jsonPath("$.email", is("jolienfoets@gmail.com")))
                 .andExpect(jsonPath("$.phoneNr", is("0479994529")))
                 .andExpect(jsonPath("$.address", is("Kersstraat 17")))
                 .andExpect(jsonPath("$.postalCode", is("2200")))
@@ -117,11 +117,11 @@ public class CustomerControllerUnitTests {
     @Test
     public void whenPutCustomerNotAuthorized_thenReturnForbidden() throws Exception{
         String passwordTest = new BCryptPasswordEncoder().encode("Password123");
-        Customer customerPut = new Customer("giannideherdt@gmail.com", passwordTest, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer customerPut = new Customer("jolienfoets@gmail.com", passwordTest, "0479994786", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
 
-        given(customerRepository.findByRoleAndId(Role.CUSTOMER, customerPut.getId())).willReturn(customerPut);
+        given(customerRepository.findByRoleAndId(Role.CUSTOMER, 0)).willReturn(customerPut);
 
-        Customer updatedCustomer = new Customer("giannideherdt@gmail.com", passwordTest, "0479995875", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer updatedCustomer = new Customer("jolienfoets@gmail.com", passwordTest, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
 
 
         mockMvc.perform(put("/api/customers").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
@@ -133,9 +133,9 @@ public class CustomerControllerUnitTests {
     @Test
     public void givenCustomer_whenDeleteCustomer_thenStatusOk() throws Exception {
         String passwordTest = new BCryptPasswordEncoder().encode("Password123");
-        Customer customerToBeDeleted = new Customer("giannideberdt@gmail.com", passwordTest, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer customerToBeDeleted = new Customer("jolienfoets@gmail.com", passwordTest, "0479994786", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
 
-        given(customerRepository.findByRoleAndId(Role.CUSTOMER, customerToBeDeleted.getId())).willReturn(customerToBeDeleted);
+        given(customerRepository.findByRoleAndId(Role.CUSTOMER, 0)).willReturn(customerToBeDeleted);
 
         mockMvc.perform(delete("/api/customers/{id}", customerToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -155,8 +155,8 @@ public class CustomerControllerUnitTests {
     @Test
     public void whenDeleteCustomerNotAuthorized_thenReturnForbidden() throws Exception{
         String passwordTest = new BCryptPasswordEncoder().encode("Password123");
-        Customer customerToBeDeleted = new Customer("giannideberdt@gmail.com", passwordTest, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
-        given(customerRepository.findByRoleAndId(Role.CUSTOMER, customerToBeDeleted.getId())).willReturn(null);
+        Customer customerToBeDeleted = new Customer("jolienfoets@gmail.com", passwordTest, "0479994786", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
+        given(customerRepository.findByRoleAndId(Role.CUSTOMER, 0)).willReturn(null);
 
         mockMvc.perform(delete("/api/customers/{id}", Role.CUSTOMER, customerToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .contentType(MediaType.APPLICATION_JSON))

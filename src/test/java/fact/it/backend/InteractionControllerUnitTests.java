@@ -77,19 +77,19 @@ public class InteractionControllerUnitTests {
 
     @Test
     public void whenGetInteractionByProductId_thenReturnJsonInteraction() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionTest = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
 
-        List<Interaction> interactions = interactionRepository.findInteractionsByProductId(id);
-        given(interactionRepository.findInteractionsByProductId(id)).willReturn(interactions);
+//        Interaction interactionTest = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
-        mockMvc.perform(get("/api/interactions/product/{productId}", id).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password)))
+        List<Interaction> interactions = interactionRepository.findInteractionsByProductId(productOrangoetanSleutelhanger.getId());
+        given(interactionRepository.findInteractionsByProductId(productOrangoetanSleutelhanger.getId())).willReturn(interactions);
+
+        mockMvc.perform(get("/api/interactions/product/{productId}", productOrangoetanSleutelhanger.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
@@ -97,38 +97,37 @@ public class InteractionControllerUnitTests {
 
     @Test
     public void whenGetInteractionByProductIdUnauthorized_thenReturnJsonInteraction() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionTest = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
+//        Interaction interactionTest = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
-        List<Interaction> interactions = interactionRepository.findInteractionsByProductId(id);
-        given(interactionRepository.findInteractionsByProductId(id)).willReturn(interactions);
+        List<Interaction> interactions = interactionRepository.findInteractionsByProductId(productOrangoetanSleutelhanger.getId());
+        given(interactionRepository.findInteractionsByProductId(productOrangoetanSleutelhanger.getId())).willReturn(interactions);
 
-        mockMvc.perform(get("/api/interactions/product/{productId}", id).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
+        mockMvc.perform(get("/api/interactions/product/{productId}", productOrangoetanSleutelhanger.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void whenGetInteractionByCustomerId_thenReturnJsonInteraction() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionTest = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
 
-        List<Interaction> interactions = interactionRepository.findInteractionsByCustomerId(id);
-        given(interactionRepository.findInteractionsByCustomerId(id)).willReturn(interactions);
+//        Interaction interactionTest = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
-        mockMvc.perform(get("/api/interactions/customer/{customerId}", id).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password)))
+        List<Interaction> interactions = interactionRepository.findInteractionsByCustomerId(0);
+        given(interactionRepository.findInteractionsByCustomerId(0)).willReturn(interactions);
+
+        mockMvc.perform(get("/api/interactions/customer/{customerId}", 0).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
@@ -136,33 +135,32 @@ public class InteractionControllerUnitTests {
 
     @Test
     public void whenGetInteractionByCustomerIdUnauthorized_thenReturnJsonInteraction() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionTest = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
 
-        List<Interaction> interactions = interactionRepository.findInteractionsByCustomerId(id);
-        given(interactionRepository.findInteractionsByCustomerId(id)).willReturn(interactions);
+//        Interaction interactionTest = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
-        mockMvc.perform(get("/api/interactions/customer/{customerId}", id).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
+        List<Interaction> interactions = interactionRepository.findInteractionsByCustomerId(0);
+        given(interactionRepository.findInteractionsByCustomerId(0)).willReturn(interactions);
+
+        mockMvc.perform(get("/api/interactions/customer/{customerId}", 0).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void whenPostInteraction_thenReturnJsonInteraction() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionPost = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
+        Interaction interactionPost = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
 
         mockMvc.perform(post("/api/interactions").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
@@ -175,19 +173,18 @@ public class InteractionControllerUnitTests {
                 .andExpect(jsonPath("$.amountBought", is(1)))
                 .andExpect(jsonPath("$.product.name", is("WWF sleutelhanger orang-oetan")))
                 .andExpect(jsonPath("$.customer.email", is("giannideherdt@gmail.com")))
-                .andExpect(jsonPath("$.review.score", is(5)));
+                .andExpect(jsonPath("$.review.score", is(5.0)));
     }
 
     @Test
     public void whenPostInteractionNotAuthorized_thenReturnForbidden() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionPost = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
+        Interaction interactionPost = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
         mockMvc.perform(post("/api/interactions").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                         .content(mapper.writeValueAsString(interactionPost))
@@ -197,18 +194,17 @@ public class InteractionControllerUnitTests {
 
     @Test
     public void givenInteraction_whenPutInteraction_thenReturnJsonInteraction() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionPut = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
+        Interaction interactionPut = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
         given(interactionRepository.findInteractionById(interactionPut.getId())).willReturn(interactionPut);
 
-        Interaction updatedInteraction = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 5, 3, 1, new Date());
+        Interaction updatedInteraction = new Interaction(5, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
         mockMvc.perform(put("/api/interactions").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .content(mapper.writeValueAsString(updatedInteraction))
@@ -220,23 +216,22 @@ public class InteractionControllerUnitTests {
                 .andExpect(jsonPath("$.amountBought", is(1)))
                 .andExpect(jsonPath("$.product.name", is("WWF sleutelhanger orang-oetan")))
                 .andExpect(jsonPath("$.customer.email", is("giannideherdt@gmail.com")))
-                .andExpect(jsonPath("$.review.score", is(5)));
+                .andExpect(jsonPath("$.review.score", is(5.0)));
     }
 
     @Test
     public void whenPutInteractionNotAuthorized_thenReturnForbidden() throws Exception{
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionPut = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
+        Interaction interactionPut = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
         given(interactionRepository.findInteractionById(interactionPut.getId())).willReturn(interactionPut);
 
-        Interaction updatedInteraction = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 5, 3, 1, new Date());
+        Interaction updatedInteraction = new Interaction(5, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
         mockMvc.perform(put("/api/interactions").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
                         .content(mapper.writeValueAsString(updatedInteraction))
@@ -246,27 +241,26 @@ public class InteractionControllerUnitTests {
 
     @Test
     public void givenInteraction_whenDeleteInteraction_thenStatusOk() throws Exception {
-        String id = new ObjectId().toString();
-        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Kersstraat 17", "2200", "Belgium", Role.ADMIN, new Date(), "Gianni" , "De Herdt");
-        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt, new Date());
-        Category categorySleutelhangers = new Category("sleutelhangers", new Date());
-        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION, new Date(), "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", Arrays.asList("https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
-        Product productOrangoetanSleutelhanger =new Product(id, categorySleutelhangers, organizationWWF, "WWF sleutelhanger orang-oetan", 10.95, "Een schattige orang-oetan als sleutelhanger van 10cm.", true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), new Date());
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        Interaction interactionToBeDeleted = new Interaction(productOrangoetanSleutelhanger, customerGianniDeHerdt,reviewGianniDeHerdtSleutelhanger, 4, 3, 1, new Date());
+        Interaction interactionToBeDeleted = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
 
-        given(interactionRepository.findInteractionById(id)).willReturn(interactionToBeDeleted);
+        given(interactionRepository.findInteractionById(interactionToBeDeleted.getId())).willReturn(interactionToBeDeleted);
 
-        mockMvc.perform(delete("/api/interactions/{id}", id).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+        mockMvc.perform(delete("/api/interactions/{id}", interactionToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void givenInteraction_whenDeleteInteraction_thenStatusNotFound() throws Exception {
-        given(interactionRepository.findInteractionById("XXX")).willReturn(null);
+        given(interactionRepository.findInteractionById(12345)).willReturn(null);
 
-        mockMvc.perform(delete("/api/interactions/{id}", "XXX").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+        mockMvc.perform(delete("/api/interactions/{id}", 12345).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
@@ -274,9 +268,17 @@ public class InteractionControllerUnitTests {
 
     @Test
     public void whenDeleteInteractionNotAuthorized_thenReturnForbidden() throws Exception{
-        given(interactionRepository.findInteractionById("XXX")).willReturn(null);
+        Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
+        Review reviewGianniDeHerdtSleutelhanger = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
+        Category categorySleutelhangers = new Category("sleutelhangers");
+        Organization organizationWWF = new Organization("supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
+        Product productOrangoetanSleutelhanger = new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categorySleutelhangers, organizationWWF);
 
-        mockMvc.perform(delete("/api/interactions/{id}", "XXX").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+        Interaction interactionToBeDeleted = new Interaction(4, 3, 1, reviewGianniDeHerdtSleutelhanger, productOrangoetanSleutelhanger, customerGianniDeHerdt);
+
+        given(interactionRepository.findInteractionById(interactionToBeDeleted.getId())).willReturn(interactionToBeDeleted);
+
+        mockMvc.perform(delete("/api/interactions/{id}", interactionToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
