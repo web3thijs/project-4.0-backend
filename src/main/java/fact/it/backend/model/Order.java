@@ -1,5 +1,7 @@
 package fact.it.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,12 +17,15 @@ public class Order {
     private Date date;
     private boolean completed = false;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<Donation> donations = new ArrayList<>();
 
@@ -36,10 +41,6 @@ public class Order {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public Date getDate() {
@@ -70,15 +71,7 @@ public class Order {
         return orderDetails;
     }
 
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
     public List<Donation> getDonations() {
         return donations;
-    }
-
-    public void setDonations(List<Donation> donations) {
-        this.donations = donations;
     }
 }

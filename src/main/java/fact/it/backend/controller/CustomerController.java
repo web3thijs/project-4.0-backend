@@ -10,12 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -24,15 +22,18 @@ public class CustomerController {
     @Autowired
     CustomerRepository customerRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     private JwtUtils jwtUtils;
 
+    public CustomerController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @PostConstruct
     public void fillDatabase(){
-        String password = new BCryptPasswordEncoder().encode("Password123");
+        String password = passwordEncoder.encode("Password123");
 
         customerRepository.save(new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt"));
         customerRepository.save(new Customer("thijswouters@gmail.com", password, "0479954719", "Belgium", "1680", "Hoekstraat 165", Role.ADMIN, "Thijs" , "Wouters"));

@@ -1,5 +1,7 @@
 package fact.it.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +20,23 @@ public class Product {
     @ElementCollection
     private List<String> imageUrl;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "organization_id", referencedColumnName = "id")
     private Organization organization;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<Interaction> interactions = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<Stock> stocks = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
@@ -48,10 +55,6 @@ public class Product {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -114,23 +117,11 @@ public class Product {
         return interactions;
     }
 
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
-    }
-
     public List<Stock> getStocks() {
         return stocks;
     }
 
-    public void setStocks(List<Stock> stocks) {
-        this.stocks = stocks;
-    }
-
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
     }
 }

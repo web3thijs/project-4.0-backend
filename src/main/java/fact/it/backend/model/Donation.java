@@ -12,10 +12,12 @@ public class Donation {
 
     private double amount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "organization_id", referencedColumnName = "id")
     private Organization organization;
 
     public Donation() {
@@ -29,10 +31,6 @@ public class Donation {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public double getAmount() {

@@ -12,12 +12,12 @@ public class Customer extends User{
     private String firstName;
     private String lastName;
 
-    @OneToMany(targetEntity = Review.class)
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer")
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     @JsonIgnore
+    @OneToMany(mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
 
     @OneToOne
@@ -52,16 +52,8 @@ public class Customer extends User{
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
     public List<Order> getOrders() {
         return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     public Interaction getInteraction() {

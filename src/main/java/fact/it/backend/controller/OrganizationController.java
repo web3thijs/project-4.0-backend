@@ -106,7 +106,7 @@ public class OrganizationController {
 
     @PostConstruct
     public void fillDatabase(){
-        String password = new BCryptPasswordEncoder().encode("Password123");
+        String password =  passwordEncoder.encode("Password123");
 
         organizationRepository.save(new Organization("supporters@wwf.be", password, "+3223400920", "Emile Jacqmainlaan 90", "1000", "Belgium", Role.ORGANIZATION,"WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966", "Onze slogan ‘Together Possible!’", "WWF zet zich in", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg"));
         organizationRepository.save(new Organization("info@bkks.be", password, "+3211192819", "Diesterstraat 67A bus 001", "3800", "Belgium", Role.ORGANIZATION,"Belgisch KinderKanker Steunfonds", "BE0835627680", "0835627680", "Het Belgisch Kinder Kanker", "Het Belgisch Kinder", "Zelfsn dan financiële steun om deze moeilijke", "+3223400920", "supporters@wwf.be", "https://belgischkinderkankersteunfonds.be/wp-content/uploads/2020/02/cropped-logo-bkks-1.png"));
