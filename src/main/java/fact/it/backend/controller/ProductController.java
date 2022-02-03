@@ -96,7 +96,7 @@ public class ProductController {
             Product retrievedProduct = productRepository.findProductById(updatedProduct.getId());
 
             retrievedProduct.setCategory(categoryRepository.findCategoryById(updatedProduct.getCategory().getId()));
-            retrievedProduct.setOrganization(organizationRepository.findByOrganizationId(updatedProduct.getOrganization().getId()));
+            retrievedProduct.setOrganization(organizationRepository.findOrganizationById(updatedProduct.getOrganization().getId()));
             retrievedProduct.setName(updatedProduct.getName());
             retrievedProduct.setPrice(updatedProduct.getPrice());
             retrievedProduct.setDescription(updatedProduct.getDescription());
