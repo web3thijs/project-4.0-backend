@@ -64,7 +64,7 @@ public class StockController {
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN")){
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && stock.getProduct().getOrganization().getId() == user_id)){
             stockRepository.save(stock);
             return ResponseEntity.ok(stock);
         } else {
@@ -79,7 +79,7 @@ public class StockController {
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN")){
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedStock.getProduct().getOrganization().getId() == user_id)){
             Stock retrievedStock = stockRepository.findStockById(updatedStock.getId());
 
             retrievedStock.setSize(updatedStock.getSize());
@@ -102,7 +102,7 @@ public class StockController {
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN")){
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && stockRepository.findStockById(id).getProduct().getOrganization().getId() == user_id)){
             Stock stock = stockRepository.findStockById(id);
 
             if(stock != null){
