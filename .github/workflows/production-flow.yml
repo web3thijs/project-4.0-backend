@@ -10,17 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     
     name: Java 11 build, test, deliver container
-    services:
-      mydb:
-        image: mysql:8
-        env:
-          MYSQL_ROOT_PASSWORD: Password123
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - name: Verify MySQL connection from container 
         run: |
-          sudo apt-get update
-          sudo apt-get install -y mysql-client
+          sudo /etc/init.d/mysql start
           sudo mysql --host mydb -uroot -ppassword -e "SHOW DATABASES"
       - name: Check out repository
         uses: actions/checkout@v1
