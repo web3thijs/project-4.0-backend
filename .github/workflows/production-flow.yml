@@ -12,7 +12,7 @@ jobs:
     name: Java 11 build, test, deliver container
     services:
       mydb:
-        image: mysql:5.7
+        image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: Password123
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
