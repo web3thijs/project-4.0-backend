@@ -10,26 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     
     name: Java 11 build, test, deliver container
-    
-    services:
-      mysql:
-        image: mysql:8
-        env:
-          MYSQL_ROOT_PASSWORD: Password123
-          MYSQL_DATABASE: mus_db
-        ports:
-        - 3306:3306
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DB_DATABASE: mus_db
+      DB_USER: root
+      DB_PASSWORD: root
     
     steps:
       - name: Check out repository
         uses: actions/checkout@v1
         env:
-          MYSQL_HOST: mysql
-          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          MYSQL_HOST: localhost
+          MYSQL_PORT: 3306
           MYSQL_USER: root
           MYSQL_PASSWORD: Password123
+          
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
