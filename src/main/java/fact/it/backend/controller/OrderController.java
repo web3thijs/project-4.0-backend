@@ -124,7 +124,7 @@ public class OrderController {
         Order retrievedOrder = orderRepository.findOrderById(updatedOrder.getId());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)){
-            retrievedOrder.setCustomer(updatedOrder.getCustomer());
+            retrievedOrder.setCustomer(customerRepository.getById(updatedOrder.getCustomer().getId()));
             retrievedOrder.setDate(updatedOrder.getDate());
             retrievedOrder.setCompleted(updatedOrder.isCompleted());
 

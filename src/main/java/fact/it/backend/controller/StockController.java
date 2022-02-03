@@ -82,9 +82,9 @@ public class StockController {
         if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedStock.getProduct().getOrganization().getId() == user_id)){
             Stock retrievedStock = stockRepository.findStockById(updatedStock.getId());
 
-            retrievedStock.setSize(updatedStock.getSize());
-            retrievedStock.setColor(updatedStock.getColor());
-            retrievedStock.setProduct(updatedStock.getProduct());
+            retrievedStock.setSize(sizeRepository.findSizeById(updatedStock.getSize().getId()));
+            retrievedStock.setColor(colorRepository.findColorById(updatedStock.getColor().getId()));
+            retrievedStock.setProduct(productRepository.findProductById(updatedStock.getProduct().getId()));
             retrievedStock.setAmountInStock(updatedStock.getAmountInStock());
 
             stockRepository.save(retrievedStock);

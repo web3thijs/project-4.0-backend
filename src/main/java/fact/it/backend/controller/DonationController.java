@@ -83,8 +83,8 @@ public class DonationController {
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedDonation.getOrder().getCustomer().getId() == user_id)){
-            retrievedDonation.setOrder(updatedDonation.getOrder());
-            retrievedDonation.setOrganization(updatedDonation.getOrganization());
+            retrievedDonation.setOrder(orderRepository.getById(updatedDonation.getOrder().getId()));
+            retrievedDonation.setOrganization(organizationRepository.getById(updatedDonation.getOrganization().getId()));
             retrievedDonation.setAmount(updatedDonation.getAmount());
 
             donationRepository.save(retrievedDonation);
