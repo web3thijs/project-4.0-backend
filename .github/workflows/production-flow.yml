@@ -23,12 +23,13 @@ jobs:
           MYSQL_PORT: 3306
           MYSQL_USER: root
           MYSQL_PASSWORD: Password123
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           
       - name: Set up MySQL
         run: |
           sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-          mysql -u root -p status
+          mysql -u root status
           
   
 
