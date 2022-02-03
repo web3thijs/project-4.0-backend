@@ -36,10 +36,10 @@ public class DonationController {
 
     @PostConstruct
     public void fillDatabase(){
-        donationRepository.save(new Donation(2.5, orderRepository.findOrderById(3), organizationRepository.findById(7)));
-        donationRepository.save(new Donation(1.5, orderRepository.findOrderById(1), organizationRepository.findById(7)));
-        donationRepository.save(new Donation(15, orderRepository.findOrderById(3), organizationRepository.findById(10)));
-        donationRepository.save(new Donation(1, orderRepository.findOrderById(1), organizationRepository.findById(11)));
+        donationRepository.save(new Donation(2.5, orderRepository.findOrderById(3), organizationRepository.findByOrganizationId(7)));
+        donationRepository.save(new Donation(1.5, orderRepository.findOrderById(1), organizationRepository.findByOrganizationId(7)));
+        donationRepository.save(new Donation(15, orderRepository.findOrderById(3), organizationRepository.findByOrganizationId(10)));
+        donationRepository.save(new Donation(1, orderRepository.findOrderById(1), organizationRepository.findByOrganizationId(11)));
     }
 
     @GetMapping("/order/{orderId}")
