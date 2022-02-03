@@ -64,7 +64,7 @@ public class StockController {
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && stock.getProduct().getOrganization().getId() == user_id)){
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION"))){
             stockRepository.save(stock);
             return ResponseEntity.ok(stock);
         } else {
