@@ -101,9 +101,9 @@ public class InteractionController {
         Interaction retrievedInteraction = interactionRepository.findInteractionById(updatedInteraction.getId());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedInteraction.getCustomer().getId() == user_id)){
-            retrievedInteraction.setProduct(updatedInteraction.getProduct());
-            retrievedInteraction.setCustomer(updatedInteraction.getCustomer());
-            retrievedInteraction.setReview(updatedInteraction.getReview());
+            retrievedInteraction.setProduct(productRepository.getById(updatedInteraction.getProduct().getId()));
+            retrievedInteraction.setCustomer(customerRepository.getById(updatedInteraction.getCustomer().getId()));
+            retrievedInteraction.setReview(reviewRepository.getById(updatedInteraction.getReview().getId()));
             retrievedInteraction.setAmountClicks(updatedInteraction.getAmountClicks());
 
             interactionRepository.save(retrievedInteraction);
