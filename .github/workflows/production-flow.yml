@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-          mysql -u root -p Password123
+          mysql -u root -p status
           
   
 
