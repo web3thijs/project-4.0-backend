@@ -28,6 +28,8 @@ jobs:
         env:
           MYSQL_HOST: mysql
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Password123
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
