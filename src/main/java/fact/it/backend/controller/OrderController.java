@@ -72,29 +72,15 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long customerId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
+    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long customerId){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId == user_id)){
-            if(sort != null){
-                if(order != null && order.equals("desc")){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                    List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
-                    return ResponseEntity.ok(orders);
-                }
-                else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                    List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
-                    return ResponseEntity.ok(orders);
-                }
-            }else{
-                Pageable requestedPage = PageRequest.of(page, 9, Sort.by("name").ascending());
-                List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
-                return ResponseEntity.ok(orders);
-            }
+            List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
+            return ResponseEntity.ok(orders);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
