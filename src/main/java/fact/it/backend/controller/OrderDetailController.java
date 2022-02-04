@@ -121,10 +121,10 @@ public class OrderDetailController {
         OrderDetail retrievedOrderDetail = orderDetailRepository.findOrderDetailById(updatedOrderDetail.getId());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrderDetail.getOrder().getCustomer().getId() == user_id)){
-            retrievedOrderDetail.setProduct(updatedOrderDetail.getProduct());
-            retrievedOrderDetail.setOrder(updatedOrderDetail.getOrder());
-            retrievedOrderDetail.setSize(updatedOrderDetail.getSize());
-            retrievedOrderDetail.setColor(updatedOrderDetail.getColor());
+            retrievedOrderDetail.setProduct(productRepository.getById(updatedOrderDetail.getProduct().getId()));
+            retrievedOrderDetail.setOrder(orderRepository.getById(updatedOrderDetail.getOrder().getId()));
+            retrievedOrderDetail.setSize(sizeRepository.getById(updatedOrderDetail.getSize().getId()));
+            retrievedOrderDetail.setColor(colorRepository.getById(updatedOrderDetail.getColor().getId()));
             retrievedOrderDetail.setAmount(updatedOrderDetail.getAmount());
 
             orderDetailRepository.save(retrievedOrderDetail);

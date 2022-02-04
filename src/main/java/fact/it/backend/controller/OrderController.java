@@ -82,17 +82,17 @@ public class OrderController {
             if(sort != null){
                 if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                    Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPageWithSortDesc);
+                    List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
                     return ResponseEntity.ok(orders);
                 }
                 else{
                     Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                    Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPageWithSort);
+                    List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
                     return ResponseEntity.ok(orders);
                 }
             }else{
                 Pageable requestedPage = PageRequest.of(page, 9, Sort.by("name").ascending());
-                Page<Order> orders = orderRepository.findOrdersByCustomerId(customerId, requestedPage);
+                List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
                 return ResponseEntity.ok(orders);
             }
         } else {
@@ -124,7 +124,7 @@ public class OrderController {
         Order retrievedOrder = orderRepository.findOrderById(updatedOrder.getId());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)){
-            retrievedOrder.setCustomer(updatedOrder.getCustomer());
+            retrievedOrder.setCustomer(customerRepository.getById(updatedOrder.getCustomer().getId()));
             retrievedOrder.setDate(updatedOrder.getDate());
             retrievedOrder.setCompleted(updatedOrder.isCompleted());
 

@@ -36,10 +36,10 @@ public class DonationController {
 
     @PostConstruct
     public void fillDatabase(){
-        donationRepository.save(new Donation(2.5, orderRepository.findOrderById(3), organizationRepository.findById(7)));
-        donationRepository.save(new Donation(1.5, orderRepository.findOrderById(1), organizationRepository.findById(7)));
-        donationRepository.save(new Donation(15, orderRepository.findOrderById(3), organizationRepository.findById(10)));
-        donationRepository.save(new Donation(1, orderRepository.findOrderById(1), organizationRepository.findById(11)));
+        donationRepository.save(new Donation(2.5, orderRepository.findOrderById(3), organizationRepository.findOrganizationById(7)));
+        donationRepository.save(new Donation(1.5, orderRepository.findOrderById(1), organizationRepository.findOrganizationById(7)));
+        donationRepository.save(new Donation(15, orderRepository.findOrderById(3), organizationRepository.findOrganizationById(10)));
+        donationRepository.save(new Donation(1, orderRepository.findOrderById(1), organizationRepository.findOrganizationById(11)));
     }
 
     @GetMapping("/order/{orderId}")
@@ -83,8 +83,8 @@ public class DonationController {
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedDonation.getOrder().getCustomer().getId() == user_id)){
-            retrievedDonation.setOrder(updatedDonation.getOrder());
-            retrievedDonation.setOrganization(updatedDonation.getOrganization());
+            retrievedDonation.setOrder(orderRepository.getById(updatedDonation.getOrder().getId()));
+            retrievedDonation.setOrganization(organizationRepository.getById(updatedDonation.getOrganization().getId()));
             retrievedDonation.setAmount(updatedDonation.getAmount());
 
             donationRepository.save(retrievedDonation);
