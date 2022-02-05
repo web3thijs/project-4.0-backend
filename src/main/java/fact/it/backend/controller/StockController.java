@@ -39,32 +39,31 @@ public class StockController {
     private JwtUtils jwtUtils;
 
     @GetMapping
-    public Page<Stock> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "amountInStock")String sort, @RequestParam(required = false)String order){
-            if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                Page<Stock> stocks = stockRepository.findAll(requestedPageWithSortDesc);
-                return stocks;
-            }
-            else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                Page<Stock> stocks = stockRepository.findAll(requestedPageWithSort);
-                return stocks;
-            }
+    public Page<Stock> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "amountInStock") String sort, @RequestParam(required = false) String order) {
+        if (order != null && order.equals("desc")) {
+            Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
+            Page<Stock> stocks = stockRepository.findAll(requestedPageWithSortDesc);
+            return stocks;
+        } else {
+            Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
+            Page<Stock> stocks = stockRepository.findAll(requestedPageWithSort);
+            return stocks;
         }
+    }
 
     @GetMapping("/product/{productId}")
-    public List<Stock> findStocksByProductId(@PathVariable long productId){
+    public List<Stock> findStocksByProductId(@PathVariable long productId) {
         return stockRepository.findStocksByProductId(productId);
     }
 
     @PostMapping
-    public ResponseEntity<?> addStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock stock){
+    public ResponseEntity<?> addStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock stock) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("ORGANIZATION"))){
+        if (role.contains("ADMIN") || (role.contains("ORGANIZATION"))) {
             stockRepository.save(stock);
             return ResponseEntity.ok(stock);
         } else {
@@ -73,13 +72,13 @@ public class StockController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock updatedStock){
+    public ResponseEntity<?> updateStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock updatedStock) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedStock.getProduct().getOrganization().getId() == user_id)){
+        if (role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedStock.getProduct().getOrganization().getId() == user_id)) {
             Stock retrievedStock = stockRepository.findStockById(updatedStock.getId());
 
             retrievedStock.setSize(sizeRepository.findSizeById(updatedStock.getSize().getId()));
@@ -96,19 +95,19 @@ public class StockController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteStock(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity deleteStock(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && stockRepository.findStockById(id).getProduct().getOrganization().getId() == user_id)){
+        if (role.contains("ADMIN") || (role.contains("ORGANIZATION") && stockRepository.findStockById(id).getProduct().getOrganization().getId() == user_id)) {
             Stock stock = stockRepository.findStockById(id);
 
-            if(stock != null){
+            if (stock != null) {
                 stockRepository.delete(stock);
                 return ResponseEntity.ok().build();
-            }else{
+            } else {
                 return ResponseEntity.notFound().build();
             }
         } else {

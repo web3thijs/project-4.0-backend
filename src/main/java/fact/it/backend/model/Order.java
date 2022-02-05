@@ -33,6 +33,11 @@ public class Order {
     }
 
     public Order(Date date, boolean completed, Customer customer) {
+        this.date = date;
+        this.completed = completed;
+        this.customer = customer;
+    }
+    public Order(long id,Date date, boolean completed, Customer customer) {
         this.id = id;
         this.date = date;
         this.completed = completed;

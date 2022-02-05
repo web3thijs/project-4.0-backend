@@ -36,35 +36,34 @@ public class OrderController {
     OrderDetailRepository orderDetailRepository;
 
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false)String order){
+    public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false) String order) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
-        if(role.contains("ADMIN")){
-                if(order != null){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                    Page<Order> orders = orderRepository.findAll(requestedPageWithSortDesc);
-                    return ResponseEntity.ok(orders);
-                }
-                else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                    Page<Order> orders = orderRepository.findAll(requestedPageWithSort);
-                    return ResponseEntity.ok(orders);
-                }
+        if (role.contains("ADMIN")) {
+            if (order != null) {
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
+                Page<Order> orders = orderRepository.findAll(requestedPageWithSortDesc);
+                return ResponseEntity.ok(orders);
+            } else {
+                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
+                Page<Order> orders = orderRepository.findAll(requestedPageWithSort);
+                return ResponseEntity.ok(orders);
+            }
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findOrderById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity<?> findOrderById(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
         Order retrievedOrder = orderRepository.findOrderById(id);
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)){
+        if (role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)) {
             return ResponseEntity.ok(retrievedOrder);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
@@ -72,25 +71,24 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long customerId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false) String sort, @RequestParam(required = false)String order){
+    public ResponseEntity<?> findOrdersByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long customerId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId == user_id)){
-            if(sort != null){
-                if(order != null && order.equals("desc")){
+        if (role.contains("ADMIN") || (role.contains("CUSTOMER") && customerId == user_id)) {
+            if (sort != null) {
+                if (order != null && order.equals("desc")) {
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                     List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
                     return ResponseEntity.ok(orders);
-                }
-                else{
+                } else {
                     Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                     List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
                     return ResponseEntity.ok(orders);
                 }
-            }else{
+            } else {
                 Pageable requestedPage = PageRequest.of(page, 9, Sort.by("name").ascending());
                 List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
                 return ResponseEntity.ok(orders);
@@ -101,13 +99,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order order){
+    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order order) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId() == user_id)){
+        if (role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId() == user_id)) {
             orderRepository.save(order);
             return ResponseEntity.ok(order);
         } else {
@@ -116,14 +114,14 @@ public class OrderController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order updatedOrder){
+    public ResponseEntity<?> updateOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Order updatedOrder) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
         Order retrievedOrder = orderRepository.findOrderById(updatedOrder.getId());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)){
+        if (role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrder.getCustomer().getId() == user_id)) {
             retrievedOrder.setCustomer(customerRepository.getById(updatedOrder.getCustomer().getId()));
             retrievedOrder.setDate(updatedOrder.getDate());
             retrievedOrder.setCompleted(updatedOrder.isCompleted());
@@ -137,24 +135,24 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteOrder(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity deleteOrder(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
-        if(role.contains("ADMIN")){
+        if (role.contains("ADMIN")) {
             Order order = orderRepository.findOrderById(id);
             List<OrderDetail> orderDetails = orderDetailRepository.findOrderDetailsByOrderId(id);
 
-            if(order != null){
+            if (order != null) {
                 orderRepository.delete(order);
-                if(orderDetails != null) {
-                  for (int i = 0; i < orderDetails.size(); i++) {
-                      orderDetailRepository.delete(orderDetails.get(i));
-                  }
+                if (orderDetails != null) {
+                    for (int i = 0; i < orderDetails.size(); i++) {
+                        orderDetailRepository.delete(orderDetails.get(i));
+                    }
                 }
                 return ResponseEntity.ok().build();
-            }else{
+            } else {
                 return ResponseEntity.notFound().build();
             }
         } else {

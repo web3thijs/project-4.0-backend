@@ -33,9 +33,19 @@ public class Review {
         this.text = text;
         this.customer = customer;
     }
+    public Review(long id, double score, String title, String text, Customer customer) {
+        this.score = score;
+        this.title = title;
+        this.text = text;
+        this.customer = customer;
+    }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public double getScore() {

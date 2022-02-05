@@ -52,9 +52,23 @@ public class Product {
         this.category = category;
         this.organization = organization;
     }
+    public Product(long id, String name, String description, double price, boolean isActive, List<String> imageUrl, Category category, Organization organization) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.isActive = isActive;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.organization = organization;
+    }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
