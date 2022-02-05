@@ -2,12 +2,8 @@ package fact.it.backend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fact.it.backend.model.AuthRequest;
-import fact.it.backend.model.Customer;
-import fact.it.backend.model.Role;
-import fact.it.backend.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,10 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TokenGetService {
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    CustomerRepository customerRepository;
-
+    
     public String obtainAccessToken(String email, String password) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         AuthRequest user = new AuthRequest();
