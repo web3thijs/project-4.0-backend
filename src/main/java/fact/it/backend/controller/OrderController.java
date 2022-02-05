@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.dto.UpdateDonationDTO;
 import fact.it.backend.dto.UpdateOrderDetailDTO;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.CustomerRepository;
@@ -182,14 +183,14 @@ public class OrderController {
     }
 
     @PostMapping("/addDonation")
-    public ResponseEntity addDonationToOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateOrderDetailDTO updateOrderDetailDTO){
+    public ResponseEntity addDonationToOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateDonationDTO updateDonationDTO){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
-            orderService.addProductToOrder(updateOrderDetailDTO, user_id);
+            orderService.addDonationToOrder(updateDonationDTO, user_id);
             return new ResponseEntity<String>("Added", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
@@ -197,14 +198,14 @@ public class OrderController {
     }
 
     @PostMapping("/updateDonation")
-    public ResponseEntity updateDonationFromOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateOrderDetailDTO updateOrderDetailDTO){
+    public ResponseEntity updateDonationFromOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateDonationDTO updateDonationDTO){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
-            orderService.updateOrderDetail(updateOrderDetailDTO, user_id);
+            orderService.updateDonation(updateDonationDTO, user_id);
             return new ResponseEntity<String>("Added", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
