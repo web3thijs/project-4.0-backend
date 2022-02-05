@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -52,13 +53,11 @@ public class ColorControllerUnitTests {
     @Value("Password123")
     private String password;
 
-    /*@Test
+    @Test
     public void whenGetAllColors_thenReturnJsonColor() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        List<Color> allColors = colorRepository.findAll();
 
-        Page<Color> allColors = colorRepository.findAll(requestedPage);
-
-        given(colorRepository.findAll(requestedPage)).willReturn(allColors);
+        given(colorRepository.findAll()).willReturn(allColors);
 
         mockMvc.perform(get("/api/colors"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -68,18 +67,16 @@ public class ColorControllerUnitTests {
 
     @Test
     public void whenGetAllColorsWithParams_thenReturnJsonColor() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        List<Color> allColorsWithParams = colorRepository.findAll();
 
-        Page<Color> allColorsWithParams = colorRepository.findAll(requestedPage);
-
-        given(colorRepository.findAll(requestedPage)).willReturn(allColorsWithParams);
+        given(colorRepository.findAll()).willReturn(allColorsWithParams);
 
         mockMvc.perform(get("/api/colors?page=0&sort=name&order=desc"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
 
-    }*/
+    }
 
     @Test
     public void whenGetColorById_thenReturnJsonColor() throws Exception{
