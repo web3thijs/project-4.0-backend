@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface DonationRepository extends JpaRepository<Donation, Long> {
     Page<Donation> findAll(Pageable pageable);
-    Page<Donation> findDonationsByOrderId(long orderId, Pageable pageable);
+    List<Donation> findDonationsByOrderId(long orderId);
     Donation findDonationById(long id);
 }

@@ -43,7 +43,7 @@ public class DonationController {
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long orderId, @RequestParam(required = false, defaultValue = "0") int page) {
+    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long orderId) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -51,8 +51,7 @@ public class DonationController {
         Order order = orderRepository.findOrderById(orderId);
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId() == user_id)){
-            Pageable requestedPage = PageRequest.of(page, 8);
-            Page<Donation> donationsByCustomerIdAndOrderId = donationRepository.findDonationsByOrderId(orderId, requestedPage);
+            List<Donation> donationsByCustomerIdAndOrderId = donationRepository.findDonationsByOrderId(orderId);
             return ResponseEntity.ok(donationsByCustomerIdAndOrderId);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
@@ -83,8 +82,8 @@ public class DonationController {
         Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedDonation.getOrder().getCustomer().getId() == user_id)){
-            retrievedDonation.setOrder(orderRepository.getById(updatedDonation.getOrder().getId()));
-            retrievedDonation.setOrganization(organizationRepository.getById(updatedDonation.getOrganization().getId()));
+            retrievedDonation.setOrder(orderRepository.findOrderById(updatedDonation.getOrder().getId()));
+            retrievedDonation.setOrganization(organizationRepository.findOrganizationById(updatedDonation.getOrganization().getId()));
             retrievedDonation.setAmount(updatedDonation.getAmount());
 
             donationRepository.save(retrievedDonation);
