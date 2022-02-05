@@ -15,9 +15,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,13 +49,11 @@ public class CategoryControllerUnitTests {
     private String password;
 
 
-   /* @Test
+   @Test
     public void whenGetAllCategories_thenReturnJsonCategory() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        List<Category> allCategories = categoryRepository.findAll();
 
-        Page<Category> allCategories = categoryRepository.findAll(requestedPage);
-
-        given(categoryRepository.findAll(requestedPage)).willReturn(allCategories);
+        given(categoryRepository.findAll()).willReturn(allCategories);
 
         mockMvc.perform(get("/api/categories"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -62,18 +63,16 @@ public class CategoryControllerUnitTests {
 
     @Test
     public void whenGetAllCategoriesWithParams_thenReturnJsonCategory() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        List<Category> allCategoriesWithParams = categoryRepository.findAll();
 
-        Page<Category> allCategoriesWithParams = categoryRepository.findAll(requestedPage);
+        given(categoryRepository.findAll()).willReturn(allCategoriesWithParams);
 
-        given(categoryRepository.findAll(requestedPage)).willReturn(allCategoriesWithParams);
-
-        mockMvc.perform(get("/api/categories?page=0&sort=name&order=desc"))
+        mockMvc.perform(get("/api/categories?sort=name&order=desc"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
 
-    }*/
+    }
 
     @Test
     public void whenGetCategoryById_thenReturnJsonCategory() throws Exception{
