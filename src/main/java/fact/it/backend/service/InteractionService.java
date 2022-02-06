@@ -45,14 +45,14 @@ public class InteractionService {
     }
 
 
-//    public void addCart(AddToInteractionDTO addToInteractionDTO){
-//        if(interactionRepository.findInteractionsByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId()).size() == 0){
-//            Interaction newInteraction = new Interaction(0, 0, 1, productRepository.findProductById(addToInteractionDTO.getProductId()), customerRepository.findCustomerById(addToInteractionDTO.getCustomerId()));
-//            interactionRepository.save(newInteraction);
-//        } else {
-//            Interaction interaction = interactionRepository.findInteractionByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId());
-//            interaction.setAmountCart(interaction.getAmountCart() + 1);
-//            interactionRepository.save(interaction);
-//        }
-//    }
+    public void addCart(AddToInteractionDTO addToInteractionDTO){
+        if(interactionRepository.findInteractionsByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId()).size() == 0){
+            Interaction newInteraction = new Interaction(0, 0, 1, productRepository.findProductById(addToInteractionDTO.getProductId()), customerRepository.findCustomerById(addToInteractionDTO.getCustomerId()));
+            interactionRepository.save(newInteraction);
+        } else {
+            Interaction interaction = interactionRepository.findInteractionByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId());
+            interaction.setAmountCart(interaction.getAmountCart() + 1);
+            interactionRepository.save(interaction);
+        }
+    }
 }

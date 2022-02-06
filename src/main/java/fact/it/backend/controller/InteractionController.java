@@ -166,4 +166,19 @@ public class InteractionController {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
+
+    @PostMapping("/addCart")
+    public ResponseEntity addCart(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody AddToInteractionDTO addToInteractionDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            interactionService.addCart(addToInteractionDTO);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
 }
