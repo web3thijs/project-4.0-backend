@@ -20,8 +20,9 @@ public class Customer extends User{
     @OneToMany(mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
 
-    @OneToOne
-    private Interaction interaction;
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer")
+    private List<Interaction> interactions = new ArrayList<>();
 
     public Customer() {
     }
@@ -61,11 +62,11 @@ public class Customer extends User{
         return orders;
     }
 
-    public Interaction getInteraction() {
-        return interaction;
+    public List<Interaction> getInteractions() {
+        return interactions;
     }
 
-    public void setInteraction(Interaction interaction) {
-        this.interaction = interaction;
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 }
