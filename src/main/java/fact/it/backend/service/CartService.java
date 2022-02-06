@@ -1,6 +1,8 @@
 package fact.it.backend.service;
 
 import fact.it.backend.dto.CartDTO;
+import fact.it.backend.dto.CartProductDTO;
+import fact.it.backend.model.Donation;
 import fact.it.backend.model.Order;
 import fact.it.backend.model.OrderDetail;
 import fact.it.backend.repository.OrderRepository;
@@ -17,13 +19,16 @@ public class CartService {
         this.orderRepository = orderRepository;
     }
 
-    public List<CartDTO> getCart(Long userId){
+    public CartDTO getCart(Long userId){
         Order order = orderRepository.findOrdersByCustomerIdAndCompleted(userId, false);
-        List<CartDTO> cartDTOS = new ArrayList<>();
+        CartDTO cartDTO = new CartDTO();
+        List<CartProductDTO> cartProductDTOS = new ArrayList<>();
+
         for(OrderDetail orderDetail : order.getOrderDetails()){
-            CartDTO cartDTO = new CartDTO(orderDetail.getProduct().getName(), orderDetail.getProduct().getPrice(), orderDetail.getAmount(), orderDetail.getSize().getName(), orderDetail.getProduct().getImageUrl());
-            cartDTOS.add(cartDTO);
+            cartProductDTOS.add(new CartProductDTO(orderDetail.getProduct().getName(), orderDetail.getProduct().getPrice(), orderDetail.getAmount(), orderDetail.getSize().getName(), orderDetail.getProduct().getImageUrl()));
         }
-        return cartDTOS;
+
+        cartDTO.setCartProductDTOS(cartProductDTOS);
+        return cartDTO;
     }
 }
