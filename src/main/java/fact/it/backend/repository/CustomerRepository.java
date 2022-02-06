@@ -15,4 +15,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findByRole(Role role);
     Customer findByRoleAndId(Role role, long id);
     Customer findById(long id);
+
+    Customer findCustomerById(Long customerId);
 }

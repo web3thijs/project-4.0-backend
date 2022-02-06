@@ -1,18 +1,18 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.dto.AddToInteractionDTO;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.CustomerRepository;
 import fact.it.backend.repository.InteractionRepository;
 import fact.it.backend.repository.ProductRepository;
 import fact.it.backend.repository.ReviewRepository;
+import fact.it.backend.service.InteractionService;
 import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,9 +34,10 @@ public class InteractionController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostConstruct
-    public void fillDatabase(){
+    InteractionService interactionService;
 
+    public InteractionController(InteractionService interactionService) {
+        this.interactionService = interactionService;
     }
 
     @GetMapping
@@ -92,6 +93,8 @@ public class InteractionController {
         }
     }
 
+
+
     @PutMapping
     public ResponseEntity<?> updateInteraction(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Interaction updatedInteraction){
         String token = tokenWithPrefix.substring(7);
@@ -129,6 +132,51 @@ public class InteractionController {
             } else{
                 return ResponseEntity.notFound().build();
             }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/addClick")
+    public ResponseEntity addClick(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody AddToInteractionDTO addToInteractionDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            interactionService.addClick(addToInteractionDTO);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/addBuy")
+    public ResponseEntity addBought(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody AddToInteractionDTO addToInteractionDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            interactionService.addBuy(addToInteractionDTO);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/addCart")
+    public ResponseEntity addCart(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody AddToInteractionDTO addToInteractionDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            interactionService.addCart(addToInteractionDTO);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
