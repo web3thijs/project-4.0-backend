@@ -2,6 +2,7 @@ package fact.it.backend.controller;
 
 import fact.it.backend.model.Donation;
 import fact.it.backend.model.Order;
+import fact.it.backend.model.Organization;
 import fact.it.backend.repository.DonationRepository;
 import fact.it.backend.repository.OrderRepository;
 import fact.it.backend.repository.OrganizationRepository;
@@ -53,6 +54,22 @@ public class DonationController {
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId() == user_id)){
             List<Donation> donationsByCustomerIdAndOrderId = donationRepository.findDonationsByOrderId(orderId);
             return ResponseEntity.ok(donationsByCustomerIdAndOrderId);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @GetMapping("/organization/{organizationId}")
+    public ResponseEntity<?> findDonationsByOrganizationId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long organizationId) {
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+        Organization organization = organizationRepository.findOrganizationById(organizationId);
+
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && organization.getId() == user_id)){
+            List<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(organizationId);
+            return ResponseEntity.ok(donationsByOrganizationId);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
