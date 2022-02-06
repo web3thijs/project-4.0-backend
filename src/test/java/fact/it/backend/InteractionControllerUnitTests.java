@@ -15,10 +15,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
@@ -279,6 +276,71 @@ public class InteractionControllerUnitTests {
         given(interactionRepository.findInteractionById(interactionToBeDeleted.getId())).willReturn(interactionToBeDeleted);
 
         mockMvc.perform(delete("/api/interactions/{id}", interactionToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void whenAddClickInteraction_thenReturnCreated() throws Exception {
+        Map<String,Object> input=new HashMap<>();
+        input.put("productId", "1");
+        input.put("customerId", "2");
+        mockMvc.perform(post("/api/interactions/addClick").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+                        .content(mapper.writeValueAsString(input))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void whenAddClickInteractionUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String,Object> input=new HashMap<>();
+        input.put("productId", "1");
+        input.put("customerId", "2");
+        mockMvc.perform(post("/api/interactions/addClick").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                        .content(mapper.writeValueAsString(input))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void whenAddBuyInteraction_thenReturnCreated() throws Exception {
+        Map<String,Object> input=new HashMap<>();
+        input.put("productId", "1");
+        input.put("customerId", "2");
+        mockMvc.perform(post("/api/interactions/addBuy").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+                        .content(mapper.writeValueAsString(input))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void whenAddBuyInteractionUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String,Object> input=new HashMap<>();
+        input.put("productId", "1");
+        input.put("customerId", "2");
+        mockMvc.perform(post("/api/interactions/addBuy").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                        .content(mapper.writeValueAsString(input))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void whenAddCartInteraction_thenReturnCreated() throws Exception {
+        Map<String,Object> input=new HashMap<>();
+        input.put("productId", "1");
+        input.put("customerId", "2");
+        mockMvc.perform(post("/api/interactions/addCart").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+                        .content(mapper.writeValueAsString(input))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+    @Test
+    public void whenAddCartInteractionUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String,Object> input=new HashMap<>();
+        input.put("productId", "1");
+        input.put("customerId", "2");
+        mockMvc.perform(post("/api/interactions/addCart").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                        .content(mapper.writeValueAsString(input))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
