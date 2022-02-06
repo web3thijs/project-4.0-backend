@@ -1,9 +1,12 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.dto.UpdateDonationDTO;
+import fact.it.backend.dto.UpdateOrderDetailDTO;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.CustomerRepository;
 import fact.it.backend.repository.OrderDetailRepository;
 import fact.it.backend.repository.OrderRepository;
+import fact.it.backend.service.OrderService;
 import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,9 @@ public class OrderController {
 
     @Autowired
     OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    OrderService orderService;
 
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "date") String sort, @RequestParam(required = false)String order){
@@ -143,6 +147,66 @@ public class OrderController {
             }else{
                 return ResponseEntity.notFound().build();
             }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/addProduct")
+    public ResponseEntity addProductToOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateOrderDetailDTO updateOrderDetailDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            orderService.addProductToOrder(updateOrderDetailDTO, user_id);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/updateProduct")
+    public ResponseEntity updateProductFromOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateOrderDetailDTO updateOrderDetailDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            orderService.updateOrderDetail(updateOrderDetailDTO, user_id);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/addDonation")
+    public ResponseEntity addDonationToOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateDonationDTO updateDonationDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            orderService.addDonationToOrder(updateDonationDTO, user_id);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/updateDonation")
+    public ResponseEntity updateDonationFromOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateDonationDTO updateDonationDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            orderService.updateDonation(updateDonationDTO, user_id);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
