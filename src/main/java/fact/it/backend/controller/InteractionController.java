@@ -34,11 +34,6 @@ public class InteractionController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostConstruct
-    public void fillDatabase(){
-
-    }
-
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix){
         String token = tokenWithPrefix.substring(7);
