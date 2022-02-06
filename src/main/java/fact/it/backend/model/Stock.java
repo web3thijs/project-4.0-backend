@@ -33,6 +33,13 @@ public class Stock {
         this.color = color;
         this.product = product;
     }
+    public Stock(long id,int amountInStock, Size size, Color color, Product product) {
+        this.id = id;
+        this.amountInStock = amountInStock;
+        this.size = size;
+        this.color = color;
+        this.product = product;
+    }
 
     public Long getId() {
         return id;

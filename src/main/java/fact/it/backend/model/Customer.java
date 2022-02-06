@@ -31,6 +31,11 @@ public class Customer extends User{
         this.firstName = firstName;
         this.lastName = lastName;
     }
+    public Customer(long id,String email, String password, String phoneNr, String country, String postalCode, String address, Role role, String firstName, String lastName) {
+        super(id, email, password, phoneNr, country, postalCode, address, role);
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public String getFirstName() {
         return firstName;

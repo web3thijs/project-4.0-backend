@@ -29,6 +29,8 @@ public class Donation {
         this.organization = organization;
     }
 
+
+
     public long getId() {
         return id;
     }
