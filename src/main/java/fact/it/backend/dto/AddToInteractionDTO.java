@@ -2,12 +2,12 @@ package fact.it.backend.dto;
 
 import javax.validation.constraints.NotNull;
 
-public class AddClickDTO {
+public class AddToInteractionDTO {
     private Long id;
     private @NotNull Long customerId;
     private @NotNull Long productId;
 
-    public AddClickDTO() {
+    public AddToInteractionDTO() {
     }
 
     public Long getId() {

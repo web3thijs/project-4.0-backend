@@ -1,6 +1,6 @@
 package fact.it.backend.service;
 
-import fact.it.backend.dto.AddClickDTO;
+import fact.it.backend.dto.AddToInteractionDTO;
 import fact.it.backend.model.Interaction;
 import fact.it.backend.repository.CustomerRepository;
 import fact.it.backend.repository.InteractionRepository;
@@ -22,14 +22,37 @@ public class InteractionService {
         this.customerRepository = customerRepository;
     }
 
-    public void addClick(AddClickDTO addClickDTO){
-        if(interactionRepository.findInteractionsByProductIdAndCustomerId(addClickDTO.getProductId(), addClickDTO.getCustomerId()).size() == 0){
-            Interaction newInteraction = new Interaction(1, 0, 0, productRepository.findProductById(addClickDTO.getProductId()), customerRepository.findCustomerById(addClickDTO.getCustomerId()));
+    public void addClick(AddToInteractionDTO addToInteractionDTO){
+        if(interactionRepository.findInteractionsByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId()).size() == 0){
+            Interaction newInteraction = new Interaction(1, 0, 0, productRepository.findProductById(addToInteractionDTO.getProductId()), customerRepository.findCustomerById(addToInteractionDTO.getCustomerId()));
             interactionRepository.save(newInteraction);
         } else {
-            Interaction interaction = interactionRepository.findInteractionByProductIdAndCustomerId(addClickDTO.getProductId(), addClickDTO.getCustomerId());
+            Interaction interaction = interactionRepository.findInteractionByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId());
             interaction.setAmountClicks(interaction.getAmountClicks() + 1);
             interactionRepository.save(interaction);
         }
     }
+
+    public void addBuy(AddToInteractionDTO addToInteractionDTO){
+        if(interactionRepository.findInteractionsByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId()).size() == 0){
+            Interaction newInteraction = new Interaction(0, 0, 1, productRepository.findProductById(addToInteractionDTO.getProductId()), customerRepository.findCustomerById(addToInteractionDTO.getCustomerId()));
+            interactionRepository.save(newInteraction);
+        } else {
+            Interaction interaction = interactionRepository.findInteractionByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId());
+            interaction.setAmountBought(interaction.getAmountBought() + 1);
+            interactionRepository.save(interaction);
+        }
+    }
+
+
+//    public void addCart(AddToInteractionDTO addToInteractionDTO){
+//        if(interactionRepository.findInteractionsByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId()).size() == 0){
+//            Interaction newInteraction = new Interaction(0, 0, 1, productRepository.findProductById(addToInteractionDTO.getProductId()), customerRepository.findCustomerById(addToInteractionDTO.getCustomerId()));
+//            interactionRepository.save(newInteraction);
+//        } else {
+//            Interaction interaction = interactionRepository.findInteractionByProductIdAndCustomerId(addToInteractionDTO.getProductId(), addToInteractionDTO.getCustomerId());
+//            interaction.setAmountCart(interaction.getAmountCart() + 1);
+//            interactionRepository.save(interaction);
+//        }
+//    }
 }
