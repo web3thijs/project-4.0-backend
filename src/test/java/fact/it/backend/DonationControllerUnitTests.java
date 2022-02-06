@@ -58,9 +58,6 @@ public class DonationControllerUnitTests {
 
     @Test
     public void whenGetDonationByOrderId_thenReturnJsonDonations() throws Exception{
-        Customer customerThijsWouters = new Customer("thijswouters@gmail.com", password, "0479954719", "Hoekstraat 165", "1680", "Belgium", Role.ADMIN, "Thijs" , "Wouters");
-        Order order1ThijsWouters = new Order(0,new Date(), true,customerThijsWouters);
-
         List<Donation> donationsByOrderId = donationRepository.findDonationsByOrderId(0);
         given(donationRepository.findDonationsByOrderId(0)).willReturn(donationsByOrderId);
 
@@ -68,6 +65,38 @@ public class DonationControllerUnitTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
+    }
+
+    @Test
+    public void whenGetDonationByOrderIdUnauthorized_thenReturnForbidden() throws Exception{
+        List<Donation> donationsByOrderId = donationRepository.findDonationsByOrderId(0);
+        given(donationRepository.findDonationsByOrderId(0)).willReturn(donationsByOrderId);
+
+        mockMvc.perform(get("/api/donations/order/{orderId}", 0).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void whenGetDonationByOrganizationId_thenReturnJsonDonations() throws Exception{
+        List<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(0);
+        given(donationRepository.findDonationsByOrganizationId(0)).willReturn(donationsByOrganizationId);
+
+        mockMvc.perform(get("/api/donations/organization/{organizationId}", 0).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
+
+    }
+
+    @Test
+    public void whenGetDonationByOrganizationIdUnauthorized_thenReturnForbidden() throws Exception{
+        List<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(0);
+        given(donationRepository.findDonationsByOrganizationId(0)).willReturn(donationsByOrganizationId);
+
+        mockMvc.perform(get("/api/donations/organization/{organizationId}", 0).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
 
     }
 
