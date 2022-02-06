@@ -57,7 +57,7 @@ public class OrganizationController {
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedOrganization.getId() == user_id)){
-            Organization retrievedOrganization= organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganization.getId());
+            Organization retrievedOrganization = organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganization.getId());
 
             retrievedOrganization.setEmail(updatedOrganization.getEmail());
             retrievedOrganization.setPassword(passwordEncoder.encode(updatedOrganization.getPassword()));
