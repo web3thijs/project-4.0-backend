@@ -1,6 +1,7 @@
 package fact.it.backend.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 
 @Entity
 public class Interaction {
@@ -31,6 +32,14 @@ public class Interaction {
         this.amountCart = amountCart;
         this.amountBought = amountBought;
         this.review = review;
+        this.product = product;
+        this.customer = customer;
+    }
+
+    public Interaction(int amountClicks, int amountCart, int amountBought, Product product, Customer customer) {
+        this.amountClicks = amountClicks;
+        this.amountCart = amountCart;
+        this.amountBought = amountBought;
         this.product = product;
         this.customer = customer;
     }

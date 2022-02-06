@@ -1,10 +1,12 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.dto.AddClickDTO;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.CustomerRepository;
 import fact.it.backend.repository.InteractionRepository;
 import fact.it.backend.repository.ProductRepository;
 import fact.it.backend.repository.ReviewRepository;
+import fact.it.backend.service.InteractionService;
 import fact.it.backend.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,12 @@ public class InteractionController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    InteractionService interactionService;
+
+    public InteractionController(InteractionService interactionService) {
+        this.interactionService = interactionService;
+    }
 
     @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix){
@@ -87,6 +95,8 @@ public class InteractionController {
         }
     }
 
+
+
     @PutMapping
     public ResponseEntity<?> updateInteraction(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Interaction updatedInteraction){
         String token = tokenWithPrefix.substring(7);
@@ -124,6 +134,21 @@ public class InteractionController {
             } else{
                 return ResponseEntity.notFound().build();
             }
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/addClick")
+    public ResponseEntity addProductToOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody AddClickDTO addClickDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            interactionService.addClick(addClickDTO);
+            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
