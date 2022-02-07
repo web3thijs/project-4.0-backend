@@ -15,8 +15,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique= true)
     @NotNull
-    @Size(min = 3, max = 30, message = "Name should have at least 3 or a maximum of 30 characters.")
+    @Size(min = 3, max = 50, message = "Name should have at least 3 or a maximum of 50 characters.")
     private String name;
 
     @JsonIgnore

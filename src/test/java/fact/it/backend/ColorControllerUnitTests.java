@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
@@ -82,7 +83,7 @@ public class ColorControllerUnitTests {
     public void whenGetColorById_thenReturnJsonColor() throws Exception{
         Color colorTest = new Color("rood");
 
-        given(colorRepository.findColorById(colorTest.getId())).willReturn(colorTest);
+        given(colorRepository.findById(colorTest.getId())).willReturn(Optional.of(colorTest));
 
         mockMvc.perform(get("/api/colors/{id}", colorTest.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -119,7 +120,7 @@ public class ColorControllerUnitTests {
     public void givenColor_whenPutColor_thenReturnJsonColor() throws Exception{
         Color colorPut = new Color("bluaw");
 
-        given(colorRepository.findColorById(colorPut.getId())).willReturn(colorPut);
+        given(colorRepository.findById(colorPut.getId())).willReturn(Optional.of(colorPut));
 
         Color updatedColor = new Color(colorPut.getId(),"blauw");
 
@@ -150,7 +151,7 @@ public class ColorControllerUnitTests {
     public void givenColor_whenDeleteColor_thenStatusOk() throws Exception {
         Color colorToBeDeleted = new Color("magenta");
 
-        given(colorRepository.findColorById(colorToBeDeleted.getId())).willReturn(colorToBeDeleted);
+        given(colorRepository.findById(colorToBeDeleted.getId())).willReturn(Optional.of(colorToBeDeleted));
 
         mockMvc.perform(delete("/api/colors/{id}", colorToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -159,12 +160,9 @@ public class ColorControllerUnitTests {
 
     @Test
     public void givenColor_whenDeleteColor_thenStatusNotFound() throws Exception {
-        given(colorRepository.findColorById(12345)).willReturn(null);
-
-        mockMvc.perform(delete("/api/colors/{id}", 12345).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+        mockMvc.perform(delete("/api/colors/{id}", 12345789).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-
     }
 
     @Test

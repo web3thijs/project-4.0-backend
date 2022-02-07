@@ -88,12 +88,8 @@ public class CategoryController {
             Category category = categoryRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Cannot delete. Category not found for this id: " + id));
 
-            if(category != null){
                 categoryRepository.delete(category);
                 return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
         } else {
             return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
