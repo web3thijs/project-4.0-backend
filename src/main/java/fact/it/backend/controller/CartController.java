@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -49,7 +50,9 @@ public class CartController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
             orderService.addProductToOrder(updateOrderDetailDTO, user_id);
-            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
@@ -64,7 +67,9 @@ public class CartController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
             orderService.updateOrderDetail(updateOrderDetailDTO, user_id);
-            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
@@ -79,7 +84,9 @@ public class CartController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
             orderService.addDonationToOrder(updateDonationDTO, user_id);
-            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
