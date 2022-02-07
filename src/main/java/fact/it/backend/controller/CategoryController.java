@@ -59,7 +59,7 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateCategory(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Category updatedCategory) throws ResourceNotFoundException{
+    public ResponseEntity<?> updateCategory(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Category updatedCategory) throws ResourceNotFoundException{
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -79,7 +79,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCategory(@RequestHeader("authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
+    public ResponseEntity deleteCategory(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

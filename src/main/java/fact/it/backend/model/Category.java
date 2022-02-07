@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class Category {
     private long id;
 
     @NotNull
-    @Size(min = 2, message = "First Name should have atleast 2 characters")
+    @Size(min = 3, max = 30, message = "Name should have at least 3 or a maximum of 30 characters.")
     private String name;
 
     @JsonIgnore
