@@ -1,8 +1,12 @@
 package fact.it.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +16,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @Size(min = 2, message = "First Name should have atleast 2 characters")
     private String name;
 
     @JsonIgnore
@@ -33,6 +39,7 @@ public class Category {
         return id;
     }
 
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
