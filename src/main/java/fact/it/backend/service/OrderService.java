@@ -9,7 +9,9 @@ import fact.it.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -41,14 +43,21 @@ public class OrderService {
         }
 
         Order order = orderRepository.findOrdersByCustomerIdAndCompleted(userId, false);
-        OrderDetail orderDetail = new OrderDetail(updateOrderDetailDTO.getAmount(), productRepository.findProductById(updateOrderDetailDTO.getProductId()), orderRepository.findOrderById(order.getId()), sizeRepository.findSizeById(updateOrderDetailDTO.getSizeId()), colorRepository.findColorById(updateOrderDetailDTO.getColorId()));
-        orderDetailRepository.save(orderDetail);
+        List<OrderDetail> orderDetails = orderDetailRepository.findOrderDetailsBySizeIdAndColorIdAndProductIdAndOrderId(updateOrderDetailDTO.getSizeId(), updateOrderDetailDTO.getColorId(), updateOrderDetailDTO.getProductId(), order.getId());
 
+        if(orderDetails.size() == 1){
+            OrderDetail orderDetail = orderDetailRepository.findOrderDetailBySizeIdAndColorIdAndProductIdAndOrderId(updateOrderDetailDTO.getSizeId(), updateOrderDetailDTO.getColorId(), updateOrderDetailDTO.getProductId(), order.getId());
+            orderDetail.setAmount(orderDetail.getAmount() + updateOrderDetailDTO.getAmount());
+            orderDetailRepository.save(orderDetail);
+        } else {
+            OrderDetail newOrderDetail = new OrderDetail(updateOrderDetailDTO.getAmount(), productRepository.findProductById(updateOrderDetailDTO.getProductId()), orderRepository.findOrderById(order.getId()), sizeRepository.findSizeById(updateOrderDetailDTO.getSizeId()), colorRepository.findColorById(updateOrderDetailDTO.getColorId()));
+            orderDetailRepository.save(newOrderDetail);
+        }
     }
 
     public void updateOrderDetail(UpdateOrderDetailDTO updateOrderDetailDTO, long userId){
         Order order = orderRepository.findOrdersByCustomerIdAndCompleted(userId, false);
-        OrderDetail orderDetail = orderDetailRepository.findOrderDetailsBySizeIdAndColorIdAndProductIdAndOrderId(updateOrderDetailDTO.getSizeId(), updateOrderDetailDTO.getColorId(), updateOrderDetailDTO.getProductId(), order.getId());
+        OrderDetail orderDetail = orderDetailRepository.findOrderDetailBySizeIdAndColorIdAndProductIdAndOrderId(updateOrderDetailDTO.getSizeId(), updateOrderDetailDTO.getColorId(), updateOrderDetailDTO.getProductId(), order.getId());
 
         if(updateOrderDetailDTO.getAmount() == 0){
             orderDetailRepository.delete(orderDetail);
