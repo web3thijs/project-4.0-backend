@@ -12,9 +12,7 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Page<Customer> findByRole(Role role, Pageable pageable);
-    List<Customer> findByRole(Role role);
     Customer findByRoleAndId(Role role, long id);
+    Customer findCustomerById(long customerId);
     Customer findById(long id);
-
-    Customer findCustomerById(Long customerId);
 }
