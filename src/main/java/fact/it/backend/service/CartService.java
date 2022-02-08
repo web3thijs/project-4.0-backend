@@ -27,7 +27,7 @@ public class CartService {
         List<CartDonationDTO> cartDonationDTOS = new ArrayList<>();
 
         for(OrderDetail orderDetail : order.getOrderDetails()){
-            cartProductDTOS.add(new CartProductDTO(orderDetail.getProduct().getName(), orderDetail.getProduct().getPrice(), orderDetail.getAmount(), orderDetail.getSize().getName(), orderDetail.getProduct().getImageUrl()));
+            cartProductDTOS.add(new CartProductDTO(orderDetail.getProduct().getId(), orderDetail.getProduct().getName(), orderDetail.getProduct().getPrice(), orderDetail.getAmount(), orderDetail.getSize().getName(), orderDetail.getProduct().getImageUrl()));
         }
 
         for(Donation donation : order.getDonations()){
