@@ -16,6 +16,9 @@ public class Order {
 
     private Date date;
     private boolean completed = false;
+    private String country;
+    private String postalCode;
+    private String address;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
@@ -32,13 +35,16 @@ public class Order {
     public Order() {
     }
 
-    public Order(Date date, boolean completed, Customer customer) {
+    public Order(Date date, boolean completed, String country, String postalCode, String address, Customer customer) {
         this.date = date;
         this.completed = completed;
+        this.country = country;
+        this.postalCode = postalCode;
+        this.address = address;
         this.customer = customer;
     }
-    public Order(long id, Date date, boolean completed, Customer customer) {
-        this.id = id;
+
+    public Order(Date date, boolean completed, Customer customer) {
         this.date = date;
         this.completed = completed;
         this.customer = customer;
@@ -74,6 +80,30 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public List<OrderDetail> getOrderDetails() {
