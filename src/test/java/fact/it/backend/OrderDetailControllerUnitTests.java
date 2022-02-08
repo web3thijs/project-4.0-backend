@@ -226,7 +226,7 @@ public class OrderDetailControllerUnitTests {
         Customer customerThijsWouters = new Customer("thijswouters@gmail.com", password, "0479954719", "Hoekstraat 165", "1680", "Belgium", Role.ADMIN, "Thijs" , "Wouters");
         Color colorBruin = new Color(0,"bruin");
         Size sizeSmall = new Size(0,"Small");
-        Order orderThijsWouters = new Order(0,new Date(), true, customerThijsWouters);
+        Order orderThijsWouters = new Order(new Date(), true, customerThijsWouters);
 
         OrderDetail orderDetailPut = new OrderDetail(2, productOrangoetanSleutelhanger, orderThijsWouters,sizeSmall, colorBruin);
 

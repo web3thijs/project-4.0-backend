@@ -178,11 +178,11 @@ public class OrderControllerUnitTests {
     public void givenOrder_whenPutOrder_thenReturnJsonOrder() throws Exception{
         Date date = new Date();
         Customer customerThijsWouters = new Customer(2,"thijswouters@gmail.com", password, "0479954719", "Hoekstraat 165", "1680", "Belgium", Role.ADMIN, "Thijs" , "Wouters");
-        Order orderPut = new Order(0,date, false, customerThijsWouters);
+        Order orderPut = new Order(date, false, customerThijsWouters);
 
         given(orderRepository.findById(orderPut.getId())).willReturn(Optional.of(orderPut));
 
-        Order updatedOrder = new Order(0,date, true, customerThijsWouters);
+        Order updatedOrder = new Order(date, true, customerThijsWouters);
 
         mockMvc.perform(put("/api/orders").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .content(mapper.writeValueAsString(updatedOrder))
