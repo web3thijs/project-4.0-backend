@@ -6,6 +6,7 @@ import java.util.List;
 public class CartProductDTO {
     private Long id;
     private @NotNull Long productId;
+    private @NotNull Long sizeId;
     private @NotNull String productName;
     private @NotNull Double productPrice;
     private @NotNull int amount;
@@ -15,8 +16,9 @@ public class CartProductDTO {
     public CartProductDTO() {
     }
 
-    public CartProductDTO(Long productId, String productName, Double productPrice, int amount, String sizeName, List<String> imgUrl) {
+    public CartProductDTO(Long productId, Long sizeId, String productName, Double productPrice, int amount, String sizeName, List<String> imgUrl) {
         this.productId = productId;
+        this.sizeId = sizeId;
         this.productName = productName;
         this.productPrice = productPrice;
         this.amount = amount;
@@ -30,6 +32,14 @@ public class CartProductDTO {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public Long getSizeId() {
+        return sizeId;
+    }
+
+    public void setSizeId(Long sizeId) {
+        this.sizeId = sizeId;
     }
 
     public String getProductName() {
