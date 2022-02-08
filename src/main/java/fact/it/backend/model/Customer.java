@@ -4,12 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Customer extends User{
+
+    @NotNull
+    @Size(min = 2, max = 50, message = "First name should have at least 2 or a maximum of 30 characters.")
     private String firstName;
+
+    @NotNull
+    @Size(min = 2, max = 50, message = "Last name should have at least 2 or a maximum of 50 characters.")
     private String lastName;
 
     @JsonIgnore
@@ -69,4 +77,5 @@ public class Customer extends User{
     public void setInteractions(List<Interaction> interactions) {
         this.interactions = interactions;
     }
+
 }

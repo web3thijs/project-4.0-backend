@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.Donation;
 import fact.it.backend.model.Order;
 import fact.it.backend.model.Organization;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -44,39 +46,41 @@ public class DonationController {
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long orderId) {
+    public ResponseEntity<?> findDonationsByCustomerId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long orderId) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
-        Order order = orderRepository.findOrderById(orderId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found for this id: " + orderId));
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && order.getCustomer().getId() == user_id)){
             List<Donation> donationsByCustomerIdAndOrderId = donationRepository.findDonationsByOrderId(orderId);
             return ResponseEntity.ok(donationsByCustomerIdAndOrderId);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping("/organization/{organizationId}")
-    public ResponseEntity<?> findDonationsByOrganizationId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long organizationId) {
+    public ResponseEntity<?> findDonationsByOrganizationId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long organizationId) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
-        Organization organization = organizationRepository.findOrganizationById(organizationId);
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Organization not found for this id: " + organizationId));
 
         if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && organization.getId() == user_id)){
             List<Donation> donationsByOrganizationId = donationRepository.findDonationsByOrganizationId(organizationId);
             return ResponseEntity.ok(donationsByOrganizationId);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> addDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation donation) {
+    public ResponseEntity<?> addDonation(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Donation donation) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -86,17 +90,18 @@ public class DonationController {
             donationRepository.save(donation);
             return ResponseEntity.ok(donation);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> updateDonation(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Donation updatedDonation) {
+    public ResponseEntity<?> updateDonation(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Donation updatedDonation) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
-        Donation retrievedDonation = donationRepository.findDonationById(updatedDonation.getId());
+        Donation retrievedDonation = donationRepository.findById(updatedDonation.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot update. Donation not found for this id: " + updatedDonation.getId()));
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedDonation.getOrder().getCustomer().getId() == user_id)){
             retrievedDonation.setOrder(orderRepository.findOrderById(updatedDonation.getOrder().getId()));
@@ -107,26 +112,22 @@ public class DonationController {
 
             return ResponseEntity.ok(retrievedDonation);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDonation(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) {
+    public ResponseEntity deleteDonation(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
-        Donation donation = donationRepository.findDonationById(id);
+        Donation donation = donationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot delete. Donation not found for this id: " + id));
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && donation.getOrder().getCustomer().getId() == user_id)){
-
-            if (donation != null) {
                 donationRepository.delete(donation);
                 return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }

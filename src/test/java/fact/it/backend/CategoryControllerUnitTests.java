@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
@@ -78,7 +79,7 @@ public class CategoryControllerUnitTests {
     public void whenGetCategoryById_thenReturnJsonCategory() throws Exception{
         Category categoryTest = new Category("kleren");
 
-        given(categoryRepository.findCategoryById(categoryTest.getId())).willReturn(categoryTest);
+        given(categoryRepository.findById(categoryTest.getId())).willReturn(Optional.of(categoryTest));
 
         mockMvc.perform(get("/api/categories/{id}", categoryTest.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -114,7 +115,7 @@ public class CategoryControllerUnitTests {
     public void givenCategory_whenPutCategory_thenReturnJsonCategory() throws Exception{
         Category categoryPut = new Category("penen");
 
-        given(categoryRepository.findCategoryById(categoryPut.getId())).willReturn(categoryPut);
+        given(categoryRepository.findById(categoryPut.getId())).willReturn(Optional.of(categoryPut));
 
         Category updatedCategory = new Category(categoryPut.getId(),"pennen");
 
@@ -131,7 +132,7 @@ public class CategoryControllerUnitTests {
     public void whenPutCategoryNotAuthorized_thenReturnForbidden() throws Exception{
         Category categoryPut = new Category("penen");
 
-        given(categoryRepository.findCategoryById(categoryPut.getId())).willReturn(categoryPut);
+        given(categoryRepository.findById(categoryPut.getId())).willReturn(Optional.of(categoryPut));
 
         Category updatedCategory = new Category(categoryPut.getId(),"pennen");
 
@@ -145,7 +146,7 @@ public class CategoryControllerUnitTests {
     public void givenCategory_whenDeleteCategory_thenStatusOk() throws Exception {
         Category categoryToBeDeleted = new Category("kettingen");
 
-        given(categoryRepository.findCategoryById(categoryToBeDeleted.getId())).willReturn(categoryToBeDeleted);
+        given(categoryRepository.findById(categoryToBeDeleted.getId())).willReturn(Optional.of(categoryToBeDeleted));
 
         mockMvc.perform(delete("/api/categories/{id}", categoryToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -154,7 +155,7 @@ public class CategoryControllerUnitTests {
 
     @Test
     public void givenCategory_whenDeleteCategory_thenStatusNotFound() throws Exception {
-        given(categoryRepository.findCategoryById(12345)).willReturn(null);
+        given(categoryRepository.findById(12345L)).willReturn(null);
 
         mockMvc.perform(delete("/api/categories/{id}", 123456789).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -165,7 +166,7 @@ public class CategoryControllerUnitTests {
     @Test
     public void whenDeleteCategoryNotAuthorized_thenReturnForbidden() throws Exception{
         Category categoryToBeDeleted = new Category("kettingen");
-        given(categoryRepository.findCategoryById(categoryToBeDeleted.getId())).willReturn(null);
+        given(categoryRepository.findById(categoryToBeDeleted.getId())).willReturn(null);
 
         mockMvc.perform(delete("/api/categories/{id}", categoryToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .contentType(MediaType.APPLICATION_JSON))

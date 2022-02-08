@@ -2,6 +2,7 @@
 package fact.it.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fact.it.backend.model.Category;
 import fact.it.backend.model.Customer;
 import fact.it.backend.model.Role;
 import fact.it.backend.repository.CustomerRepository;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.mockito.BDDMockito.given;
@@ -121,12 +124,11 @@ public class CustomerControllerUnitTests {
 
     @Test
     public void whenPutCustomerNotAuthorized_thenReturnForbidden() throws Exception{
-        String passwordTest = new BCryptPasswordEncoder().encode("Password123");
-        Customer customerPut = new Customer("jolienfoets@gmail.com", passwordTest, "0479994786", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer customerPut = new Customer("jolienfoets@gmail.com", password, "0479994786", "Kersstraat 17", "2200", "Belgium", Role.CUSTOMER, "Gianni" , "De Herdt");
 
         given(customerRepository.findByRoleAndId(Role.CUSTOMER, 0)).willReturn(customerPut);
 
-        Customer updatedCustomer = new Customer("jolienfoets@gmail.com", passwordTest, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Customer updatedCustomer = new Customer("jolienfoets@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
 
 
         mockMvc.perform(put("/api/customers").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
@@ -150,7 +152,7 @@ public class CustomerControllerUnitTests {
     public void givenCustomer_whenDeleteCustomer_thenStatusNotFound() throws Exception {
         given(customerRepository.findByRoleAndId(Role.CUSTOMER, 12345)).willReturn(null);
 
-        mockMvc.perform(delete("/api/customers/{id}", 12345).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganizationAdmin, password))
+        mockMvc.perform(delete("/api/customers/{id}", 12345789).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganizationAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

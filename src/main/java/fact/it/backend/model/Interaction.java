@@ -1,6 +1,7 @@
 package fact.it.backend.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 @Entity
@@ -9,8 +10,13 @@ public class Interaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
     private int amountClicks;
+
+    @NotNull
     private int amountCart;
+
+    @NotNull
     private int amountBought;
 
     @OneToOne
