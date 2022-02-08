@@ -31,7 +31,7 @@ public class CartService {
         }
 
         for(Donation donation : order.getDonations()){
-            cartDonationDTOS.add(new CartDonationDTO(donation.getOrganization().getOrganizationName(), donation.getAmount()));
+            cartDonationDTOS.add(new CartDonationDTO(donation.getId(), donation.getOrganization().getOrganizationName(), donation.getAmount()));
         }
 
         cartDTO.setCartProductDTOS(cartProductDTOS);

@@ -5,15 +5,25 @@ import java.util.List;
 
 public class CartDonationDTO {
     private Long id;
+    private Long donationId;
     private @NotNull String organizationName;
     private @NotNull double amount;
 
     public CartDonationDTO() {
     }
 
-    public CartDonationDTO(String organizationName, double amount) {
+    public CartDonationDTO(Long donationId, String organizationName, double amount) {
+        this.donationId = donationId;
         this.organizationName = organizationName;
         this.amount = amount;
+    }
+
+    public Long getDonationId() {
+        return donationId;
+    }
+
+    public void setDonationId(Long donationId) {
+        this.donationId = donationId;
     }
 
     public String getOrganizationName() {
