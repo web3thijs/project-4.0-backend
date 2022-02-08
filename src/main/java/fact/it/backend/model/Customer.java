@@ -12,11 +12,11 @@ import java.util.List;
 @Entity
 public class Customer extends User{
 
-    @NotNull
+    @NotNull(message = "First name is required.")
     @Size(min = 2, max = 50, message = "First name should have at least 2 or a maximum of 30 characters.")
     private String firstName;
 
-    @NotNull
+    @NotNull(message = "Last name is required.")
     @Size(min = 2, max = 50, message = "Last name should have at least 2 or a maximum of 50 characters.")
     private String lastName;
 
