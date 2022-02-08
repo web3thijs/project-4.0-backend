@@ -74,9 +74,16 @@ public class OrderService {
         }
 
         Order order = orderRepository.findOrdersByCustomerIdAndCompleted(userId, false);
-        Donation donation = new Donation(updateDonationDTO.getAmount(), order, organizationRepository.findOrganizationById(updateDonationDTO.getOrganizationId()));
-        donationRepository.save(donation);
+        List<Donation> donations = donationRepository.findDonationsByOrderIdAndOrganizationId(order.getId(), updateDonationDTO.getOrganizationId());
 
+        if(donations.size() == 1){
+            Donation donation = donationRepository.findDonationByOrderIdAndOrganizationId(order.getId(), updateDonationDTO.getOrganizationId());
+            donation.setAmount(donation.getAmount() + updateDonationDTO.getAmount());
+            donationRepository.save(donation);
+        } else {
+            Donation donation = new Donation(updateDonationDTO.getAmount(), order, organizationRepository.findOrganizationById(updateDonationDTO.getOrganizationId()));
+            donationRepository.save(donation);
+        }
     }
 
     public void updateDonation(UpdateDonationDTO updateDonationDTO, long userId){
