@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @RequestMapping(path = "api/donations")
-@WithMockUser(username="admin", roles="ADMIN")
+@WithMockUser(username = "admin", roles = "ADMIN")
 public class CartControllerUnitTests {
     @Autowired
     private MockMvc mockMvc;
@@ -52,18 +52,18 @@ public class CartControllerUnitTests {
     private String password;
 
     @Test
-    public void whenGetCart_thenReturnJsonCart() throws Exception{
-        CartDTO cart = new CartDTO();
-
-        given(cartService.getCart(0L)).willReturn(cart);
+    public void whenGetCart_thenReturnJsonCart() throws Exception {
+//        CartDTO cart = new CartDTO();
+//
+//        given(cartService.getCart(0L)).willReturn(cart);
 
         mockMvc.perform(get("/api/cart").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void whenGetCartUnauthorized_thenReturnForbidden() throws Exception{
+    public void whenGetCartUnauthorized_thenReturnForbidden() throws Exception {
         CartDTO cart = new CartDTO();
 
         given(cartService.getCart(0L)).willReturn(cart);
@@ -74,8 +74,8 @@ public class CartControllerUnitTests {
     }
 
     @Test
-    public void whenAddProduct_thenReturnOk() throws Exception{
-        Map<String,Object> input=new HashMap<>();
+    public void whenAddProduct_thenReturnOk() throws Exception {
+        Map<String, Object> input = new HashMap<>();
         input.put("productId", 1);
         input.put("sizeId", 1);
         input.put("colorId", 1);
@@ -87,8 +87,8 @@ public class CartControllerUnitTests {
     }
 
     @Test
-    public void whenAddProductUnauthorized_thenReturnForbidden() throws Exception{
-        Map<String,Object> input=new HashMap<>();
+    public void whenAddProductUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String, Object> input = new HashMap<>();
         input.put("productId", 1);
         input.put("sizeId", 1);
         input.put("colorId", 1);
@@ -100,8 +100,8 @@ public class CartControllerUnitTests {
     }
 
     @Test
-    public void whenUpdateProduct_thenReturnOk() throws Exception{
-        Map<String,Object> input=new HashMap<>();
+    public void whenUpdateProduct_thenReturnOk() throws Exception {
+        Map<String, Object> input = new HashMap<>();
         input.put("productId", 1);
         input.put("sizeId", 1);
         input.put("colorId", 1);
@@ -113,8 +113,8 @@ public class CartControllerUnitTests {
     }
 
     @Test
-    public void whenUpdateProductUnauthorized_thenReturnForbidden() throws Exception{
-        Map<String,Object> input=new HashMap<>();
+    public void whenUpdateProductUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String, Object> input = new HashMap<>();
         input.put("productId", 1);
         input.put("sizeId", 1);
         input.put("colorId", 1);
@@ -126,8 +126,8 @@ public class CartControllerUnitTests {
     }
 
     @Test
-    public void whenAddDonation_thenReturnOk() throws Exception{
-        Map<String,Object> input=new HashMap<>();
+    public void whenAddDonation_thenReturnOk() throws Exception {
+        Map<String, Object> input = new HashMap<>();
         input.put("organizationId", 1);
         input.put("amount", 10);
         mockMvc.perform(post("/api/cart/addDonation").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
@@ -137,8 +137,8 @@ public class CartControllerUnitTests {
     }
 
     @Test
-    public void whenAddDonationUnauthorized_thenReturnForbidden() throws Exception{
-        Map<String,Object> input=new HashMap<>();
+    public void whenAddDonationUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String, Object> input = new HashMap<>();
         input.put("organizationId", 1);
         input.put("amount", 10);
         mockMvc.perform(post("/api/cart/addDonation").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
@@ -160,8 +160,8 @@ public class CartControllerUnitTests {
     }*/
 
     @Test
-    public void whenUpdateDonationUnauthorized_thenReturnForbidden() throws Exception{
-        Map<String,Object> input=new HashMap<>();
+    public void whenUpdateDonationUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String, Object> input = new HashMap<>();
         input.put("organizationId", 1);
         input.put("amount", 15);
         mockMvc.perform(post("/api/cart/updateDonation").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))

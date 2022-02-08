@@ -274,7 +274,7 @@ public class InteractionControllerUnitTests {
         mockMvc.perform(post("/api/interactions/addClick").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .content(mapper.writeValueAsString(input))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -296,7 +296,7 @@ public class InteractionControllerUnitTests {
         mockMvc.perform(post("/api/interactions/addBuy").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .content(mapper.writeValueAsString(input))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -318,7 +318,7 @@ public class InteractionControllerUnitTests {
         mockMvc.perform(post("/api/interactions/addCart").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .content(mapper.writeValueAsString(input))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
     }
     @Test
     public void whenAddCartInteractionUnauthorized_thenReturnForbidden() throws Exception {
