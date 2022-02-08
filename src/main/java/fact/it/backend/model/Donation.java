@@ -15,7 +15,7 @@ public class Donation {
 
     @NotNull
     @Min(value = 0, message = "Amount cannot be below 0.")
-    @Max(value = 9999, message = "Amount cannot be more than 75.")
+    @Max(value = 9999, message = "Amount cannot be more than 9999.")
     private double amount;
 
     @ManyToOne(cascade = CascadeType.MERGE)
