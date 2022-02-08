@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -166,7 +167,9 @@ public class InteractionController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
             interactionService.addClick(addToInteractionDTO);
-            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
@@ -181,7 +184,9 @@ public class InteractionController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
             interactionService.addBuy(addToInteractionDTO);
-            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
@@ -196,7 +201,9 @@ public class InteractionController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
             interactionService.addCart(addToInteractionDTO);
-            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
