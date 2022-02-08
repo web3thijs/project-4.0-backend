@@ -15,7 +15,7 @@ public class Color {
     private long id;
 
     @Column(unique= true)
-    @NotNull
+    @NotNull(message = "Name is required.")
     @Size(min = 3, max = 30, message = "Name should have at least 3 or a maximum of 30 characters.")
     private String name;
 

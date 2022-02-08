@@ -16,7 +16,7 @@ public class Category {
     private long id;
 
     @Column(unique= true)
-    @NotNull
+    @NotNull(message = "Name is required.")
     @Size(min = 3, max = 50, message = "Name should have at least 3 or a maximum of 50 characters.")
     private String name;
 

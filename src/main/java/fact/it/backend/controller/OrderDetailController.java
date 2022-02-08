@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.*;
 import fact.it.backend.util.JwtUtils;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +59,7 @@ public class OrderDetailController {
                     return ResponseEntity.ok(orderDetails);
                 }
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
@@ -78,12 +80,12 @@ public class OrderDetailController {
             }
             return ResponseEntity.ok(correctOrderDetails);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> findOrderDetailByOrderId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long orderId){
+    public ResponseEntity<?> findOrderDetailByOrderId(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long orderId) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -91,14 +93,18 @@ public class OrderDetailController {
         List<OrderDetail> retrievedOrderDetails = orderDetailRepository.findOrderDetailsByOrderId(orderId);
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrderDetails.get(0) != null && retrievedOrderDetails.get(0).getOrder().getCustomer().getId() == user_id)){
-            return ResponseEntity.ok(retrievedOrderDetails);
+            if(retrievedOrderDetails.size() != 0){
+                return ResponseEntity.ok(retrievedOrderDetails);
+            } else{
+                throw new ResourceNotFoundException("No orderdetails found for order with id: " + orderId);
+            }
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> addOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody OrderDetail orderDetail){
+    public ResponseEntity<?> addOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody OrderDetail orderDetail){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -108,51 +114,50 @@ public class OrderDetailController {
             orderDetailRepository.save(orderDetail);
             return ResponseEntity.ok(orderDetail);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> updateOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody OrderDetail updatedOrderDetail){
+    public ResponseEntity<?> updateOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody OrderDetail updatedOrderDetail) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
-        OrderDetail retrievedOrderDetail = orderDetailRepository.findOrderDetailById(updatedOrderDetail.getId());
+        OrderDetail retrievedOrderDetail = orderDetailRepository.findById(updatedOrderDetail.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot update. Orderdetail not found for this id: " + updatedOrderDetail.getId()));
+
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER") && retrievedOrderDetail.getOrder().getCustomer().getId() == user_id)){
-            retrievedOrderDetail.setProduct(productRepository.getById(updatedOrderDetail.getProduct().getId()));
-            retrievedOrderDetail.setOrder(orderRepository.getById(updatedOrderDetail.getOrder().getId()));
-            retrievedOrderDetail.setSize(sizeRepository.getById(updatedOrderDetail.getSize().getId()));
-            retrievedOrderDetail.setColor(colorRepository.getById(updatedOrderDetail.getColor().getId()));
+            retrievedOrderDetail.setProduct(productRepository.findProductById(updatedOrderDetail.getProduct().getId()));
+            retrievedOrderDetail.setOrder(orderRepository.findOrderById(updatedOrderDetail.getOrder().getId()));
+            retrievedOrderDetail.setSize(sizeRepository.findSizeById(updatedOrderDetail.getSize().getId()));
+            retrievedOrderDetail.setColor(colorRepository.findColorById(updatedOrderDetail.getColor().getId()));
             retrievedOrderDetail.setAmount(updatedOrderDetail.getAmount());
 
             orderDetailRepository.save(retrievedOrderDetail);
 
             return ResponseEntity.ok(retrievedOrderDetail);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity deleteOrderDetail(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
         if(role.contains("ADMIN")){
-            OrderDetail orderDetail = orderDetailRepository.findOrderDetailById(id);
+            OrderDetail orderDetail = orderDetailRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot delete. Orderdetail not found for this id: " + id));
 
-            if(orderDetail != null){
                 orderDetailRepository.delete(orderDetail);
                 return ResponseEntity.ok().build();
-            } else{
-                return ResponseEntity.notFound().build();
-            }
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 

@@ -1,8 +1,10 @@
 package fact.it.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +16,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "A date is required.")
     private Date date;
+
+    @NotNull(message = "Completed must be true or false.")
     private boolean completed = false;
     private String country;
     private String postalCode;

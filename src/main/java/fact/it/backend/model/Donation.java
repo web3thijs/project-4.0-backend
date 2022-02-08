@@ -13,7 +13,7 @@ public class Donation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "Amount is required.")
     @Min(value = 0, message = "Amount cannot be below 0.")
     @Max(value = 9999, message = "Amount cannot be more than 9999.")
     private double amount;
