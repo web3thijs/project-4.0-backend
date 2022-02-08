@@ -180,13 +180,13 @@ public class BackendApplication {
         }
 
         if(orderDetailRepository.findAll().size() == 0){
-            orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(1), orderRepository.findOrderById(1), sizeRepository.findSizeById(7), colorRepository.findColorById(4)));
-            orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(1), sizeRepository.findSizeById(8), colorRepository.findColorById(4)));
-            orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(2), orderRepository.findOrderById(2), sizeRepository.findSizeById(5), colorRepository.findColorById(9)));
-            orderDetailRepository.save(new OrderDetail(4, productRepository.findProductById(2), orderRepository.findOrderById(3), sizeRepository.findSizeById(5), colorRepository.findColorById(9)));
-            orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(4), sizeRepository.findSizeById(6), colorRepository.findColorById(7)));
-            orderDetailRepository.save(new OrderDetail(5, productRepository.findProductById(4), orderRepository.findOrderById(5), sizeRepository.findSizeById(7), colorRepository.findColorById(2)));
-            orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(6), orderRepository.findOrderById(5), sizeRepository.findSizeById(5), colorRepository.findColorById(2)));
+            orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(1), orderRepository.findOrderById(1), sizeRepository.findSizeById(7), colorRepository.findColorById(7)));
+            orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(1), sizeRepository.findSizeById(8), colorRepository.findColorById(8)));
+            orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(2), orderRepository.findOrderById(2), sizeRepository.findSizeById(5), colorRepository.findColorById(5)));
+            orderDetailRepository.save(new OrderDetail(4, productRepository.findProductById(2), orderRepository.findOrderById(3), sizeRepository.findSizeById(5), colorRepository.findColorById(5)));
+            orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(3), orderRepository.findOrderById(4), sizeRepository.findSizeById(6), colorRepository.findColorById(6)));
+            orderDetailRepository.save(new OrderDetail(5, productRepository.findProductById(4), orderRepository.findOrderById(5), sizeRepository.findSizeById(7), colorRepository.findColorById(7)));
+            orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(6), orderRepository.findOrderById(5), sizeRepository.findSizeById(5), colorRepository.findColorById(5)));
             orderDetailRepository.save(new OrderDetail(1, productRepository.findProductById(5), orderRepository.findOrderById(4), sizeRepository.findSizeById(8), colorRepository.findColorById(8)));
             orderDetailRepository.save(new OrderDetail(2, productRepository.findProductById(5), orderRepository.findOrderById(1), sizeRepository.findSizeById(8), colorRepository.findColorById(8)));
         }
