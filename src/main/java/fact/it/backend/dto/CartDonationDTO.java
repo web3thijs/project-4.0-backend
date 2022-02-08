@@ -7,14 +7,16 @@ public class CartDonationDTO {
     private Long id;
     private Long organizationId;
     private @NotNull String organizationName;
+    private @NotNull String organizationImg;
     private @NotNull double amount;
 
     public CartDonationDTO() {
     }
 
-    public CartDonationDTO(Long organizationId, String organizationName, double amount) {
+    public CartDonationDTO(Long organizationId, String organizationName, String organizationImg, double amount) {
         this.organizationId = organizationId;
         this.organizationName = organizationName;
+        this.organizationImg = organizationImg;
         this.amount = amount;
     }
 
@@ -32,6 +34,14 @@ public class CartDonationDTO {
 
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+    }
+
+    public String getOrganizationImg() {
+        return organizationImg;
+    }
+
+    public void setOrganizationImg(String organizationImg) {
+        this.organizationImg = organizationImg;
     }
 
     public double getAmount() {

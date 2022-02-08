@@ -101,7 +101,9 @@ public class CartController {
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
             orderService.updateDonation(updateDonationDTO, user_id);
-            return new ResponseEntity<String>("Added", HttpStatus.CREATED);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
