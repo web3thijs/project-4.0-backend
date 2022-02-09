@@ -1,18 +1,17 @@
 package fact.it.backend.dto;
 
-import fact.it.backend.model.OrderDetail;
-import fact.it.backend.model.Product;
-
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class CartDTO {
-    private Long id;
+public class OrderConfirmationDTO {
+    private Long Id;
     private @NotNull List<CartProductDTO> cartProductDTOS;
     private @NotNull List<CartDonationDTO> cartDonationDTOS;
-    private @NotNull double total;
+    private @NotNull String country;
+    private @NotNull String postal;
+    private @NotNull String address;
 
-    public CartDTO() {
+    public OrderConfirmationDTO() {
     }
 
     public List<CartProductDTO> getCartProductDTOS() {
@@ -31,12 +30,27 @@ public class CartDTO {
         this.cartDonationDTOS = cartDonationDTOS;
     }
 
-    public double getTotal() {
-        return total;
+    public String getCountry() {
+        return country;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPostal() {
+        return postal;
+    }
+
+    public void setPostal(String postal) {
+        this.postal = postal;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
-

@@ -26,16 +26,22 @@ public class CartService {
         List<CartProductDTO> cartProductDTOS = new ArrayList<>();
         List<CartDonationDTO> cartDonationDTOS = new ArrayList<>();
 
+        Double totalOrderDetails = 0.00;
+        Double totalDonations = 0.00;
+
         for(OrderDetail orderDetail : order.getOrderDetails()){
             cartProductDTOS.add(new CartProductDTO(orderDetail.getProduct().getId(), orderDetail.getSize().getId(), orderDetail.getProduct().getName(), orderDetail.getProduct().getPrice(), orderDetail.getAmount(), orderDetail.getSize().getName(), orderDetail.getProduct().getImageUrl()));
+            totalOrderDetails = totalOrderDetails + orderDetail.getProduct().getPrice();
         }
 
         for(Donation donation : order.getDonations()){
             cartDonationDTOS.add(new CartDonationDTO(donation.getOrganization().getId(), donation.getOrganization().getOrganizationName(), donation.getOrganization().getImageUrl(), donation.getAmount()));
+            totalDonations = totalDonations + donation.getAmount();
         }
 
         cartDTO.setCartProductDTOS(cartProductDTOS);
         cartDTO.setCartDonationDTOS(cartDonationDTOS);
+        cartDTO.setTotal(totalDonations + totalOrderDetails);
         return cartDTO;
     }
 }
