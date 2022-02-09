@@ -31,7 +31,7 @@ public class CartService {
 
         for(OrderDetail orderDetail : order.getOrderDetails()){
             cartProductDTOS.add(new CartProductDTO(orderDetail.getProduct().getId(), orderDetail.getSize().getId(), orderDetail.getProduct().getName(), orderDetail.getProduct().getPrice(), orderDetail.getAmount(), orderDetail.getSize().getName(), orderDetail.getProduct().getImageUrl()));
-            totalOrderDetails = totalOrderDetails + orderDetail.getProduct().getPrice();
+            totalOrderDetails = totalOrderDetails + ( orderDetail.getProduct().getPrice() * orderDetail.getAmount());
         }
 
         for(Donation donation : order.getDonations()){
