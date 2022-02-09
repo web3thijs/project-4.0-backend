@@ -42,7 +42,7 @@ public class OrderDetailController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @GetMapping
+/*    @GetMapping
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String tokenWithPrefix, @RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "order.date") String sort, @RequestParam(required = false) String order){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
@@ -61,7 +61,7 @@ public class OrderDetailController {
         } else {
             return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
-    }
+    }*/
 
     @GetMapping("/organization")
     public ResponseEntity<?> findOrderDetailByOrganizationId(@RequestHeader("Authorization") String tokenWithPrefix){

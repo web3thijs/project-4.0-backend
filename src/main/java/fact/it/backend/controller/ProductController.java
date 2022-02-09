@@ -1,10 +1,12 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.CategoryRepository;
 import fact.it.backend.repository.OrganizationRepository;
 import fact.it.backend.repository.ProductRepository;
 import fact.it.backend.util.JwtUtils;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,8 +54,10 @@ public class ProductController {
             }
         }
     @GetMapping("/organization/{organizationId}")
-    public Page<Product> findProductsByOrganizationId(@PathVariable long organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
-            if(order != null && order.equals("desc")){
+    public Page<Product> findProductsByOrganizationId(@PathVariable long organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order) throws ResourceNotFoundException {
+        organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find products. Organization not found for this id: " + organizationId));
+        if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSortDesc);
                 return products;
@@ -60,18 +65,19 @@ public class ProductController {
             else{
                 Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSort);
-                return products;
+                    return products;
             }
         }
 
     @GetMapping("/{id}")
-    public Product find(@PathVariable long id){
-
-        return productRepository.findProductById(id);
+    public ResponseEntity<?> find(@PathVariable long id) throws ResourceNotFoundException {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found for this id: " + id));
+        return ResponseEntity.ok().body(product);
     }
 
     @PostMapping
-    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Product product){
+    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Product product){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -81,19 +87,20 @@ public class ProductController {
             productRepository.save(product);
             return ResponseEntity.ok(product);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Product updatedProduct){
+    public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Product updatedProduct) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedProduct.getOrganization().getId() == user_id)){
-            Product retrievedProduct = productRepository.findProductById(updatedProduct.getId());
+            Product retrievedProduct = productRepository.findById(updatedProduct.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot update. Product not found for this id: " + updatedProduct.getId()));
 
             retrievedProduct.setCategory(categoryRepository.findCategoryById(updatedProduct.getCategory().getId()));
             retrievedProduct.setOrganization(organizationRepository.findOrganizationById(updatedProduct.getOrganization().getId()));
@@ -106,27 +113,25 @@ public class ProductController {
             productRepository.save(retrievedProduct);
             return ResponseEntity.ok(retrievedProduct);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProduct(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity deleteProduct(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
         if(role.contains("ADMIN")){
-            Product product = productRepository.findProductById(id);
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot update. category not found for this id: " + id));
 
-            if(product != null){
                 productRepository.delete(product);
                 return ResponseEntity.ok().build();
-            } else{
-                return ResponseEntity.notFound().build();
-            }
+
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 }

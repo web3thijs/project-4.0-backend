@@ -3,6 +3,10 @@ package fact.it.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,11 +17,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull(message = "Name is required.")
+    @Size(min = 3, max = 50, message = "Name should have at least 3 or a maximum of 50 characters.")
     private String name;
+
+    @Size(max = 255, message = "Description can have a maximum of 255 characters.")
     private String description;
+
+    @NotNull(message = "Price is required.")
+    @Min(value = 0, message = "Price cannot be below 0.")
+    @Max(value = 9999, message = "Price cannot be above 9999.")
     private double price;
+
+    @NotNull(message = "isActive is required.")
     private boolean isActive;
 
+    @NotNull(message = "At least one product image is required.")
     @ElementCollection
     private List<String> imageUrl;
 

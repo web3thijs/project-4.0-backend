@@ -39,7 +39,7 @@ public class Organization extends User{
     private String help;
 
     @NotNull(message = "Phone number for support is required.")
-    @Pattern(regexp = "(^\\+[0-9]{2}|^\\+[0-9]{2}\\(0\\)|^\\(\\+[0-9]{2}\\)\\(0\\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\\-\\s]{9}$)", message = "Phone number for support is not valid.")
+    @Pattern(regexp = "(^[0-9+]{2}(\\+?\\-? *[0-9 \\/]{6,17})$)", message = "Phone number for support is not valid.")
     private String supportPhoneNr;
 
     @NotNull(message = "Support email is required.")
