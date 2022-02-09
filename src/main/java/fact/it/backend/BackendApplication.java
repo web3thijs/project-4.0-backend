@@ -130,7 +130,6 @@ public class BackendApplication {
             sizeRepository.save(new Size("15 cm"));
             sizeRepository.save(new Size("0,5 liter"));
             sizeRepository.save(new Size("100 gram"));
-            sizeRepository.save(new Size("100 gram"));
         }
 
         if(productRepository.findAll().size() == 0){

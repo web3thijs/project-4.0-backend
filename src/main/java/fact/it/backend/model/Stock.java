@@ -1,6 +1,8 @@
 package fact.it.backend.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Min(value = 0, message = "Stock cannot be less than 0.")
+    @Max(value = 99999, message = "Stock cannot be larger than 99999.")
     private int amountInStock;
 
     @ManyToOne(cascade = CascadeType.MERGE)
