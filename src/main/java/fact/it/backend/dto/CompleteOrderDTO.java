@@ -5,9 +5,9 @@ import java.util.List;
 
 public class CompleteOrderDTO {
     private Long id;
-    private String country;
-    private String postal;
-    private String address;
+    private @NotNull String country;
+    private @NotNull String postal;
+    private @NotNull String address;
 
     public CompleteOrderDTO() {
     }

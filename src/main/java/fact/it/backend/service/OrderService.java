@@ -1,8 +1,6 @@
 package fact.it.backend.service;
 
-import fact.it.backend.dto.CompleteOrderDTO;
-import fact.it.backend.dto.UpdateDonationDTO;
-import fact.it.backend.dto.UpdateOrderDetailDTO;
+import fact.it.backend.dto.*;
 import fact.it.backend.model.Donation;
 import fact.it.backend.model.Order;
 import fact.it.backend.model.OrderDetail;
@@ -105,11 +103,37 @@ public class OrderService {
         order.setCountry(completeOrderDTO.getCountry());
         order.setAddress(completeOrderDTO.getAddress());
         order.setPostalCode(completeOrderDTO.getPostal());
-        order.setCompleted(true);
 
         orderRepository.save(order);
+    }
 
-        Order newOrder = new Order(new Date(), false, customerRepository.findById(userId));
+    public OrderConfirmationDTO getOrderConfirmation(Long userId){
+        Order order = orderRepository.findOrdersByCustomerIdAndCompleted(userId, false);
+        OrderConfirmationDTO orderConfirmationDTO = new OrderConfirmationDTO();
+        List<CartProductDTO> cartProductDTOS = new ArrayList<>();
+        List<CartDonationDTO> cartDonationDTOS = new ArrayList<>();
+
+
+        for(OrderDetail orderDetail : order.getOrderDetails()){
+            cartProductDTOS.add(new CartProductDTO(orderDetail.getProduct().getId(), orderDetail.getSize().getId(), orderDetail.getProduct().getName(), orderDetail.getProduct().getPrice(), orderDetail.getAmount(), orderDetail.getSize().getName(), orderDetail.getProduct().getImageUrl()));
+        }
+
+        for(Donation donation : order.getDonations()){
+            cartDonationDTOS.add(new CartDonationDTO(donation.getOrganization().getId(), donation.getOrganization().getOrganizationName(), donation.getOrganization().getImageUrl(), donation.getAmount()));
+        }
+
+        orderConfirmationDTO.setCartProductDTOS(cartProductDTOS);
+        orderConfirmationDTO.setCartDonationDTOS(cartDonationDTOS);
+        orderConfirmationDTO.setAddress(order.getAddress());
+        orderConfirmationDTO.setCountry(order.getCountry());
+        orderConfirmationDTO.setPostal(order.getPostalCode());
+
+        order.setCompleted(true);
+        orderRepository.save(order);
+
+        Order newOrder = new Order(new Date(), false, customerRepository.findCustomerById(userId));
         orderRepository.save(newOrder);
+
+        return orderConfirmationDTO;
     }
 }

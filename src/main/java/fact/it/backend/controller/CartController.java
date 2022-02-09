@@ -126,4 +126,18 @@ public class CartController {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
+
+    @GetMapping("/completed")
+    public ResponseEntity<?> getConfirmation(@RequestHeader("authorization") String tokenWithPrefix){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            return ResponseEntity.ok(orderService.getOrderConfirmation(user_id));
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
 }
