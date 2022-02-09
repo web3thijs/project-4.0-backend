@@ -27,14 +27,13 @@ public class CategoryController {
     private JwtUtils jwtUtils;
 
     @GetMapping
-    public List<Category> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order){
-            if(order != null && order.equals("desc")){
-                return categoryRepository.findAll(Sort.by(sort).descending());
-            }
-            else{
-                return categoryRepository.findAll(Sort.by(sort));
-            }
+    public List<Category> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
+        if (order != null && order.equals("desc")) {
+            return categoryRepository.findAll(Sort.by(sort).descending());
+        } else {
+            return categoryRepository.findAll(Sort.by(sort));
         }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable long id) throws ResourceNotFoundException {
@@ -44,12 +43,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCategory(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Category category){
+    public ResponseEntity<?> addCategory(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Category category) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
-        if(role.contains("ADMIN")){
+        if (role.contains("ADMIN")) {
             categoryRepository.save(category);
             return ResponseEntity.ok(category);
         } else {
@@ -58,12 +57,12 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateCategory(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Category updatedCategory) throws ResourceNotFoundException{
+    public ResponseEntity<?> updateCategory(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Category updatedCategory) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
-        if(role.contains("ADMIN")){
+        if (role.contains("ADMIN")) {
             Category retrievedCategory = categoryRepository.findById(updatedCategory.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Cannot update. category not found for this id: " + updatedCategory.getId()));
 
@@ -83,12 +82,12 @@ public class CategoryController {
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
-        if(role.contains("ADMIN")){
+        if (role.contains("ADMIN")) {
             Category category = categoryRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Cannot delete. Category not found for this id: " + id));
 
-                categoryRepository.delete(category);
-                return ResponseEntity.ok().build();
+            categoryRepository.delete(category);
+            return ResponseEntity.ok().build();
         } else {
             return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }

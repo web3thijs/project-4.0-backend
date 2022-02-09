@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.Category;
 import fact.it.backend.model.OrderDetail;
 import fact.it.backend.model.Product;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -30,50 +32,52 @@ public class SizeController {
     private JwtUtils jwtUtils;
 
     @GetMapping
-    public Page<Size> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name")String sort, @RequestParam(required = false)String order) {
-            if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                Page<Size> sizes = sizeRepository.findAll(requestedPageWithSortDesc);
-                return sizes;            }
-            else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                Page<Size> sizes = sizeRepository.findAll(requestedPageWithSort);
-                return sizes;            }
+    public Page<Size> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
+        if (order != null && order.equals("desc")) {
+            Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
+            Page<Size> sizes = sizeRepository.findAll(requestedPageWithSortDesc);
+            return sizes;
+        } else {
+            Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
+            Page<Size> sizes = sizeRepository.findAll(requestedPageWithSort);
+            return sizes;
         }
+    }
 
     @GetMapping("/{id}")
-    public Size findById(@PathVariable long id) {return sizeRepository.findSizeById(id);}
+    public ResponseEntity<?> findById(@PathVariable long id) throws ResourceNotFoundException {
+        Size size = sizeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Size not found for this id: " + id));
+        return ResponseEntity.ok().body(size);
+    }
 
     @PostMapping
-    public ResponseEntity<?> addSize(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Size size){
+    public ResponseEntity<?> addSize(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Size size) {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN")){
+        if (role.contains("ADMIN")) {
             sizeRepository.save(size);
             return ResponseEntity.ok(size);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSize(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity deleteSize(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
-        if(role.contains("ADMIN")){
-            Size size = sizeRepository.findSizeById(id);
+        if (role.contains("ADMIN")) {
+            Size size = sizeRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Size not found for this id: " + id));
 
-            if(size != null){
-                sizeRepository.delete(size);
-                return ResponseEntity.ok().build();
-            } else{
-                return ResponseEntity.notFound().build();
-            }
+            sizeRepository.delete(size);
+            return ResponseEntity.ok().build();
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
