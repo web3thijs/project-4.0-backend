@@ -1,5 +1,6 @@
 package fact.it.backend.service;
 
+import fact.it.backend.dto.CompleteOrderDTO;
 import fact.it.backend.dto.UpdateDonationDTO;
 import fact.it.backend.dto.UpdateOrderDetailDTO;
 import fact.it.backend.model.Donation;
@@ -96,5 +97,19 @@ public class OrderService {
             donation.setAmount(updateDonationDTO.getAmount());
             donationRepository.save(donation);
         }
+    }
+
+    public void completeOrder(CompleteOrderDTO completeOrderDTO, long userId){
+        Order order = orderRepository.findOrdersByCustomerIdAndCompleted(userId, false);
+
+        order.setCountry(completeOrderDTO.getCountry());
+        order.setAddress(completeOrderDTO.getAddress());
+        order.setPostalCode(completeOrderDTO.getPostal());
+        order.setCompleted(true);
+
+        orderRepository.save(order);
+
+        Order newOrder = new Order(new Date(), false, customerRepository.findById(userId));
+        orderRepository.save(newOrder);
     }
 }

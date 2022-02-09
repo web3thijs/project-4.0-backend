@@ -10,6 +10,7 @@ public class CartDTO {
     private Long id;
     private @NotNull List<CartProductDTO> cartProductDTOS;
     private @NotNull List<CartDonationDTO> cartDonationDTOS;
+    private @NotNull double total;
 
     public CartDTO() {
     }
@@ -28,6 +29,14 @@ public class CartDTO {
 
     public void setCartDonationDTOS(List<CartDonationDTO> cartDonationDTOS) {
         this.cartDonationDTOS = cartDonationDTOS;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 }
 

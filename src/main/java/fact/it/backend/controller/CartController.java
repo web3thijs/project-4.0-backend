@@ -108,4 +108,21 @@ public class CartController {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
+
+    @PostMapping("/completeOrder")
+    public ResponseEntity completeOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateOrderDetailDTO updateOrderDetailDTO){
+        String token = tokenWithPrefix.substring(7);
+        Map<String, Object> claims = jwtUtils.extractAllClaims(token);
+        String role = claims.get("role").toString();
+        long user_id = Long.parseLong(claims.get("user_id").toString());
+
+        if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
+            orderService.addProductToOrder(updateOrderDetailDTO, user_id);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("status", "Added");
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+        }
+    }
 }
