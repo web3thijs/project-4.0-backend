@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.ColorRepository;
 import fact.it.backend.repository.ProductRepository;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -53,12 +55,18 @@ public class StockController {
         }
 
     @GetMapping("/product/{productId}")
-    public List<Stock> findStocksByProductId(@PathVariable long productId){
-        return stockRepository.findStocksByProductId(productId);
+    public ResponseEntity<?> findStocksByProductId(@PathVariable long productId) throws ResourceNotFoundException {
+        List<Stock> stocks = stockRepository.findStocksByProductId(productId);
+
+        if(stocks.size() != 0){
+            return ResponseEntity.ok(stocks);
+        }else{
+            throw new ResourceNotFoundException("No stocks found for product with id: " + productId);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<?> addStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock stock){
+    public ResponseEntity<?> addStock(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Stock stock){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -68,19 +76,20 @@ public class StockController {
             stockRepository.save(stock);
             return ResponseEntity.ok(stock);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> updateStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock updatedStock){
+    public ResponseEntity<?> updateStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock updatedStock) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedStock.getProduct().getOrganization().getId() == user_id)){
-            Stock retrievedStock = stockRepository.findStockById(updatedStock.getId());
+            Stock retrievedStock = stockRepository.findById(updatedStock.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot update. Stock not found for this id: " + updatedStock.getId()));
 
             retrievedStock.setSize(sizeRepository.findSizeById(updatedStock.getSize().getId()));
             retrievedStock.setColor(colorRepository.findColorById(updatedStock.getColor().getId()));
@@ -91,28 +100,25 @@ public class StockController {
 
             return ResponseEntity.ok(retrievedStock);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteStock(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity deleteStock(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && stockRepository.findStockById(id).getProduct().getOrganization().getId() == user_id)){
-            Stock stock = stockRepository.findStockById(id);
+            Stock stock = stockRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot delete. Stock not found for this id: " + id));
 
-            if(stock != null){
                 stockRepository.delete(stock);
                 return ResponseEntity.ok().build();
-            }else{
-                return ResponseEntity.notFound().build();
-            }
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 }

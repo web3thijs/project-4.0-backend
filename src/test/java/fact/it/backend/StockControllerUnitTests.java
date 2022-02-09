@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -143,7 +144,7 @@ public class StockControllerUnitTests {
         Size sizeMedium = new Size(0, "Medium");
         Stock stockPut = new Stock(0,50, sizeMedium, colorBruin, productOrangOetan);
 
-        given(stockRepository.findStockById(0)).willReturn(stockPut);
+        given(stockRepository.findById(stockPut.getId())).willReturn(Optional.of(stockPut));
 
         Stock updatedStock = new Stock( 0,49, sizeMedium, colorBruin, productOrangOetan);
 
@@ -182,7 +183,7 @@ public class StockControllerUnitTests {
         Size sizeMedium = new Size( "Medium");
         Stock stockToBeDeleted = new Stock(50, sizeMedium, colorBruin, productOrangOetan);
 
-        given(stockRepository.findStockById(0)).willReturn(stockToBeDeleted);
+        given(stockRepository.findById(0L)).willReturn(Optional.of(stockToBeDeleted));
 
         mockMvc.perform(delete("/api/stocks/{id}", 0).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .contentType(MediaType.APPLICATION_JSON))
