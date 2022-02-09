@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -84,7 +85,7 @@ public class ReviewControllerUnitTests {
         Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
         Review reviewTest = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
 
-        given(reviewRepository.findReviewById(reviewTest.getId())).willReturn(reviewTest);
+        given(reviewRepository.findById(reviewTest.getId())).willReturn(Optional.of(reviewTest));
 
         mockMvc.perform(get("/api/reviews/{id}", reviewTest.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -130,7 +131,7 @@ public class ReviewControllerUnitTests {
         Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
         Review reviewPut = new Review( 5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
 
-        given(reviewRepository.findReviewById(reviewPut.getId())).willReturn(reviewPut);
+        given(reviewRepository.findById(reviewPut.getId())).willReturn(Optional.of(reviewPut));
 
         Review updatedReview = new Review( 4.5, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
 
@@ -138,7 +139,6 @@ public class ReviewControllerUnitTests {
                         .content(mapper.writeValueAsString(updatedReview))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(0)))
                 .andExpect(jsonPath("$.score", is(4.5)))
@@ -167,7 +167,7 @@ public class ReviewControllerUnitTests {
         Customer customerGianniDeHerdt = new Customer("giannideherdt@gmail.com", password, "0479994529", "Belgium", "2200", "Kersstraat 17", Role.ADMIN, "Gianni" , "De Herdt");
         Review reviewToBeDeleted = new Review( 4, "Zeer leuke sleutelhanger", "Hangt heel mooi aan mijn sleutelbundel. Lief en zacht!", customerGianniDeHerdt);
 
-        given(reviewRepository.findReviewById(reviewToBeDeleted.getId())).willReturn(reviewToBeDeleted);
+        given(reviewRepository.findById(reviewToBeDeleted.getId())).willReturn(Optional.of(reviewToBeDeleted));
 
         mockMvc.perform(delete("/api/reviews/{id}", reviewToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                         .contentType(MediaType.APPLICATION_JSON))

@@ -18,7 +18,7 @@ public class Product {
     private long id;
 
     @NotNull(message = "Name is required.")
-    @Size(min = 3, max = 50, message = "Name should have at least 3 or a maximum of 70 characters.")
+    @Size(min = 3, max = 50, message = "Name should have at least 3 or a maximum of 50 characters.")
     private String name;
 
     @Size(max = 255, message = "Description can have a maximum of 255 characters.")
