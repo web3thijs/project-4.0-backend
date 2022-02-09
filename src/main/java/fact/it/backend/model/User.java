@@ -17,6 +17,7 @@ public class User {
     private Long id;
 
     @Column(unique = true)
+    @NotNull(message = "Email is required.")
     @Email(message = "Email is invalid.")
     private String email;
 
