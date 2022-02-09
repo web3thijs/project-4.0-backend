@@ -81,7 +81,7 @@ public class StockController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateStock(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Stock updatedStock) throws ResourceNotFoundException {
+    public ResponseEntity<?> updateStock(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Stock updatedStock) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();

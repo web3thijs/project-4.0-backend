@@ -2,6 +2,9 @@ package fact.it.backend.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +16,27 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    @Email(message = "Email is invalid.")
     private String email;
+
+    @NotNull(message = "Password is required.")
     private String password;
+
+    @NotNull(message = "Phone number is required")
+    @Pattern(regexp = "(^[0-9+]{2}(\\+?\\-? *[0-9 \\/]{6,17})$)", message = "Phone number is invalid.")
     private String phoneNr;
+
+    @NotNull(message = "Country is required")
     private String country;
+
+    @NotNull(message = "Postal code is required.")
+    @Pattern(regexp = "^[1-9]{1}[0-9]{3}$", message = "Postal code is invalid.")
     private String postalCode;
+
+    @NotNull(message = "Address is required.")
     private String address;
+    @NotNull(message = "Role is required.")
     private Role role;
 
     public User() {
