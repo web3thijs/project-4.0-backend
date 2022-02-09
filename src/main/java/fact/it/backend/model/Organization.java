@@ -5,19 +5,48 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Organization extends User{
+    @NotNull(message = "Organization name is required.")
+    @Size(min = 1, max = 255, message = "First name should have at least 1 or a maximum of 255 characters.")
     private String organizationName;
+
+    @NotNull(message = "Registration number is required.")
+    @Pattern(regexp = "^[0-1]{1}[0-9]{9}$", message = "Company registration number starts with a 0 or 1 followed by 9 [0-9] numbers.")
     private String companyRegistrationNr;
+
+    @NotNull(message = "Vat number is required.")
+    @Pattern(regexp = "^BE+[0-9]{10}$", message = "Company VAT number starts with BE followed by 10 [0-9] numbers.")
     private String vatNr;
+
+    @NotNull(message = "Who text is required.")
+    @Size(max = 255, message = "Who cannot be longer than 255 characters.")
     private String who;
+
+    @NotNull(message = "What text is required.")
+    @Size(max = 255, message = "What cannot be longer than 255 characters.")
     private String what;
+
+    @NotNull(message = "Help text is required.")
+    @Size(max = 255, message = "Help cannot be longer than 255 characters.")
     private String help;
+
+    @NotNull(message = "Phone number for support is required.")
+    @Pattern(regexp = "(^\\+[0-9]{2}|^\\+[0-9]{2}\\(0\\)|^\\(\\+[0-9]{2}\\)\\(0\\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\\-\\s]{9}$)", message = "Phone number for support is not valid.")
     private String supportPhoneNr;
+
+    @NotNull(message = "Support email is required.")
+    @Email(message = "Support email is not valid.")
     private String supportEmail;
+
+    @NotNull(message = "Image url is required.")
     private String imageUrl;
 
     @JsonIgnore

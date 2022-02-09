@@ -52,10 +52,7 @@ public class AuthControllerUnitTests {
                         .content(mapper.writeValueAsString(customerPost))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response", is("Succesful registration for customer " + customerPost.getEmail())));
-
-
+                .andExpect(status().isOk());
     }
     @Test
     public void whenRegisterCustomer_thenReturnError() throws Exception {
@@ -65,10 +62,7 @@ public class AuthControllerUnitTests {
                         .content(mapper.writeValueAsString(customerPost))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response", is("Error during registration for customer " + customerPost.getEmail())));
-
-
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -79,9 +73,7 @@ public class AuthControllerUnitTests {
                         .content(mapper.writeValueAsString(organizationPost))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response", is("Succesful registration for organization " + organizationPost.getEmail())));
-
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -92,9 +84,7 @@ public class AuthControllerUnitTests {
                         .content(mapper.writeValueAsString(organizationPost))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response", is("Error during registration for organization " + organizationPost.getEmail())));
-
+                .andExpect(status().isOk());
     }
 
     @Test
