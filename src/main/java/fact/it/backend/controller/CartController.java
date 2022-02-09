@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.dto.CompleteOrderDTO;
 import fact.it.backend.dto.UpdateDonationDTO;
 import fact.it.backend.dto.UpdateOrderDetailDTO;
 import fact.it.backend.model.Role;
@@ -110,16 +111,16 @@ public class CartController {
     }
 
     @PostMapping("/completeOrder")
-    public ResponseEntity completeOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody UpdateOrderDetailDTO updateOrderDetailDTO){
+    public ResponseEntity completeOrder(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody CompleteOrderDTO completeOrderDTO){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
         if(role.contains("ADMIN") || (role.contains("CUSTOMER"))){
-            orderService.addProductToOrder(updateOrderDetailDTO, user_id);
+            orderService.completeOrder(completeOrderDTO, user_id);
             HashMap<String, Object> map = new HashMap<>();
-            map.put("status", "Added");
+            map.put("status", "Order completed");
             return new ResponseEntity<Object>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
