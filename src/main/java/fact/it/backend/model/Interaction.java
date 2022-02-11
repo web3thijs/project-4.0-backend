@@ -1,6 +1,8 @@
 package fact.it.backend.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Entity
 public class Interaction {
@@ -8,8 +10,13 @@ public class Interaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
     private int amountClicks;
+
+    @NotNull
     private int amountCart;
+
+    @NotNull
     private int amountBought;
 
     @OneToOne
@@ -19,7 +26,8 @@ public class Interaction {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
     public Interaction() {
@@ -30,6 +38,14 @@ public class Interaction {
         this.amountCart = amountCart;
         this.amountBought = amountBought;
         this.review = review;
+        this.product = product;
+        this.customer = customer;
+    }
+
+    public Interaction(int amountClicks, int amountCart, int amountBought, Product product, Customer customer) {
+        this.amountClicks = amountClicks;
+        this.amountCart = amountCart;
+        this.amountBought = amountBought;
         this.product = product;
         this.customer = customer;
     }

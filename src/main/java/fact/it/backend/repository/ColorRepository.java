@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ColorRepository extends JpaRepository<Color, Long> {
-    Page<Color> findAll(Pageable pageable);
+    List<Color> findAll();
     Color findColorById(long id);
 }

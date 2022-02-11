@@ -12,6 +12,8 @@ public interface InteractionRepository extends JpaRepository<Interaction, Long> 
     List<Interaction> findAll();
     List<Interaction> findInteractionsByProductId(long productId);
     List<Interaction> findInteractionsByCustomerId(long customerId);
+    Interaction findInteractionByProductIdAndCustomerId(long productId, long customerId);
     Interaction findInteractionById(long id);
+    List<Interaction> findInteractionsByProductIdAndCustomerId(Long productId, Long customerId);
 }
 

@@ -1,6 +1,9 @@
 package fact.it.backend.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,9 @@ public class Donation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull(message = "Amount is required.")
+    @Min(value = 0, message = "Amount cannot be below 0.")
+    @Max(value = 9999, message = "Amount cannot be more than 9999.")
     private double amount;
 
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -28,6 +34,8 @@ public class Donation {
         this.order = order;
         this.organization = organization;
     }
+
+
 
     public long getId() {
         return id;

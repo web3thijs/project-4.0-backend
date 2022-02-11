@@ -15,9 +15,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,40 +50,34 @@ public class CategoryControllerUnitTests {
     private String password;
 
 
-   /* @Test
+    @Test
     public void whenGetAllCategories_thenReturnJsonCategory() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        List<Category> allCategories = categoryRepository.findAll();
 
-        Page<Category> allCategories = categoryRepository.findAll(requestedPage);
-
-        given(categoryRepository.findAll(requestedPage)).willReturn(allCategories);
+        given(categoryRepository.findAll()).willReturn(allCategories);
 
         mockMvc.perform(get("/api/categories"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
     }
-
     @Test
-    public void whenGetAllCategoriesWithParams_thenReturnJsonCategory() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+    public void whenGetAllCategoriesDesc_thenReturnJsonCategory() throws Exception{
+        List<Category> allCategories = categoryRepository.findAll();
 
-        Page<Category> allCategoriesWithParams = categoryRepository.findAll(requestedPage);
+        given(categoryRepository.findAll()).willReturn(allCategories);
 
-        given(categoryRepository.findAll(requestedPage)).willReturn(allCategoriesWithParams);
-
-        mockMvc.perform(get("/api/categories?page=0&sort=name&order=desc"))
+        mockMvc.perform(get("/api/categories?order=desc"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-
-    }*/
+    }
 
     @Test
     public void whenGetCategoryById_thenReturnJsonCategory() throws Exception{
         Category categoryTest = new Category("kleren");
 
-        given(categoryRepository.findCategoryById(categoryTest.getId())).willReturn(categoryTest);
+        given(categoryRepository.findById(categoryTest.getId())).willReturn(Optional.of(categoryTest));
 
         mockMvc.perform(get("/api/categories/{id}", categoryTest.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -115,7 +113,7 @@ public class CategoryControllerUnitTests {
     public void givenCategory_whenPutCategory_thenReturnJsonCategory() throws Exception{
         Category categoryPut = new Category("penen");
 
-        given(categoryRepository.findCategoryById(categoryPut.getId())).willReturn(categoryPut);
+        given(categoryRepository.findById(categoryPut.getId())).willReturn(Optional.of(categoryPut));
 
         Category updatedCategory = new Category(categoryPut.getId(),"pennen");
 
@@ -132,7 +130,7 @@ public class CategoryControllerUnitTests {
     public void whenPutCategoryNotAuthorized_thenReturnForbidden() throws Exception{
         Category categoryPut = new Category("penen");
 
-        given(categoryRepository.findCategoryById(categoryPut.getId())).willReturn(categoryPut);
+        given(categoryRepository.findById(categoryPut.getId())).willReturn(Optional.of(categoryPut));
 
         Category updatedCategory = new Category(categoryPut.getId(),"pennen");
 
@@ -146,7 +144,7 @@ public class CategoryControllerUnitTests {
     public void givenCategory_whenDeleteCategory_thenStatusOk() throws Exception {
         Category categoryToBeDeleted = new Category("kettingen");
 
-        given(categoryRepository.findCategoryById(categoryToBeDeleted.getId())).willReturn(categoryToBeDeleted);
+        given(categoryRepository.findById(categoryToBeDeleted.getId())).willReturn(Optional.of(categoryToBeDeleted));
 
         mockMvc.perform(delete("/api/categories/{id}", categoryToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -155,7 +153,7 @@ public class CategoryControllerUnitTests {
 
     @Test
     public void givenCategory_whenDeleteCategory_thenStatusNotFound() throws Exception {
-        given(categoryRepository.findCategoryById(12345)).willReturn(null);
+        given(categoryRepository.findById(12345L)).willReturn(null);
 
         mockMvc.perform(delete("/api/categories/{id}", 123456789).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -166,7 +164,7 @@ public class CategoryControllerUnitTests {
     @Test
     public void whenDeleteCategoryNotAuthorized_thenReturnForbidden() throws Exception{
         Category categoryToBeDeleted = new Category("kettingen");
-        given(categoryRepository.findCategoryById(categoryToBeDeleted.getId())).willReturn(null);
+        given(categoryRepository.findById(categoryToBeDeleted.getId())).willReturn(null);
 
         mockMvc.perform(delete("/api/categories/{id}", categoryToBeDeleted.getId()).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                 .contentType(MediaType.APPLICATION_JSON))

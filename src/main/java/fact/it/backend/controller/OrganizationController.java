@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.OrganizationRepository;
 import fact.it.backend.util.JwtUtils;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -45,46 +47,53 @@ public class OrganizationController {
         }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable long id){
-        return ResponseEntity.ok(organizationRepository.findById(id));
+    public ResponseEntity<?> findById(@PathVariable long id) throws ResourceNotFoundException {
+        return ResponseEntity.ok(organizationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Organization not found for this id: " + id)));
+
     }
 
     @PutMapping
-    public ResponseEntity<?> updateOrganization(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Organization updatedOrganization){
+    public ResponseEntity<?> updateOrganization(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Organization updatedOrganization) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
         long user_id = Long.parseLong(claims.get("user_id").toString());
 
-        if(role.contains("ADMIN") || (role.contains("CUSTOMER") && updatedOrganization.getId() == user_id)){
-            Organization retrievedOrganization= organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganization.getId());
+        if(role.contains("ADMIN") || (role.contains("ORGANIZATION") && updatedOrganization.getId() == user_id)){
+            Organization retrievedOrganization = organizationRepository.findByRoleAndId(Role.ORGANIZATION, updatedOrganization.getId());
 
-            retrievedOrganization.setEmail(updatedOrganization.getEmail());
-            retrievedOrganization.setPassword(passwordEncoder.encode(updatedOrganization.getPassword()));
-            retrievedOrganization.setPhoneNr(updatedOrganization.getPhoneNr());
-            retrievedOrganization.setAddress(updatedOrganization.getAddress());
-            retrievedOrganization.setPostalCode(updatedOrganization.getPostalCode());
-            retrievedOrganization.setCountry(updatedOrganization.getCountry());
-            retrievedOrganization.setRole(updatedOrganization.getRole());
-            retrievedOrganization.setOrganizationName(updatedOrganization.getOrganizationName());
-            retrievedOrganization.setCompanyRegistrationNr(updatedOrganization.getCompanyRegistrationNr());
-            retrievedOrganization.setVatNr(updatedOrganization.getVatNr());
-            retrievedOrganization.setWho(updatedOrganization.getWho());
-            retrievedOrganization.setWhat(updatedOrganization.getWhat());
-            retrievedOrganization.setHelp(updatedOrganization.getHelp());
-            retrievedOrganization.setSupportPhoneNr(updatedOrganization.getSupportPhoneNr());
-            retrievedOrganization.setSupportEmail(updatedOrganization.getSupportEmail());
+            if(retrievedOrganization != null){
+                retrievedOrganization.setEmail(updatedOrganization.getEmail());
+                retrievedOrganization.setPassword(passwordEncoder.encode(updatedOrganization.getPassword()));
+                retrievedOrganization.setPhoneNr(updatedOrganization.getPhoneNr());
+                retrievedOrganization.setAddress(updatedOrganization.getAddress());
+                retrievedOrganization.setPostalCode(updatedOrganization.getPostalCode());
+                retrievedOrganization.setCountry(updatedOrganization.getCountry());
+                retrievedOrganization.setRole(updatedOrganization.getRole());
+                retrievedOrganization.setOrganizationName(updatedOrganization.getOrganizationName());
+                retrievedOrganization.setCompanyRegistrationNr(updatedOrganization.getCompanyRegistrationNr());
+                retrievedOrganization.setVatNr(updatedOrganization.getVatNr());
+                retrievedOrganization.setWho(updatedOrganization.getWho());
+                retrievedOrganization.setWhat(updatedOrganization.getWhat());
+                retrievedOrganization.setHelp(updatedOrganization.getHelp());
+                retrievedOrganization.setSupportPhoneNr(updatedOrganization.getSupportPhoneNr());
+                retrievedOrganization.setSupportEmail(updatedOrganization.getSupportEmail());
 
-            organizationRepository.save(retrievedOrganization);
+                organizationRepository.save(retrievedOrganization);
 
+            } else{
+                throw new ResourceNotFoundException("Cannot update. Organization not found for this id: " + updatedOrganization.getId());
+            }
             return ResponseEntity.ok(retrievedOrganization);
+
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrganization(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity<?> deleteOrganization(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -96,7 +105,7 @@ public class OrganizationController {
                 organizationRepository.delete(organization);
                 return ResponseEntity.ok().build();
             } else{
-                return ResponseEntity.notFound().build();
+                throw new ResourceNotFoundException("Cannot delete. Interaction not found for this id: " + id);
             }
         } else {
             return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);

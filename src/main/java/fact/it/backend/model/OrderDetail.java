@@ -1,6 +1,8 @@
 package fact.it.backend.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity
 public class OrderDetail {
@@ -8,6 +10,8 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Min(value = 0, message = "Amount cannot be less than 0.")
+    @Max(value = 9999, message = "Amount cannot be more than 9999.")
     private int amount;
 
     @ManyToOne(cascade = CascadeType.MERGE)

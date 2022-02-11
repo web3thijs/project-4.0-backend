@@ -1,5 +1,6 @@
 package fact.it.backend.controller;
 
+import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.Category;
 import fact.it.backend.model.Color;
 import fact.it.backend.model.Product;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,24 +36,26 @@ public class ColorController {
     private JwtUtils jwtUtils;
   
     @GetMapping
-    public Page<Color> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
+    public List<Color> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
             if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                Page<Color> colors = colorRepository.findAll(requestedPageWithSortDesc);
+                List<Color> colors = colorRepository.findAll(Sort.by(sort).descending());
                 return colors;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                Page<Color> colors = colorRepository.findAll(requestedPageWithSort);
+                List<Color> colors = colorRepository.findAll(Sort.by(sort).ascending());
                 return colors;
             }
         }
 
     @GetMapping("/{id}")
-    public Color findById(@PathVariable long id) { return colorRepository.findColorById(id); }
+    public ResponseEntity<?> findById(@PathVariable long id) throws ResourceNotFoundException {
+        Color color = colorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Color not found for this id: " + id));
+        return ResponseEntity.ok().body(color);
+    }
 
     @PostMapping
-    public ResponseEntity<?> addColor(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Color color){
+    public ResponseEntity<?> addColor(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Color color){
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
@@ -60,45 +64,44 @@ public class ColorController {
             colorRepository.save(color);
             return ResponseEntity.ok(color);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> updateColor(@RequestHeader("Authorization") String tokenWithPrefix, @RequestBody Color updatedColor){
+    public ResponseEntity<?> updateColor(@RequestHeader("Authorization") String tokenWithPrefix, @Valid @RequestBody Color updatedColor) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
         if(role.contains("ADMIN")){
-            Color retrievedColor = colorRepository.findColorById(updatedColor.getId());
+            Color retrievedColor = colorRepository.findById(updatedColor.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot update. category not found for this id: " + updatedColor.getId()));
 
             retrievedColor.setName(updatedColor.getName());
-            colorRepository.save(updatedColor);
+
+            colorRepository.save(retrievedColor);
 
             return ResponseEntity.ok(updatedColor);
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteColor(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id){
+    public ResponseEntity deleteColor(@RequestHeader("Authorization") String tokenWithPrefix, @PathVariable long id) throws ResourceNotFoundException {
         String token = tokenWithPrefix.substring(7);
         Map<String, Object> claims = jwtUtils.extractAllClaims(token);
         String role = claims.get("role").toString();
 
         if(role.contains("ADMIN")){
-            Color color = colorRepository.findColorById(id);
+            Color color = colorRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot delete. category not found for this id: " + id));
 
-            if(color != null){
                 colorRepository.delete(color);
                 return ResponseEntity.ok().build();
-            } else{
-                return ResponseEntity.notFound().build();
-            }
         } else {
-            return new ResponseEntity<String>("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("Not authorized", HttpStatus.FORBIDDEN);
         }
     }
 }
