@@ -19,7 +19,7 @@ public class Review {
     private double score;
 
     @NotEmpty
-    @Size(max = 50, message = "Title can be a maximum of 50 characters.")
+    @Size(max = 100, message = "Title can be a maximum of 100 characters.")
     private String title;
 
     @Size(max = 255, message = "Text can be a maximum of 255 characters.")
