@@ -45,7 +45,6 @@ public class ProductController {
     public List<Product> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false, defaultValue = "0")long categorie, @RequestParam(required = false, defaultValue = "0") long vzw, @RequestParam(required = false, defaultValue = "0")long prijsgt, @RequestParam(required = false, defaultValue = "999999999999")long prijslt ){
 
         if(order != null && order.equals("desc")){
-
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 JSONArray products = productRepository.filterProductsBasedOnKeywords(categorie, vzw, prijsgt, prijslt, requestedPageWithSortDesc);
                 return products;
@@ -57,7 +56,7 @@ public class ProductController {
             }
         }
     @GetMapping("/organization/{organizationId}")
-    public JSONArray findProductsByOrganizationId(@PathVariable long organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order) throws ResourceNotFoundException {
+    public List<Product> findProductsByOrganizationId(@PathVariable long organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order) throws ResourceNotFoundException {
         organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find products. Organization not found for this id: " + organizationId));
         if(order != null && order.equals("desc")){

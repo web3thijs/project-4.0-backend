@@ -50,7 +50,7 @@ public class CategoryControllerUnitTests {
     private String password;
 
 
-/*   @Test
+    @Test
     public void whenGetAllCategories_thenReturnJsonCategory() throws Exception{
         List<Category> allCategories = categoryRepository.findAll();
 
@@ -61,19 +61,17 @@ public class CategoryControllerUnitTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
     }
-
     @Test
-    public void whenGetAllCategoriesWithParams_thenReturnJsonCategory() throws Exception{
-        List<Category> allCategoriesWithParams = categoryRepository.findAll();
+    public void whenGetAllCategoriesDesc_thenReturnJsonCategory() throws Exception{
+        List<Category> allCategories = categoryRepository.findAll();
 
-        given(categoryRepository.findAll()).willReturn(allCategoriesWithParams);
+        given(categoryRepository.findAll()).willReturn(allCategories);
 
-        mockMvc.perform(get("/api/categories?sort=name&order=desc"))
+        mockMvc.perform(get("/api/categories?order=desc"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-
-    }*/
+    }
 
     @Test
     public void whenGetCategoryById_thenReturnJsonCategory() throws Exception{

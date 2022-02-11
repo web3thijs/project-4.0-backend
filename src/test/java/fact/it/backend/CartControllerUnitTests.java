@@ -2,6 +2,7 @@ package fact.it.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fact.it.backend.dto.CartDTO;
+import fact.it.backend.dto.CartProductDTO;
 import fact.it.backend.model.Interaction;
 import fact.it.backend.service.CartService;
 import fact.it.backend.service.TokenGetService;
@@ -16,11 +17,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CartControllerUnitTests {
     @Autowired
     private MockMvc mockMvc;
+
 
     @MockBean
     CartService cartService;
