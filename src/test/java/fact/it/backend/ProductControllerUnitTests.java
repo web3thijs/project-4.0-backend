@@ -63,9 +63,9 @@ public class ProductControllerUnitTests {
     @Test
     public void whenGetAllProducts_thenReturnJsonProduct() throws Exception{
        Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("name").ascending());
-        JSONObject allProducts = productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, requestedPageWithSort);
+        JSONObject allProducts = productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "",requestedPageWithSort);
 
-        given(productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, requestedPageWithSort)).willReturn(allProducts);
+        given(productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "", requestedPageWithSort)).willReturn(allProducts);
 
         mockMvc.perform(get("/api/products")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -75,9 +75,9 @@ public class ProductControllerUnitTests {
     @Test
     public void whenGetAllProductsDesc_thenReturnJsonProduct() throws Exception{
         Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("name").ascending());
-        JSONObject allProducts = productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, requestedPageWithSort);
+        JSONObject allProducts = productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "",requestedPageWithSort);
 
-        given(productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, requestedPageWithSort)).willReturn(allProducts);
+        given(productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "", requestedPageWithSort)).willReturn(allProducts);
 
         mockMvc.perform(get("/api/products?order=desc")
                         .contentType(MediaType.APPLICATION_JSON))

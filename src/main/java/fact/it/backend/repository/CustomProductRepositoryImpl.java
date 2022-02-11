@@ -45,18 +45,18 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         return json;
     }
     @Override
-    public JSONObject filterProductsBasedOnKeywords(long categorie, long vzw, long prijsgt, long prijslt, Pageable pageable) {
+    public JSONObject filterProductsBasedOnKeywords(long categorie, long vzw, long prijsgt, long prijslt, String naam, Pageable pageable) {
         StringBuilder sb = new StringBuilder();
         JSONObject json = new JSONObject();
 
         if (categorie != 0 && vzw != 0) {
-            sb.append("SELECT * FROM product WHERE category_id = ").append(categorie).append(" AND organization_id = ").append(vzw).append(" AND price >= ").append(prijsgt).append(" AND price <= ").append(prijslt);
+            sb.append("SELECT * FROM product WHERE category_id = ").append(categorie).append(" AND organization_id = ").append(vzw).append(" AND price >= ").append(prijsgt).append(" AND price <= ").append(prijslt).append(" AND name LIKE \"%").append(naam).append("%\"");
         } else if (categorie != 0) {
-            sb.append("SELECT * FROM product WHERE category_id = ").append(categorie).append(" AND price >= ").append(prijsgt).append(" AND price <= ").append(prijslt);
+            sb.append("SELECT * FROM product WHERE category_id = ").append(categorie).append(" AND price >= ").append(prijsgt).append(" AND price <= ").append(prijslt).append(" AND name LIKE \"%").append(naam).append("%\"");
         } else if (vzw != 0){
-            sb.append("SELECT * FROM product WHERE organization_id = ").append(vzw).append(" AND price >= ").append(prijsgt).append(" AND price <= ").append(prijslt);
+            sb.append("SELECT * FROM product WHERE organization_id = ").append(vzw).append(" AND price >= ").append(prijsgt).append(" AND price <= ").append(prijslt).append(" AND name LIKE \"%").append(naam).append("%\"");
         } else {
-            sb.append("SELECT * FROM product ").append("WHERE price >= ").append(prijsgt).append(" AND price <= ").append(prijslt);
+            sb.append("SELECT * FROM product ").append("WHERE price >= ").append(prijsgt).append(" AND price <= ").append(prijslt).append(" AND name LIKE \"%").append(naam).append("%\"");
         }
         String sort = pageable.getSort().toString();
         String sortFixed = sort.replace(":", "");
