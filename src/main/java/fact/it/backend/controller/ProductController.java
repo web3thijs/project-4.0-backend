@@ -7,6 +7,7 @@ import fact.it.backend.repository.OrganizationRepository;
 import fact.it.backend.repository.ProductRepository;
 import fact.it.backend.util.JwtUtils;
 import org.apache.coyote.Response;
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,31 +42,32 @@ public class ProductController {
     private JwtUtils jwtUtils;
 
     @GetMapping
-    public Page<Product> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false)String categorie, @RequestParam(required = false) String vzw, @RequestParam(required = false)Double prijsgt, @RequestParam(required = false)Double prijslt ){
-            if(order != null && order.equals("desc")){
+    public List<Product> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false, defaultValue = "0")long categorie, @RequestParam(required = false, defaultValue = "0") long vzw, @RequestParam(required = false, defaultValue = "0")long prijsgt, @RequestParam(required = false, defaultValue = "999999999999")long prijslt ){
+
+        if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                Page<Product> products = productRepository.findAll(requestedPageWithSortDesc);
+                JSONArray products = productRepository.filterProductsBasedOnKeywords(categorie, vzw, prijsgt, prijslt, requestedPageWithSortDesc);
                 return products;
             }
             else{
                 Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                Page<Product> products = productRepository.findAll(requestedPageWithSort);
+                JSONArray products =  productRepository.filterProductsBasedOnKeywords(categorie, vzw, prijsgt, prijslt, requestedPageWithSort);
                 return products;
             }
         }
     @GetMapping("/organization/{organizationId}")
-    public Page<Product> findProductsByOrganizationId(@PathVariable long organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order) throws ResourceNotFoundException {
+    public List<Product> findProductsByOrganizationId(@PathVariable long organizationId, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false)String order) throws ResourceNotFoundException {
         organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find products. Organization not found for this id: " + organizationId));
         if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSortDesc);
+                JSONArray products = productRepository.filterProductsOrganizationId(organizationId,requestedPageWithSortDesc);
                 return products;
             }
             else{
                 Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                Page<Product> products = productRepository.findProductsByOrganizationId(organizationId,requestedPageWithSort);
-                    return products;
+                JSONArray products = productRepository.filterProductsOrganizationId(organizationId,requestedPageWithSort);
+                return products;
             }
         }
 

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
