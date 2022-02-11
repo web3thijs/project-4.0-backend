@@ -23,9 +23,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         this.entityManager = entityManager.getEntityManagerFactory().createEntityManager();
     }
     @Override
-    public JSONArray filterProductsOrganizationId(long organizationId, Pageable pageable){
+    public JSONObject filterProductsOrganizationId(long organizationId, Pageable pageable){
         StringBuilder sb = new StringBuilder();
-        JSONArray array = new JSONArray();
         JSONObject json = new JSONObject();
 
         sb.append("SELECT * FROM product WHERE organization_id = ").append(organizationId);
@@ -43,13 +42,11 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         q.setMaxResults(pageSize);
         json.put("content", q.getResultList());
         json.put("totalPages", totalPages);
-        array.add(json);
-        return array;
+        return json;
     }
     @Override
-    public JSONArray filterProductsBasedOnKeywords(long categorie, long vzw, long prijsgt, long prijslt, Pageable pageable) {
+    public JSONObject filterProductsBasedOnKeywords(long categorie, long vzw, long prijsgt, long prijslt, Pageable pageable) {
         StringBuilder sb = new StringBuilder();
-        JSONArray array = new JSONArray();
         JSONObject json = new JSONObject();
 
         if (categorie != 0 && vzw != 0) {
@@ -74,9 +71,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         q.setMaxResults(pageSize);
         json.put("content", q.getResultList());
         json.put("totalPages", totalPages);
-        array.add(json);
 
-        return array;
+        return json;
     }
 
 }
