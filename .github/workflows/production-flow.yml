@@ -31,12 +31,12 @@ jobs:
 #           key: ${{ runner.os }}-sonar
 #           restore-keys: ${{ runner.os }}-sonar
 
-#       - name: Build, test and package project
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=backend-prod -Dmaven.test.skip=true
+      - name: Build, test and package project
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B verify -Dmaven.test.skip=true
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
