@@ -43,17 +43,17 @@ public class ProductController {
     private JwtUtils jwtUtils;
 
     @GetMapping
-    public JSONObject findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false, defaultValue = "0")long categorie, @RequestParam(required = false, defaultValue = "0") long vzw, @RequestParam(required = false, defaultValue = "0")long prijsgt, @RequestParam(required = false, defaultValue = "999999999999")long prijslt, @RequestParam(required = false, defaultValue = "%%") String naam){
+    public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false, defaultValue = "0")long categorie, @RequestParam(required = false, defaultValue = "0") long vzw, @RequestParam(required = false, defaultValue = "0")long prijsgt, @RequestParam(required = false, defaultValue = "999999999999")long prijslt, @RequestParam(required = false, defaultValue = "%%") String naam){
 
         if(order != null && order.equals("desc")){
                 Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
                 JSONObject products = productRepository.filterProductsBasedOnKeywords(categorie, vzw, prijsgt, prijslt, naam, requestedPageWithSortDesc);
-                return products;
+                return ResponseEntity.ok(products);
             }
             else{
                 Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
                 JSONObject products =  productRepository.filterProductsBasedOnKeywords(categorie, vzw, prijsgt, prijslt, naam, requestedPageWithSort);
-                return products;
+                return ResponseEntity.ok(products);
             }
         }
     @GetMapping("/organization/{organizationId}")

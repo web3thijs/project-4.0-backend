@@ -6,12 +6,16 @@ import fact.it.backend.model.Organization;
 import fact.it.backend.model.Role;
 import fact.it.backend.repository.OrganizationRepository;
 import fact.it.backend.service.TokenGetService;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -52,34 +56,29 @@ public class OrganizationControllerUnitTests {
     @Value("Password123")
     private String password;
 
-    /* @Test
-    public void whenGetAllOrganizations_thenReturnJsonOrganization() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+    @Test
+    public void whenGetAllOrganizations_thenReturnJsonOrganizations() throws Exception{
+        Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("organization_name").ascending());
+        JSONObject allOrganizations = organizationRepository.filterOrganizations("",requestedPageWithSort);
 
-        Page<Organization> allOrganizations = organizationRepository.findAll(requestedPage);
+        given(organizationRepository.filterOrganizations("", requestedPageWithSort)).willReturn(allOrganizations);
 
-        given(organizationRepository.findAll(requestedPage)).willReturn(allOrganizations);
-
-        mockMvc.perform(get("/api/organizations"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
+        mockMvc.perform(get("/api/organizations")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void whenGetAllOrganizationsWithParams_thenReturnJsonOrganization() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+    public void whenGetAllOrganizationsParams_thenReturnJsonOrganizations() throws Exception{
+        Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("organization_name").ascending());
+        JSONObject allOrganizations = organizationRepository.filterOrganizations("",requestedPageWithSort);
 
-        Page<Organization> allOrganizationsWithParams = organizationRepository.findAll(requestedPage);
+        given(organizationRepository.filterOrganizations("", requestedPageWithSort)).willReturn(allOrganizations);
 
-        given(organizationRepository.findAll(requestedPage)).willReturn(allOrganizationsWithParams);
-
-        mockMvc.perform(get("/api/organizations?page=0&sort=name&organization=desc"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-
-    }*/
+        mockMvc.perform(get("/api/organizations?order=desc")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void whenGetOrganizationById_thenReturnJsonOrganization() throws Exception{

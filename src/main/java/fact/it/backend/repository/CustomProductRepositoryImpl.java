@@ -22,6 +22,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
     public CustomProductRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager.getEntityManagerFactory().createEntityManager();
     }
+
+
     @Override
     public JSONObject filterProductsOrganizationId(long organizationId, Pageable pageable){
         StringBuilder sb = new StringBuilder();
