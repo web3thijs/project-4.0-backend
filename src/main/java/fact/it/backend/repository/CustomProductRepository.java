@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CustomProductRepository {
-    JSONObject filterProductsBasedOnKeywords(long categorie, long vzw, long prijsgt, long prijslt, Pageable pageable);
+    JSONObject filterProductsBasedOnKeywords(long categorie, long vzw, long prijsgt, long prijslt, String naam, Pageable pageable);
     JSONObject filterProductsOrganizationId(long organizationId, Pageable pageable);
 
 }
