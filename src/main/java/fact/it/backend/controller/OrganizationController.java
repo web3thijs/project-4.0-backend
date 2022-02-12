@@ -4,6 +4,7 @@ import fact.it.backend.exception.ResourceNotFoundException;
 import fact.it.backend.model.*;
 import fact.it.backend.repository.OrganizationRepository;
 import fact.it.backend.util.JwtUtils;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,15 +34,15 @@ public class OrganizationController {
     private JwtUtils jwtUtils;
 
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "organizationName")String sort, @RequestParam(required = false)String order){
+    public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "organization_name")String sort, @RequestParam(required = false)String order, @RequestParam(required = false, defaultValue = "%%") String naam){
                 if(order != null && order.equals("desc")){
                     Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
-                    Page<Organization> organizations = organizationRepository.findByRole(Role.ORGANIZATION, requestedPageWithSortDesc);
+                    JSONObject organizations = organizationRepository.filterOrganizations(naam, requestedPageWithSortDesc);
                     return ResponseEntity.ok(organizations);
                 }
                 else{
                     Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
-                    Page<Organization> organizations = organizationRepository.findByRole(Role.ORGANIZATION, requestedPageWithSort);
+                    JSONObject organizations = organizationRepository.filterOrganizations(naam, requestedPageWithSort);
                     return ResponseEntity.ok(organizations);
                 }
         }
