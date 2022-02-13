@@ -72,7 +72,7 @@ public class AuthController {
         organization.setAddress(retrievedOrganization.getAddress());
         organization.setPostalCode(retrievedOrganization.getPostalCode());
         organization.setCountry(retrievedOrganization.getCountry());
-        organization.setRole(retrievedOrganization.getRole());
+        organization.setRole(Role.ORGANIZATION);
         organization.setOrganizationName(retrievedOrganization.getOrganizationName());
         organization.setCompanyRegistrationNr(retrievedOrganization.getCompanyRegistrationNr());
         organization.setVatNr(retrievedOrganization.getVatNr());
