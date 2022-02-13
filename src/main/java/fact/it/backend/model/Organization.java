@@ -27,29 +27,23 @@ public class Organization extends User{
     private String vatNr;
 
     @Column(length = 750)
-    @NotNull(message = "Who text is required.")
     @Size(max = 750, message = "Who cannot be longer than 600 characters.")
     private String who;
 
     @Column(length = 750)
-    @NotNull(message = "What text is required.")
     @Size(max = 750, message = "What cannot be longer than 600 characters.")
     private String what;
 
     @Column(length = 750)
-    @NotNull(message = "Help text is required.")
     @Size(max = 750, message = "Help cannot be longer than 600 characters.")
     private String help;
 
-    @NotNull(message = "Phone number for support is required.")
     @Pattern(regexp = "(^[0-9+]{2}(\\+?\\-? *[0-9 \\/]{6,17})$)", message = "Phone number for support is not valid.")
     private String supportPhoneNr;
 
-    @NotNull(message = "Support email is required.")
     @Email(message = "Support email is not valid.")
     private String supportEmail;
 
-    @NotNull(message = "Image url is required.")
     private String imageUrl;
 
     @JsonIgnore
