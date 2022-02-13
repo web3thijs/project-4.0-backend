@@ -3,7 +3,10 @@ package fact.it.backend;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fact.it.backend.dto.CartDTO;
 import fact.it.backend.dto.CartProductDTO;
+import fact.it.backend.model.Customer;
 import fact.it.backend.model.Interaction;
+import fact.it.backend.model.Order;
+import fact.it.backend.model.Role;
 import fact.it.backend.service.CartService;
 import fact.it.backend.service.TokenGetService;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -51,16 +55,15 @@ public class CartControllerUnitTests {
     @Value("Password123")
     private String password;
 
-    @Test
+/*    @Test
     public void whenGetCart_thenReturnJsonCart() throws Exception {
-//        CartDTO cart = new CartDTO();
-//
-//        given(cartService.getCart(0L)).willReturn(cart);
+        Customer customerTest = new Customer(0,"jolienfoets@gmail.com", password, "0479994786", "Belgium", "2200", "Kersstraat 17", Role.CUSTOMER, "Gianni" , "De Herdt");
+        Order order = new Order(new Date(), false, customerTest);
+        CartDTO cart = cartService.getCart(0L);
 
-        mockMvc.perform(get("/api/cart").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
+        assertThat(cart.getCartProductDTOS().isEmpty());
+
+    }*/
 
     @Test
     public void whenGetCartUnauthorized_thenReturnForbidden() throws Exception {
@@ -150,13 +153,11 @@ public class CartControllerUnitTests {
 /*    @Test
     public void whenUpdateDonation_thenReturnOk() throws Exception{
         Map<String,Object> input=new HashMap<>();
-        input.put("id", 0);
         input.put("organizationId", 1);
-        input.put("amount", 15);
-        mockMvc.perform(post("/api/cart/updateDonation").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+        input.put("amount", 15L);
+        mockMvc.perform(post("/api/cart/updateDonation").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                         .content(mapper.writeValueAsString(input))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                        .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }*/
 
     @Test
@@ -169,4 +170,43 @@ public class CartControllerUnitTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    public void whenCompleteOrder_thenReturnOk() throws Exception {
+        Map<String, Object> input = new HashMap<>();
+        input.put("country", "Belgium");
+        input.put("postal", "2260");
+        input.put("address", "Test");
+        mockMvc.perform(post("/api/cart/completeOrder").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password))
+                        .content(mapper.writeValueAsString(input))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void whenCompleteOrderUnauthorized_thenReturnForbidden() throws Exception {
+        Map<String, Object> input = new HashMap<>();
+        input.put("country", "Belgium");
+        input.put("postal", "2260");
+        input.put("address", "Test");
+        mockMvc.perform(post("/api/cart/completeOrder").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                        .content(mapper.writeValueAsString(input))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void whenzGetCompleted_thenReturnOk() throws Exception {
+        mockMvc.perform(get("/api/cart/completed").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void whenGetCompletedUnauthorized_thenReturnOk() throws Exception {
+        mockMvc.perform(get("/api/cart/completed").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
 }
