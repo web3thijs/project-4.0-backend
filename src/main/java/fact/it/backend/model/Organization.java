@@ -26,16 +26,19 @@ public class Organization extends User{
     @Pattern(regexp = "^BE+[0-9]{10}$", message = "Company VAT number starts with BE followed by 10 [0-9] numbers.")
     private String vatNr;
 
+    @Column(length = 750)
     @NotNull(message = "Who text is required.")
-    @Size(max = 255, message = "Who cannot be longer than 255 characters.")
+    @Size(max = 750, message = "Who cannot be longer than 600 characters.")
     private String who;
 
+    @Column(length = 750)
     @NotNull(message = "What text is required.")
-    @Size(max = 255, message = "What cannot be longer than 255 characters.")
+    @Size(max = 750, message = "What cannot be longer than 600 characters.")
     private String what;
 
+    @Column(length = 750)
     @NotNull(message = "Help text is required.")
-    @Size(max = 255, message = "Help cannot be longer than 255 characters.")
+    @Size(max = 750, message = "Help cannot be longer than 600 characters.")
     private String help;
 
     @NotNull(message = "Phone number for support is required.")

@@ -11,4 +11,4 @@ public interface CustomProductRepository {
     JSONObject filterProductsBasedOnKeywords(long categorie, long vzw, long prijsgt, long prijslt, String naam, Pageable pageable);
     JSONObject filterProductsOrganizationId(long organizationId, Pageable pageable);
 
-}
+    }
