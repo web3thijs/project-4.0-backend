@@ -66,27 +66,27 @@ public class BackendApplication {
     @PostConstruct
     public void fillDatabase(){
         if(categoryRepository.findAll().size() == 0){
-            categoryRepository.save(new Category("knuffels"));
-            categoryRepository.save(new Category("sleutelhangers"));
-            categoryRepository.save(new Category("pennen"));
-            categoryRepository.save(new Category("shirts mannen"));
-            categoryRepository.save(new Category("shirts vrouwen"));
-            categoryRepository.save(new Category("koffiekoppen"));
-            categoryRepository.save(new Category("drinkbussen"));
-            categoryRepository.save(new Category("mondmaskers"));
-            categoryRepository.save(new Category("kaarsen en geuren"));
+            categoryRepository.save(new Category("Knuffels"));
+            categoryRepository.save(new Category("Sleutelhangers"));
+            categoryRepository.save(new Category("Pennen"));
+            categoryRepository.save(new Category("Shirts mannen"));
+            categoryRepository.save(new Category("Shirts vrouwen"));
+            categoryRepository.save(new Category("Koffiekoppen"));
+            categoryRepository.save(new Category("Drinkbussen"));
+            categoryRepository.save(new Category("Mondmaskers"));
+            categoryRepository.save(new Category("Kaarsen en geuren"));
         }
 
         if(colorRepository.findAll().size() == 0){
-            colorRepository.save(new Color("rood"));
-            colorRepository.save(new Color("wit"));
-            colorRepository.save(new Color("groen"));
-            colorRepository.save(new Color("bruin"));
-            colorRepository.save(new Color("geel"));
-            colorRepository.save(new Color("roze"));
-            colorRepository.save(new Color("beige"));
-            colorRepository.save(new Color("mix"));
-            colorRepository.save(new Color("zwart en wit"));
+            colorRepository.save(new Color("Rood"));
+            colorRepository.save(new Color("Wit"));
+            colorRepository.save(new Color("Groen"));
+            colorRepository.save(new Color("Bruin"));
+            colorRepository.save(new Color("Geel"));
+            colorRepository.save(new Color("Roze"));
+            colorRepository.save(new Color("Beige"));
+            colorRepository.save(new Color("Mix"));
+            colorRepository.save(new Color("Zwart en wit"));
         }
 
         String password = passwordEncoder.encode("Password123");
@@ -154,7 +154,7 @@ public class BackendApplication {
         if(productRepository.findAll().size() == 0){
             productRepository.save(new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categoryRepository.findCategoryById(2), organizationRepository.findOrganizationById(7)));
             productRepository.save(new Product("WWF sleutelhanger panda", "De enige echte WWF-panda als sleutelhanger van 10cm!", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-panda-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-panda-02.jpg"), categoryRepository.findCategoryById(2), organizationRepository.findOrganizationById(7)));
-            productRepository.save(new Product("Lief beertje Rode Kruis", "Slaap goed met de officiële beertjes-knuffel van het Rode Kruis!", 6.00, true, Arrays.asList("https://webcat.staci.com/WebCat3/custom/0231/_default//static/produits/P00042_MD.jpg"), categoryRepository.findCategoryById(1), organizationRepository.findOrganizationById(12)));
+            productRepository.save(new Product("Lief beertje Rode Kruis", "Slaap goed met de officiële beertjes-knuffel van het Rode Kruis!", 6.00, true, Arrays.asList("https://www.company2wear.nl/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/b/e/beertje_borstlogo.jpg"), categoryRepository.findCategoryById(1), organizationRepository.findOrganizationById(12)));
             productRepository.save(new Product("Balpen blauw", "Steun het Rode Kruis door het aankopen en gebruiken van de officiële balpennen!", 3.5, true, Arrays.asList("https://shop.rodekruis.nl/pub/media/catalog/product/cache/c3031995953b3e91d5674d5b0a0af4b5/n/r/nrk.5011_1.jpg", "https://webcat.staci.com/WebCat3/custom/0231/_default//static/produits/P00012_MD.jpg"), categoryRepository.findCategoryById(3), organizationRepository.findOrganizationById(12)));
             productRepository.save(new Product("Stiften damiaanactie", "Schrijf leprapatiënten niet af. Koop of verkoop de gekende rode, blauwe, groene en zwarte Damiaanactiestiften. Een pakje van vier kost €7.", 7.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-042.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-046.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-052.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-053.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-054.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-055.jpg"), categoryRepository.findCategoryById(3), organizationRepository.findOrganizationById(11) ));
             productRepository.save(new Product("Koffiemok bedrukt","Steun het Rode Kruis door het aankopen en gebruiken van de officiële koffiemokken!", 6.5, true, Arrays.asList("https://i.etsystatic.com/26520550/r/il/72e51c/3329982877/il_340x270.3329982877_kdtx.jpg"),  categoryRepository.findCategoryById(6), organizationRepository.findOrganizationById(12)));
