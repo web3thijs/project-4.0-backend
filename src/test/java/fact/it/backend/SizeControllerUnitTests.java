@@ -60,7 +60,7 @@ public class SizeControllerUnitTests {
 
     @Test
     public void whenGetAllSizes_thenReturnJsonSize() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").ascending());
+        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").ascending());
 
         Page<Size> allSizes = sizeRepository.findAll(requestedPage);
 
@@ -73,7 +73,7 @@ public class SizeControllerUnitTests {
 
     @Test
     public void whenGetAllSizesDesc_thenReturnJsonSize() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").descending());
+        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
 
         Page<Size> allSizes = sizeRepository.findAll(requestedPage);
 

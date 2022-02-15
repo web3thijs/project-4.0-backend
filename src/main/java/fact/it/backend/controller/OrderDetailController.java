@@ -49,12 +49,12 @@ public class OrderDetailController {
         String role = claims.get("role").toString();
         if(role.contains("ADMIN")){
                 if(order != null && order.equals("desc")){
-                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
+                    Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                     Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPageWithSortDesc);
                     return ResponseEntity.ok(orderDetails);
                 }
                 else{
-                    Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
+                    Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
                     Page<OrderDetail> orderDetails = orderDetailRepository.findAll(requestedPageWithSort);
                     return ResponseEntity.ok(orderDetails);
                 }

@@ -34,7 +34,7 @@ public class ReviewController {
 
     @GetMapping
     public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0") Integer page){
-        Pageable requestedPage = PageRequest.of(page, 9);
+        Pageable requestedPage = PageRequest.of(page, 8);
         Page<Review> reviews = reviewRepository.findAll(requestedPage);
 
         return ResponseEntity.ok().body(reviews);

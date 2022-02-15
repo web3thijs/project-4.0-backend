@@ -41,8 +41,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
         Query q = entityManager.createNativeQuery(sb.toString(), Product.class);
-        int totalPages = q.getResultList().size()/9;
-        if (q.getResultList().size() % 9 != 0) totalPages++;
+        int totalPages = q.getResultList().size()/8;
+        if (q.getResultList().size() % 8 != 0) totalPages++;
         q.setFirstResult(pageNumber * pageSize);
         q.setMaxResults(pageSize);
         json.put("content", q.getResultList());
@@ -72,8 +72,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
         Query q = entityManager.createNativeQuery(sb.toString(), Product.class);
-        int totalPages = q.getResultList().size()/9;
-        if (q.getResultList().size() % 9 != 0) totalPages++;
+        int totalPages = q.getResultList().size()/8;
+        if (q.getResultList().size() % 8 != 0) totalPages++;
         q.setFirstResult(pageNumber * pageSize);
         q.setMaxResults(pageSize);
         json.put("content", q.getResultList());

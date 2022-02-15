@@ -62,7 +62,7 @@ public class ProductControllerUnitTests {
 
     @Test
     public void whenGetAllProducts_thenReturnJsonProduct() throws Exception{
-       Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("name").ascending());
+       Pageable requestedPageWithSort = PageRequest.of(0, 8, Sort.by("name").ascending());
         JSONObject allProducts = productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "",requestedPageWithSort);
 
         given(productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "", requestedPageWithSort)).willReturn(allProducts);
@@ -74,7 +74,7 @@ public class ProductControllerUnitTests {
 
     @Test
     public void whenGetAllProductsDesc_thenReturnJsonProduct() throws Exception{
-        Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("name").ascending());
+        Pageable requestedPageWithSort = PageRequest.of(0, 8, Sort.by("name").ascending());
         JSONObject allProducts = productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "",requestedPageWithSort);
 
         given(productRepository.filterProductsBasedOnKeywords(8, 11, 0, 999999999, "", requestedPageWithSort)).willReturn(allProducts);
@@ -86,7 +86,7 @@ public class ProductControllerUnitTests {
 
     @Test
     public void whenGetAllProductsByOrganizationId_thenReturnJsonProduct() throws Exception{
-        Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("name").ascending());
+        Pageable requestedPageWithSort = PageRequest.of(0, 8, Sort.by("name").ascending());
         Organization organizationWWF = new Organization(11,"supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
         JSONObject allProducts = productRepository.filterProductsOrganizationId(organizationWWF.getId(),requestedPageWithSort);
 
@@ -99,7 +99,7 @@ public class ProductControllerUnitTests {
 
     @Test
     public void whenGetAllProductsByOrganizationIdDesc_thenReturnJsonProduct() throws Exception{
-        Pageable requestedPageWithSort = PageRequest.of(0, 9, Sort.by("name").ascending());
+        Pageable requestedPageWithSort = PageRequest.of(0, 8, Sort.by("name").ascending());
         Organization organizationWWF = new Organization(11,"supporters@wwf.be", password, "+3223400920", "Belgium", "1000", "Emile Jacqmainlaan 90", Role.ORGANIZATION, "WWF", "BE0408656248", "BE0408656248", "Sinds de oprichting in 1966 is WWF-België één van de belangrijkste natuurbeschermingsorganisaties in ons land. Als lid van het wereldwijde WWF-netwerk nemen we deel aan grote nationale en internationale projecten om de natuur te beschermen en te zorgen voor een duurzame toekomst voor de generaties na ons.", "Onze slogan ‘Together Possible!’ belichaamt onze werkstrategie en onze visie op een planeet waar mens en natuur in harmonie leven. WWF is afhankelijk van de steun van donateurs en donatrices, en van de samenwerking met lokale gemeenschappen, jonge generaties, private en publieke partners om duurzame natuurbeschermingsoplossingen te vinden. Alleen samen kunnen we beschermen wat ons in leven houdt: bossen, oceaan, zoet water, fauna en flora.", "WWF zet zich in om de achteruitgang van de natuur op onze planeet te stoppen en om te bouwen aan een toekomst waar de mens in harmonie leeft met de natuur.", "+3223400920", "supporters@wwf.be", "https://adfinitas-statics-cdn.s3.eu-west-3.amazonaws.com/wwf/defisc-20/logo.jpg");
 
         JSONObject allProducts = productRepository.filterProductsOrganizationId(organizationWWF.getId(),requestedPageWithSort);

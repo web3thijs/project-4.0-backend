@@ -57,7 +57,7 @@ public class ReviewControllerUnitTests {
 
     @Test
     public void whenGetAllReviews_thenReturnJsonReview() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").descending());
+        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
 
         Page<Review> allReviews = reviewRepository.findAll(requestedPage);
 
