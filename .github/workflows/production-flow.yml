@@ -16,7 +16,7 @@ jobs:
           mysql root password: 'Password123'
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
         env:
           MYSQL_HOST: 'localhost'
           MYSQL_USER: 'root'
