@@ -17,10 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
@@ -55,34 +52,28 @@ public class OrderControllerUnitTests {
     @Value("Password123")
     private String password;
 
-    /* @Test
+     @Test
     public void whenGetAllOrders_thenReturnJsonOrder() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+         List<Order> orderHistory = orderRepository.findAll();
 
-        Page<Order> allOrders = orderRepository.findAll(requestedPage);
+        given(orderRepository.findAll()).willReturn(orderHistory);
 
-        given(orderRepository.findAll(requestedPage)).willReturn(allOrders);
-
-        mockMvc.perform(get("/api/orders"))
+        mockMvc.perform(get("/api/orders").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
     }
 
     @Test
-    public void whenGetAllOrdersWithParams_thenReturnJsonOrder() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+    public void whenGetAllOrdersUnauthorized_thenReturnJsonOrder() throws Exception{
+        List<Order> orderHistory = orderRepository.findAll();
 
-        Page<Order> allOrdersWithParams = orderRepository.findAll(requestedPage);
+        given(orderRepository.findAll()).willReturn(orderHistory);
 
-        given(orderRepository.findAll(requestedPage)).willReturn(allOrdersWithParams);
-
-        mockMvc.perform(get("/api/orders?page=0&sort=name&order=desc"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-
-    }*/
+        mockMvc.perform(get("/api/orders").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
 
     @Test
     public void whenGetOrderById_thenReturnJsonOrder() throws Exception{
