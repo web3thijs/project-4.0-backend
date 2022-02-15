@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -53,34 +58,31 @@ public class SizeControllerUnitTests {
     private String password;
 
 
-   /* @Test
+    @Test
     public void whenGetAllSizes_thenReturnJsonSize() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").ascending());
 
         Page<Size> allSizes = sizeRepository.findAll(requestedPage);
 
         given(sizeRepository.findAll(requestedPage)).willReturn(allSizes);
 
-        mockMvc.perform(get("/api/sizes"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
+        mockMvc.perform(get("/api/sizes")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void whenGetAllSizesWithParams_thenReturnJsonSize() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+    public void whenGetAllSizesDesc_thenReturnJsonSize() throws Exception{
+        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").descending());
 
-        Page<Size> allSizesWithParams = sizeRepository.findAll(requestedPage);
+        Page<Size> allSizes = sizeRepository.findAll(requestedPage);
 
-        given(sizeRepository.findAll(requestedPage)).willReturn(allSizesWithParams);
+        given(sizeRepository.findAll(requestedPage)).willReturn(allSizes);
 
-        mockMvc.perform(get("/api/sizes?page=0&sort=name&order=desc"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-
-    }*/
+        mockMvc.perform(get("/api/sizes?order=desc")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void whenGetSizeById_thenReturnJsonSize() throws Exception {

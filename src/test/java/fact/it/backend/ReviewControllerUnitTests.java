@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -51,34 +55,19 @@ public class ReviewControllerUnitTests {
     private String password;
 
 
-   /* @Test
+    @Test
     public void whenGetAllReviews_thenReturnJsonReview() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").descending());
 
         Page<Review> allReviews = reviewRepository.findAll(requestedPage);
 
         given(reviewRepository.findAll(requestedPage)).willReturn(allReviews);
 
-        mockMvc.perform(get("/api/reviews"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
+        mockMvc.perform(get("/api/reviews")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
-    @Test
-    public void whenGetAllReviewsWithParams_thenReturnJsonReview() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
-
-        Page<Review> allReviewsWithParams = reviewRepository.findAll(requestedPage);
-
-        given(reviewRepository.findAll(requestedPage)).willReturn(allReviewsWithParams);
-
-        mockMvc.perform(get("/api/reviews?page=0&sort=name&order=desc"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-
-    }*/
 
     @Test
     public void whenGetReviewById_thenReturnJsonReview() throws Exception{

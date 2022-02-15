@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -51,34 +55,31 @@ public class StockControllerUnitTests {
     private String password;
 
 
-   /* @Test
+    @Test
     public void whenGetAllStocks_thenReturnJsonStock() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").ascending());
 
         Page<Stock> allStocks = stockRepository.findAll(requestedPage);
 
         given(stockRepository.findAll(requestedPage)).willReturn(allStocks);
 
-        mockMvc.perform(get("/api/stocks"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
+        mockMvc.perform(get("/api/stocks")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void whenGetAllStocksWithParams_thenReturnJsonStock() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+    public void whenGetAllStocksDesc_thenReturnJsonStock() throws Exception{
+        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").descending());
 
-        Page<Stock> allStocksWithParams = stockRepository.findAll(requestedPage);
+        Page<Stock> allStocks = stockRepository.findAll(requestedPage);
 
-        given(stockRepository.findAll(requestedPage)).willReturn(allStocksWithParams);
+        given(stockRepository.findAll(requestedPage)).willReturn(allStocks);
 
-        mockMvc.perform(get("/api/stocks?page=0&sort=name&order=desc"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-
-    }*/
+        mockMvc.perform(get("/api/stocks?order=desc")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void whenGetStockByProductId_thenReturnJsonStock() throws Exception{
@@ -91,10 +92,19 @@ public class StockControllerUnitTests {
 
         given(stockRepository.findStocksByProductId(0)).willReturn(Arrays.asList(stockTest));
 
-        mockMvc.perform(get("/api/stocks/product/{productId}", 0))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/stocks/product/{productId}", 0)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+/*    @Test
+    public void whenGetStockByProductIdNotFound_thenReturnJsonStock() throws Exception{
+        given(stockRepository.findStocksByProductId(0)).willReturn(null);
+
+        mockMvc.perform(get("/api/stocks/product/{productId}", 0)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }*/
 
     @Test
     public void whenPostStock_thenReturnJsonStock() throws Exception{

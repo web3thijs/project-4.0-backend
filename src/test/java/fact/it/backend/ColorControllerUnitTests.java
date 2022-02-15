@@ -54,7 +54,7 @@ public class ColorControllerUnitTests {
     @Value("Password123")
     private String password;
 
-/*    @Test
+    @Test
     public void whenGetAllColors_thenReturnJsonColor() throws Exception{
         List<Color> allColors = colorRepository.findAll();
 
@@ -77,7 +77,7 @@ public class ColorControllerUnitTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
 
-    }*/
+    }
 
     @Test
     public void whenGetColorById_thenReturnJsonColor() throws Exception{
