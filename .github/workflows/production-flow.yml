@@ -8,16 +8,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     name: Java 11 build, test, deliver container
-    env:
-      DB_DATABASE: mus_db
-      DB_USER: root
-      DB_PASSWORD: root
-    
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v1
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'mus_db'
+          mysql root password: 'Password123'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+        env:
+          MYSQL_HOST: 'localhost'
+          MYSQL_USER: 'root'
+          MYSQL_PASSWORD: 'Password123'
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -30,13 +33,23 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+          
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
       - name: Build, test and package project
         env:
+          MYSQL_HOST: 'localhost'
+          MYSQL_USER: 'root'
+          MYSQL_PASSWORD: 'Password123'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=backend-prod -Dmaven.test.skip=true
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=steunvzw-backend -Dmaven.test.skip=true
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
