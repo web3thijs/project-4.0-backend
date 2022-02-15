@@ -57,7 +57,7 @@ public class StockControllerUnitTests {
 
     @Test
     public void whenGetAllStocks_thenReturnJsonStock() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").ascending());
+        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").ascending());
 
         Page<Stock> allStocks = stockRepository.findAll(requestedPage);
 
@@ -70,7 +70,7 @@ public class StockControllerUnitTests {
 
     @Test
     public void whenGetAllStocksDesc_thenReturnJsonStock() throws Exception{
-        Pageable requestedPage = PageRequest.of(0, 9, Sort.by("name").descending());
+        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
 
         Page<Stock> allStocks = stockRepository.findAll(requestedPage);
 

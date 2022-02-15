@@ -46,12 +46,12 @@ public class ProductController {
     public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order, @RequestParam(required = false, defaultValue = "0")long categorie, @RequestParam(required = false, defaultValue = "0") long vzw, @RequestParam(required = false, defaultValue = "0")long prijsgt, @RequestParam(required = false, defaultValue = "999999999999")long prijslt, @RequestParam(required = false, defaultValue = "%%") String naam){
 
         if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                 JSONObject products = productRepository.filterProductsBasedOnKeywords(categorie, vzw, prijsgt, prijslt, naam, requestedPageWithSortDesc);
                 return ResponseEntity.ok(products);
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
                 JSONObject products =  productRepository.filterProductsBasedOnKeywords(categorie, vzw, prijsgt, prijslt, naam, requestedPageWithSort);
                 return ResponseEntity.ok(products);
             }
@@ -61,12 +61,12 @@ public class ProductController {
         organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find products. Organization not found for this id: " + organizationId));
         if(order != null && order.equals("desc")){
-                Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
+                Pageable requestedPageWithSortDesc = PageRequest.of(page, 8, Sort.by(sort).descending());
                 JSONObject products = productRepository.filterProductsOrganizationId(organizationId,requestedPageWithSortDesc);
                 return products;
             }
             else{
-                Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
+                Pageable requestedPageWithSort = PageRequest.of(page, 8, Sort.by(sort).ascending());
                 JSONObject products = productRepository.filterProductsOrganizationId(organizationId,requestedPageWithSort);
                 return products;
             }
