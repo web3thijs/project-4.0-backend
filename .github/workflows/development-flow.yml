@@ -11,10 +11,13 @@ jobs:
     
     name: Java 11 build, test, deploy to Heroku
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: development
+        env:
+          MYSQL_HOST: 'localhost'
+          MYSQL_USER: 'root'
+          MYSQL_PASSWORD: 'Password123'
 
 
       - name: Set up JDK 11
@@ -22,19 +25,21 @@ jobs:
         with:
           java-version: 11
       
-#       - name: Cache SonarQube packages
-#         uses: actions/cache@v1
-#         with:
-#           path: ~/.sonar/cache
-#           key: ${{ runner.os }}-sonar
-#           restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarQube packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-#       - name: Build, test and package project
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=backend-dev -Dmaven.test.skip=true
+      - name: Build, test and package project
+        env:
+          MYSQL_HOST: 'localhost'
+          MYSQL_USER: 'root'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=steunvzw-backend
       
       - name: Deploy to Heroku
         uses: AkhileshNS/heroku-deploy@v3.12.12
