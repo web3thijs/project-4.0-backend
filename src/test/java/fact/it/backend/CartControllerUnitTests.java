@@ -196,7 +196,7 @@ public class CartControllerUnitTests {
     }
 
     @Test
-    public void whenzGetCompleted_thenReturnOk() throws Exception {
+    public void whenGetCompleted_thenReturnOk() throws Exception {
         mockMvc.perform(get("/api/cart/completed").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailCustomer, password))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
