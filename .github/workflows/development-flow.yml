@@ -8,9 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    name: Java 11 build, test, deploy to Heroku
     steps:
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'mus_db'
+          mysql root password: 'Password123'
       - uses: actions/checkout@v2
         with:
           ref: development
@@ -18,24 +20,28 @@ jobs:
           MYSQL_HOST: 'localhost'
           MYSQL_USER: 'root'
           MYSQL_PASSWORD: 'Password123'
-
-
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      
       - name: Cache SonarQube packages
         uses: actions/cache@v1
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
       - name: Build, test and package project
         env:
           MYSQL_HOST: 'localhost'
           MYSQL_USER: 'root'
+          MYSQL_PASSWORD: 'Password123'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
