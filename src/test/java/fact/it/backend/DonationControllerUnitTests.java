@@ -74,7 +74,7 @@ public class DonationControllerUnitTests {
                 .andExpect(jsonPath("$.*", isA(ArrayList.class)));
     }
 
-    @Test
+/*    @Test
     public void whenGetDonationByOrderIdUnauthorized_thenReturnForbidden() throws Exception{
         Customer customerThijsWouters = new Customer("thijswouters@gmail.com", password, "0479954719", "Hoekstraat 165", "1680", "Belgium", Role.ADMIN, "Thijs" , "Wouters");
         Order order1ThijsWouters = new Order( new Date(), true, customerThijsWouters);
@@ -83,7 +83,7 @@ public class DonationControllerUnitTests {
         mockMvc.perform(get("/api/donations/order/{orderId}", 0).header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
-    }
+    }*/
 
     @Test
     public void whenGetDonationByOrganizationId_thenReturnJsonDonations() throws Exception{
