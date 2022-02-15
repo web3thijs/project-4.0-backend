@@ -60,19 +60,44 @@ public class CustomerControllerUnitTests {
     private String password;
 
 
-/*@Test
+    @Test
     public void whenGetAllCustomers_thenReturnJsonCustomer() throws Exception{
+        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").ascending());
+
+        Page<Customer> allCustomers = customerRepository.findByRole(Role.CUSTOMER, requestedPage);
+
+        given(customerRepository.findByRole(Role.CUSTOMER, requestedPage)).willReturn(allCustomers);
+
+        mockMvc.perform(get("/api/customers").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganizationAdmin, password))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void whenGetAllCustomersDesc_thenReturnJsonCustomer() throws Exception{
         Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
 
-        Page<Customer> allCustomers = customerRepository.findAll(requestedPage);
+        Page<Customer> allCustomers = customerRepository.findByRole(Role.CUSTOMER, requestedPage);
 
-        given(customerRepository.findAll(requestedPage)).willReturn(allCustomers);
+        given(customerRepository.findByRole(Role.CUSTOMER, requestedPage)).willReturn(allCustomers);
 
-        mockMvc.perform(get("/api/customers").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailAdmin, password)))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)));
-    }*/
+        mockMvc.perform(get("/api/customers").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganizationAdmin, password))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void whenGetAllCustomersUnauthorized_thenReturnJsonCustomer() throws Exception{
+        Pageable requestedPage = PageRequest.of(0, 8, Sort.by("name").descending());
+
+        Page<Customer> allCustomers = customerRepository.findByRole(Role.CUSTOMER, requestedPage);
+
+        given(customerRepository.findByRole(Role.CUSTOMER, requestedPage)).willReturn(allCustomers);
+
+        mockMvc.perform(get("/api/customers").header("Authorization", "Bearer " + tokenGetService.obtainAccessToken(emailOrganization, password))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
 
 
 

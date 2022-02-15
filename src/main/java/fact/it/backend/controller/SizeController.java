@@ -7,6 +7,7 @@ import fact.it.backend.model.Product;
 import fact.it.backend.model.Size;
 import fact.it.backend.repository.SizeRepository;
 import fact.it.backend.util.JwtUtils;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,15 +33,15 @@ public class SizeController {
     private JwtUtils jwtUtils;
 
     @GetMapping
-    public Page<Size> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
+    public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "name") String sort, @RequestParam(required = false) String order) {
         if (order != null && order.equals("desc")) {
             Pageable requestedPageWithSortDesc = PageRequest.of(page, 9, Sort.by(sort).descending());
             Page<Size> sizes = sizeRepository.findAll(requestedPageWithSortDesc);
-            return sizes;
+            return ResponseEntity.ok().body(sizes);
         } else {
             Pageable requestedPageWithSort = PageRequest.of(page, 9, Sort.by(sort).ascending());
             Page<Size> sizes = sizeRepository.findAll(requestedPageWithSort);
-            return sizes;
+            return ResponseEntity.ok().body(sizes);
         }
     }
 

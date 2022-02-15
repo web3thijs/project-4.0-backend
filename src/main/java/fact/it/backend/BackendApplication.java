@@ -65,28 +65,29 @@ public class BackendApplication {
 
     @PostConstruct
     public void fillDatabase(){
+        //Test
         if(categoryRepository.findAll().size() == 0){
-            categoryRepository.save(new Category("knuffels"));
-            categoryRepository.save(new Category("sleutelhangers"));
-            categoryRepository.save(new Category("pennen"));
-            categoryRepository.save(new Category("shirts mannen"));
-            categoryRepository.save(new Category("shirts vrouwen"));
-            categoryRepository.save(new Category("koffiekoppen"));
-            categoryRepository.save(new Category("drinkbussen"));
-            categoryRepository.save(new Category("mondmaskers"));
-            categoryRepository.save(new Category("kaarsen en geuren"));
+            categoryRepository.save(new Category("Knuffels"));
+            categoryRepository.save(new Category("Sleutelhangers"));
+            categoryRepository.save(new Category("Pennen"));
+            categoryRepository.save(new Category("Shirts mannen"));
+            categoryRepository.save(new Category("Shirts vrouwen"));
+            categoryRepository.save(new Category("Koffiekoppen"));
+            categoryRepository.save(new Category("Drinkbussen"));
+            categoryRepository.save(new Category("Mondmaskers"));
+            categoryRepository.save(new Category("Kaarsen en geuren"));
         }
 
         if(colorRepository.findAll().size() == 0){
-            colorRepository.save(new Color("rood"));
-            colorRepository.save(new Color("wit"));
-            colorRepository.save(new Color("groen"));
-            colorRepository.save(new Color("bruin"));
-            colorRepository.save(new Color("geel"));
-            colorRepository.save(new Color("roze"));
-            colorRepository.save(new Color("beige"));
-            colorRepository.save(new Color("mix"));
-            colorRepository.save(new Color("zwart en wit"));
+            colorRepository.save(new Color("Rood"));
+            colorRepository.save(new Color("Wit"));
+            colorRepository.save(new Color("Groen"));
+            colorRepository.save(new Color("Bruin"));
+            colorRepository.save(new Color("Geel"));
+            colorRepository.save(new Color("Roze"));
+            colorRepository.save(new Color("Beige"));
+            colorRepository.save(new Color("Mix"));
+            colorRepository.save(new Color("Zwart en wit"));
         }
 
         String password = passwordEncoder.encode("Password123");
@@ -98,6 +99,7 @@ public class BackendApplication {
             customerRepository.save(new Customer("boblourdaux@gmail.com", password, "0495946569", "Belgium", "3040", "Sint-Schepersberg 45", Role.CUSTOMER, "Bob" , "Lourdaux"));
             customerRepository.save(new Customer("kevinmaes@gmail.com", password, "0476281912", "Belgium", "2260", "Lambertuslaan 42", Role.CUSTOMER, "Kevin" , "Maes"));
             customerRepository.save(new Customer("helderceyssens@gmail.com", password, "0476596168", "Belgium", "1540", "Koepel 186", Role.CUSTOMER, "Helder" , "Ceyssens"));
+            customerRepository.save(new Customer("brent.eerlingen@elision.be", password, "+32011192819", "Belgium", "3800", "Steverstraat 56", Role.CUSTOMER, "Brent" , "Eerlingen"));
         }
 
         if(organizationRepository.findAll().size() == 0){
@@ -151,29 +153,29 @@ public class BackendApplication {
         }
 
         if(productRepository.findAll().size() == 0){
-            productRepository.save(new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categoryRepository.findCategoryById(2), organizationRepository.findOrganizationById(7)));
-            productRepository.save(new Product("WWF sleutelhanger panda", "De enige echte WWF-panda als sleutelhanger van 10cm!", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-panda-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-panda-02.jpg"), categoryRepository.findCategoryById(2), organizationRepository.findOrganizationById(7)));
-            productRepository.save(new Product("Lief beertje Rode Kruis", "Slaap goed met de officiële beertjes-knuffel van het Rode Kruis!", 6.00, true, Arrays.asList("https://webcat.staci.com/WebCat3/custom/0231/_default//static/produits/P00042_MD.jpg"), categoryRepository.findCategoryById(1), organizationRepository.findOrganizationById(12)));
-            productRepository.save(new Product("Balpen blauw", "Steun het Rode Kruis door het aankopen en gebruiken van de officiële balpennen!", 3.5, true, Arrays.asList("https://shop.rodekruis.nl/pub/media/catalog/product/cache/c3031995953b3e91d5674d5b0a0af4b5/n/r/nrk.5011_1.jpg", "https://webcat.staci.com/WebCat3/custom/0231/_default//static/produits/P00012_MD.jpg"), categoryRepository.findCategoryById(3), organizationRepository.findOrganizationById(12)));
-            productRepository.save(new Product("Stiften damiaanactie", "Schrijf leprapatiënten niet af. Koop of verkoop de gekende rode, blauwe, groene en zwarte Damiaanactiestiften. Een pakje van vier kost €7.", 7.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-042.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-046.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-052.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-053.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-054.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-055.jpg"), categoryRepository.findCategoryById(3), organizationRepository.findOrganizationById(11)));
-            productRepository.save(new Product("Koffiemok bedrukt","Steun het Rode Kruis door het aankopen en gebruiken van de officiële koffiemokken!", 6.5, true, Arrays.asList("https://i.etsystatic.com/26520550/r/il/72e51c/3329982877/il_340x270.3329982877_kdtx.jpg"),  categoryRepository.findCategoryById(6), organizationRepository.findOrganizationById(12)));
-            productRepository.save(new Product("Solidair mondmasker wit","Draag met trots de vlinders van Damiaanactie, terwijl je jezelf en anderen rondom je beschermt. Alle opbrengst gaat rechtstreeks naar onze projecten.", 8.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2021/12/Ontwerp-zonder-titel-3.jpg"),  categoryRepository.findCategoryById(8), organizationRepository.findOrganizationById(11)));
-            productRepository.save(new Product("Solidair mondmasker groen","Trotseer de koude winterdagen met deze groene maskers van Damiaanactie. Vrolijke mondmaskers die deze sombere dagen wat kleur geven en opwarmen.", 8.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2021/01/masque-damien-240web.jpg"),  categoryRepository.findCategoryById(8), organizationRepository.findOrganizationById(11)));
-            productRepository.save(new Product("2 solidaire mondmaskers", "Draag met trots de vlinders van Damiaanactie, terwijl je jezelf en anderen rondom je beschermt. Alle opbrengst gaat rechtstreeks naar onze projecten (€ 15  voor 2 mondmaskers).", 15.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2021/12/Ontwerp-zonder-titel-2.jpg"), categoryRepository.findCategoryById(8), organizationRepository.findOrganizationById(11)));
-//        Product productShirtMannenTP =new Product("Run for Think Pink T-shirt heren (wit)", categoryRepository.findCategoryById(4), organizationThinkPink, 9.99, "Net zoals bij elke sport, hoort ook bij het lopen een juiste outfit. Vertegenwoordig met dit T-shirt Think Pink op elk evenement of draag hem tijdens het trainen. Het loopshirt heeft een zacht aanvoelende stof en dankzij de Equarea-technologie en de verluchtingen onder de arme wordt de transpiratie perfect afgevoerd.", true, Arrays.asList("https://www.think-pink.be/Portals/0/dtxArt/blok-afbeelding/bestand/20190820Think-Pink-2019Jeroen-Willems102-2_medium_1ba503c4-ce81-4f84-abbe-c5f02cef0356.jpg", "https://www.think-pink.be/Portals/0/dtxArt/blok-galerij/afbeelding/bestand/image_groot_ac0905cd-8657-4133-b05f-703e783572ba.png"));
-//        Product productShirtVrouwenTP =new Product(categoryRepository.findCategoryById(5), organizationThinkPink, "Run for Think Pink T-shirt dames (roze)", 9.99, "Net zoals bij elke sport, hoort ook bij het lopen een juiste outfit. Vertegenwoordig met dit T-shirt Think Pink op elk evenement of draag hem tijdens het trainen. Het loopshirt heeft een zacht aanvoelende stof en dankzij de Equarea-technologie en de verluchtingen onder de arme wordt de transpiratie perfect afgevoerd.", true, Arrays.asList("https://www.think-pink.be/Portals/0/dtxArt/blok-afbeelding/bestand/6932E44F-510E-4C52-B60D-27AA69CD83A4_medium_6262025e-4c7e-468e-a0a2-2cb0237d0050.jpg"));
-//        Product productDrinkbusTP =new Product(categoryRepository.findCategoryById(7), organizationThinkPink, "Drinkbus Think Pink", 4.99, "Deze leuke Think Pink-drinkbus zorgt voor de nodige verfrissing tijdens het sporten", true, Arrays.asList("https://www.think-pink.be/Portals/0/dtxArt/blok-galerij/afbeelding/bestand/Drinkbus1_groot_3918fe9e-785f-4dd5-a652-071148ed6146.jpg", "https://www.think-pink.be/Portals/0/dtxArt/blok-galerij/afbeelding/bestand/DSC1350groot6936867c-357f-4227-890b-58c5_groot_3dd61d86-f996-49ab-ac4a-6be2443b20a5.jpeg"));
-//        Product productGeurkaarsBZN =new Product(categoryRepository.findCategoryById(9), organizationBZN, "Geurkaars Bond zonder Naam", 8.00, "Geurkaars ter ondersteuning van de Bond zonder Naam", true, Arrays.asList("https://i.imgur.com/9uiTrqz.png", "https://scontent-bru2-1.xx.fbcdn.net/v/t45.1600-4/cp0/q90/spS444/s526x296/17948818_23842562753170682_2138087182974320640_n.png.jpg?_nc_cat=111&ccb=1-5&_nc_sid=67cdda&_nc_ohc=EyD0jzQTYhwAX8aElSS&_nc_ht=scontent-bru2-1.xx&oh=00_AT9zk-4Xe2ziHjz1DDk6jyXObJY4jxlAXvgCWRr2CJXTyQ&oe=61F2E9BC"));
-//        Product productGeurstokjesBZN =new Product(categoryRepository.findCategoryById(9), organizationBZN, "Geurstokjes Bond zonder Naam", 5.00, "Geurstokjes ter ondersteuning van de Bond zonder Naam", true, Arrays.asList("https://i.imgur.com/fW2Jkm2.png"));
-//        Product productSojakaarsBZN =new Product(categoryRepository.findCategoryById(9), organizationBZN, "Sojakaars Bond zonder Naam", 10.00, "Sojakaars ter ondersteuning van de Bond zonder Naam", true, Arrays.asList("https://i.imgur.com/aOWdepM.png"));
-//        Product product3pennenBKKS =new Product(categoryRepository.findCategoryById(3), organizationBKKS, "3 stylo's Belgisch KinderKanker Fonds", 6, "3 pennen met het logo van het Belgisch KinderKanker Fonds.", true, Arrays.asList("https://www.online-fanshop.be/wp-content/uploads/2020/11/stylo-bkks.png"));
-//        Product productMondmaskerBKKS =new Product(categoryRepository.findCategoryById(8), organizationBKKS, "Mondmasker Belgisch KinderKanker Fonds", 8.25, "Mondmasker met het logo van het Belgisch KinderKanker Fonds.", true, Arrays.asList("https://www.online-fanshop.be/wp-content/uploads/2020/11/mondmasker-BKKS.png"));
-//        Product productShirtBKKS =new Product(categoryRepository.findCategoryById(4), organizationBKKS, "Stanno Pride T-Shirt", 24.99, "Dit stretchy sportshirt, onderdeel van de Stanno Pride collectie, is voorzien van het logo van BKKS. De ClimaTec finish zorgt voor optimale vochtafvoer en dankzij de ventilerende mesh-structuur op de bovenzijde en in de zij voelt het shirt licht en luchtig aan. De kraag is gemaakt van zacht rib-materiaal. De achterzijde van het shirt is net wat langer en heeft en mooie ronde afwerking.", true, Arrays.asList("https://i.imgur.com/dLA2Rab.png"));
+            productRepository.save(new Product("WWF sleutelhanger orang-oetan", "Een schattige orang-oetan als sleutelhanger van 10cm.", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-orang-oetan-02.jpg"), categoryRepository.findCategoryById(2), organizationRepository.findOrganizationById(8)));
+            productRepository.save(new Product("WWF sleutelhanger panda", "De enige echte WWF-panda als sleutelhanger van 10cm!", 10.95, true, Arrays.asList("https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-panda-01.jpg", "https://www.wwf.nl/globalassets/commerce/productafbeeldingen/wwf-sleutelhanger-panda-02.jpg"), categoryRepository.findCategoryById(2), organizationRepository.findOrganizationById(8)));
+            productRepository.save(new Product("Lief beertje Rode Kruis", "Slaap goed met de officiële beertjes-knuffel van het Rode Kruis!", 6.00, true, Arrays.asList("https://www.company2wear.nl/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/b/e/beertje_borstlogo.jpg"), categoryRepository.findCategoryById(1), organizationRepository.findOrganizationById(13)));
+            productRepository.save(new Product("Balpen blauw", "Steun het Rode Kruis door het aankopen en gebruiken van de officiële balpennen!", 3.5, true, Arrays.asList("https://shop.rodekruis.nl/pub/media/catalog/product/cache/c3031995953b3e91d5674d5b0a0af4b5/n/r/nrk.5011_1.jpg", "https://webcat.staci.com/WebCat3/custom/0231/_default//static/produits/P00012_MD.jpg"), categoryRepository.findCategoryById(3), organizationRepository.findOrganizationById(13)));
+            productRepository.save(new Product("Stiften damiaanactie", "Schrijf leprapatiënten niet af. Koop of verkoop de gekende rode, blauwe, groene en zwarte Damiaanactiestiften. Een pakje van vier kost €7.", 7.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-042.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-046.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-052.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-053.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-054.jpg", "https://damiaanactie-shop.be/wp-content/uploads/2020/11/damien-eshop-055.jpg"), categoryRepository.findCategoryById(3), organizationRepository.findOrganizationById(12)));
+            productRepository.save(new Product("Koffiemok bedrukt","Steun het Rode Kruis door het aankopen en gebruiken van de officiële koffiemokken!", 6.5, true, Arrays.asList("https://i.etsystatic.com/26520550/r/il/72e51c/3329982877/il_340x270.3329982877_kdtx.jpg"),  categoryRepository.findCategoryById(6), organizationRepository.findOrganizationById(13)));
+            productRepository.save(new Product("Solidair mondmasker wit","Draag met trots de vlinders van Damiaanactie, terwijl je jezelf en anderen rondom je beschermt. Alle opbrengst gaat rechtstreeks naar onze projecten.", 8.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2021/12/Ontwerp-zonder-titel-3.jpg"),  categoryRepository.findCategoryById(8), organizationRepository.findOrganizationById(12)));
+            productRepository.save(new Product("Solidair mondmasker groen","Trotseer de koude winterdagen met deze groene maskers van Damiaanactie. Vrolijke mondmaskers die deze sombere dagen wat kleur geven en opwarmen.", 8.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2021/01/masque-damien-240web.jpg"),  categoryRepository.findCategoryById(8), organizationRepository.findOrganizationById(12)));
+            productRepository.save(new Product("2 solidaire mondmaskers", "Draag met trots de vlinders van Damiaanactie, terwijl je jezelf en anderen rondom je beschermt. Alle opbrengst gaat rechtstreeks naar onze projecten (€ 15  voor 2 mondmaskers).", 15.00, true, Arrays.asList("https://damiaanactie-shop.be/wp-content/uploads/2021/12/Ontwerp-zonder-titel-2.jpg"), categoryRepository.findCategoryById(8), organizationRepository.findOrganizationById(12)));
+            productRepository.save(new Product("Run for Think Pink T-shirt heren (wit)", "Net zoals bij elke sport, hoort ook bij het lopen een juiste outfit. Vertegenwoordig met dit T-shirt Think Pink op elk evenement of draag hem tijdens het trainen.", 9.99, true, Arrays.asList("https://www.think-pink.be/Portals/0/dtxArt/blok-afbeelding/bestand/20190820Think-Pink-2019Jeroen-Willems102-2_medium_1ba503c4-ce81-4f84-abbe-c5f02cef0356.jpg", "https://www.think-pink.be/Portals/0/dtxArt/blok-galerij/afbeelding/bestand/image_groot_ac0905cd-8657-4133-b05f-703e783572ba.png"), categoryRepository.findCategoryById(4), organizationRepository.findOrganizationById(11)));
+            productRepository.save(new Product("Run for Think Pink T-shirt dames (roze)", "Net zoals bij elke sport, hoort ook bij het lopen een juiste outfit. Vertegenwoordig met dit T-shirt Think Pink op elk evenement of draag hem tijdens het trainen.", 9.99, true, Arrays.asList("https://www.think-pink.be/Portals/0/dtxArt/blok-afbeelding/bestand/6932E44F-510E-4C52-B60D-27AA69CD83A4_medium_6262025e-4c7e-468e-a0a2-2cb0237d0050.jpg"), categoryRepository.findCategoryById(5), organizationRepository.findOrganizationById(11)));
+            productRepository.save(new Product("Drinkbus Think Pink","Deze leuke Think Pink-drinkbus zorgt voor de nodige verfrissing tijdens het sporten", 4.99, true, Arrays.asList("https://www.think-pink.be/Portals/0/dtxArt/blok-galerij/afbeelding/bestand/Drinkbus1_groot_3918fe9e-785f-4dd5-a652-071148ed6146.jpg", "https://www.think-pink.be/Portals/0/dtxArt/blok-galerij/afbeelding/bestand/DSC1350groot6936867c-357f-4227-890b-58c5_groot_3dd61d86-f996-49ab-ac4a-6be2443b20a5.jpeg"), categoryRepository.findCategoryById(7), organizationRepository.findOrganizationById(11)));
+            productRepository.save(new Product("Geurkaars Bond zonder Naam", "Geurkaars ter ondersteuning van de Bond zonder Naam", 8.00, true, Arrays.asList("https://i.imgur.com/9uiTrqz.png"), categoryRepository.findCategoryById(9), organizationRepository.findOrganizationById(10)));
+            productRepository.save(new Product("Geurstokjes Bond zonder Naam", "Geurstokjes ter ondersteuning van de Bond zonder Naam",  5.00,  true, Arrays.asList("https://i.imgur.com/fW2Jkm2.png"),categoryRepository.findCategoryById(9), organizationRepository.findOrganizationById(10)));
+            productRepository.save(new Product("Sojakaars Bond zonder Naam", "Sojakaars ter ondersteuning van de Bond zonder Naam", 10.00, true, Arrays.asList("https://i.imgur.com/aOWdepM.png"),categoryRepository.findCategoryById(9), organizationRepository.findOrganizationById(10)));
+            productRepository.save(new Product("3 stylo's Belgisch KinderKanker Fonds", "3 pennen met het logo van het Belgisch KinderKanker Fonds.", 6, true, Arrays.asList("https://www.online-fanshop.be/wp-content/uploads/2020/11/stylo-bkks.png"), categoryRepository.findCategoryById(3),organizationRepository.findOrganizationById(9)));
+            productRepository.save(new Product("Mondmasker Belgisch KinderKanker Fonds", "Mondmasker met het logo van het Belgisch KinderKanker Fonds.",  8.25, true, Arrays.asList("https://www.online-fanshop.be/wp-content/uploads/2020/11/mondmasker-BKKS.png"), categoryRepository.findCategoryById(8), organizationRepository.findOrganizationById(9)));
+            productRepository.save(new Product("Stanno Pride T-Shirt", "Dit stretchy sportshirt, onderdeel van de Stanno Pride collectie, is voorzien van het logo van BKKS.", 24.99,  true, Arrays.asList("https://i.imgur.com/dLA2Rab.png"), categoryRepository.findCategoryById(4), organizationRepository.findOrganizationById(9)));
         }
 
         if(stockRepository.findAll().size() == 0){
             stockRepository.save(new Stock(50, sizeRepository.findSizeById(5), colorRepository.findColorById(4), productRepository.findProductById(1)));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(8), colorRepository.findColorById(4), productOrangoetanKnuffel, 20));
+            stockRepository.save(new Stock(20,sizeRepository.findSizeById(8), colorRepository.findColorById(4), productRepository.findProductById(1)));
             stockRepository.save(new Stock(50, sizeRepository.findSizeById(8), colorRepository.findColorById(9), productRepository.findProductById(2)));
             stockRepository.save(new Stock(200, sizeRepository.findSizeById(8), colorRepository.findColorById(2), productRepository.findProductById(4)));
             stockRepository.save(new Stock(100, sizeRepository.findSizeById(8), colorRepository.findColorById(8), productRepository.findProductById(5)));
@@ -181,19 +183,19 @@ public class BackendApplication {
             stockRepository.save(new Stock(200, sizeRepository.findSizeById(2), colorRepository.findColorById(2), productRepository.findProductById(7)));
             stockRepository.save(new Stock(150, sizeRepository.findSizeById(2), colorRepository.findColorById(3), productRepository.findProductById(8)));
             stockRepository.save(new Stock(200, sizeRepository.findSizeById(2), colorRepository.findColorById(2), productRepository.findProductById(9)));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(2), productShirtMannenTP, 25));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(3), colorRepository.findColorById(2), productShirtMannenTP, 50));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(6), productShirtVrouwenTP, 50));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(1), colorRepository.findColorById(6), productShirtVrouwenTP, 40));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(9), colorRepository.findColorById(6), productDrinkbusTP, 80));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(10), colorRepository.findColorById(1), productGeurkaarsBZN, 40));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(8), colorRepository.findColorById(5), productGeurstokjesBZN, 30));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(10), colorRepository.findColorById(2), productSojakaarsBZN, 20));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(8), colorRepository.findColorById(2), product3pennenBKKS, 60));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(2), productMondmaskerBKKS, 25));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(1), colorRepository.findColorById(9), productShirtBKKS, 15));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(2), colorRepository.findColorById(9), productShirtBKKS, 30));
-//        stockRepository.save(new Stock(sizeRepository.findSizeById(3), colorRepository.findColorById(9), productShirtBKKS, 30));
+            stockRepository.save(new Stock(25, sizeRepository.findSizeById(2), colorRepository.findColorById(2), productRepository.findProductById(10)));
+            stockRepository.save(new Stock(50, sizeRepository.findSizeById(3), colorRepository.findColorById(2), productRepository.findProductById(10)));
+            stockRepository.save(new Stock(50, sizeRepository.findSizeById(2), colorRepository.findColorById(6), productRepository.findProductById(11)));
+            stockRepository.save(new Stock(40, sizeRepository.findSizeById(1), colorRepository.findColorById(6), productRepository.findProductById(11)));
+            stockRepository.save(new Stock(80, sizeRepository.findSizeById(9), colorRepository.findColorById(6), productRepository.findProductById(12)));
+            stockRepository.save(new Stock(40, sizeRepository.findSizeById(10), colorRepository.findColorById(1), productRepository.findProductById(13)));
+            stockRepository.save(new Stock(30, sizeRepository.findSizeById(8), colorRepository.findColorById(5), productRepository.findProductById(14)));
+            stockRepository.save(new Stock(20, sizeRepository.findSizeById(10), colorRepository.findColorById(2), productRepository.findProductById(15)));
+            stockRepository.save(new Stock(60, sizeRepository.findSizeById(8), colorRepository.findColorById(2), productRepository.findProductById(16)));
+            stockRepository.save(new Stock(25, sizeRepository.findSizeById(2), colorRepository.findColorById(2), productRepository.findProductById(17)));
+            stockRepository.save(new Stock(15, sizeRepository.findSizeById(1), colorRepository.findColorById(9), productRepository.findProductById(18)));
+            stockRepository.save(new Stock(30, sizeRepository.findSizeById(2), colorRepository.findColorById(9), productRepository.findProductById(18)));
+            stockRepository.save(new Stock(30, sizeRepository.findSizeById(3), colorRepository.findColorById(9), productRepository.findProductById(18)));
         }
 
         if(orderDetailRepository.findAll().size() == 0){

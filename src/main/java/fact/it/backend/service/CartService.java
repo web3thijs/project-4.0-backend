@@ -21,7 +21,7 @@ public class CartService {
     }
 
     public CartDTO getCart(Long userId){
-        Order order = orderRepository.findOrdersByCustomerIdAndCompleted(userId, false);
+        Order order = orderRepository.findOrderByCustomerIdAndCompleted(userId, false);
         CartDTO cartDTO = new CartDTO();
         List<CartProductDTO> cartProductDTOS = new ArrayList<>();
         List<CartDonationDTO> cartDonationDTOS = new ArrayList<>();
