@@ -65,6 +65,7 @@ public class BackendApplication {
 
     @PostConstruct
     public void fillDatabase(){
+        //Test
         if(categoryRepository.findAll().size() == 0){
             categoryRepository.save(new Category("Knuffels"));
             categoryRepository.save(new Category("Sleutelhangers"));
